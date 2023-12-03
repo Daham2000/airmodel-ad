@@ -2,6 +2,10 @@
 using airmodel_ad.Models.ParamModels;
 using airmodel_ad.Business.Interface;
 
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace airmodel_ad.Controllers
 {
     public class AuthController : Controller
@@ -15,6 +19,11 @@ namespace airmodel_ad.Controllers
 
 		public IActionResult Index()
         {
+			ClaimsPrincipal claimsPrincipal = HttpContext.User;
+			if(claimsPrincipal.Identity.IsAuthenticated)
+			{
+                return RedirectToAction("Index", "Home");
+            }
             return View("../Auth/SignIn-Page/SignIn");
         }
 
@@ -31,16 +40,35 @@ namespace airmodel_ad.Controllers
 			return View("../Auth/SignIn-Page/SignIn");
 		}
 
-		public IActionResult ActionLogin(SignupModel signupModel)
+		[HttpPost]
+		public async Task<IActionResult> ActionLogin(SignupModel signupModel)
 		{
 			ViewBag.UserEmail = signupModel.UserEmail;
 			ViewBag.UserPassword = signupModel.UserPassword;
 			bool result = userService.FindUserByEmail(signupModel.UserEmail, signupModel.UserPassword);
 			if (result)
 			{
-				return View("../Home/HomeView");
+				List<Claim> claims = new List<Claim>()
+				{
+					new Claim(ClaimTypes.NameIdentifier, signupModel.UserEmail),
+					new Claim("OtherProperties", "User")
+				};
+
+				ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, 
+					CookieAuthenticationDefaults.AuthenticationScheme);
+
+				AuthenticationProperties authenticationProperties = new AuthenticationProperties()
+				{
+					AllowRefresh = true,
+					IsPersistent = true
+				};
+
+				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authenticationProperties);
+
+				return RedirectToAction("Index", "Home");
 			}
-			return View("../Auth/SignIn-Page/SignIn");
+            ViewBag.ValidateMessage = "User not found";
+            return View("../Auth/SignIn-Page/SignIn");
 		}
 	}
 }

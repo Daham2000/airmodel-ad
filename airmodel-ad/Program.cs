@@ -2,6 +2,7 @@ using airmodel_ad.Business.Interface;
 using airmodel_ad.Business.Services;
 using airmodel_ad.Data;
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -14,14 +15,12 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connecti
 builder.Services.AddSession();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate();
-
-builder.Services.AddAuthorization(options =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {
-	// By default, all incoming requests will be authorized according to the default policy.
-	options.FallbackPolicy = options.DefaultPolicy;
+	option.LoginPath= "/Auth/Index";
+    option.ExpireTimeSpan= TimeSpan.FromMinutes(20);	
 });
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
