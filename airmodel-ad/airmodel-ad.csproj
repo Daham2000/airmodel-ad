@@ -19,9 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Business\Interface\" />
-    <Folder Include="Business\Services\" />
-    <Folder Include="Views\Auth\Register-User\" />
+    <None Include="wwwroot\vendor\line-awesome\line-awesome\line-awesome\fonts\line-awesomeeb4f.svg" />
+    <None Include="wwwroot\vendor\line-awesome\line-awesome\line-awesome\fonts\line-awesomeeb4f.woff2" />
   </ItemGroup>
 
 </Project>
