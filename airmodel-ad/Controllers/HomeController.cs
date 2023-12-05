@@ -25,7 +25,8 @@ namespace airmodel_ad.Controllers
         public IActionResult Index()
         {
             productModels = productService.GetAllProducts();
-            ViewBag.productModels = productModels;
+            ViewBag.productModels = productService.GetAllProducts();
+            ViewBag.len = productModels.Count();
             return View("../Home/HomeView");
         }
 

@@ -17,5 +17,9 @@ namespace airmodel_ad.Data
         public DbSet<ProductModel> products { get; set; }
         public DbSet<VarientModel> varient { get; set; }
         public DbSet<VarientOptionModel> varientOption { get; set; }
+        public DbSet<OrderModel> orders { get; set; }
+        public DbSet<OrderItem> orderItem { get; set; }
+        public DbSet<CartModel> carts { get; set; }
+        public DbSet<CartItemModel> cartItems { get; set; }
     }
 }
