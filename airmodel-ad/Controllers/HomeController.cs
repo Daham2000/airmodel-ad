@@ -5,21 +5,27 @@ using airmodel_ad.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using airmodel_ad.Business.Interface;
 
 namespace airmodel_ad.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        List<ProductModel> productModels;
+        private readonly IUserService userService;
+        private readonly IProductService productService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IUserService user, IProductService product)
         {
-            _logger = logger;
+            this.userService = user;
+            this.productService = product;
         }
 
         public IActionResult Index()
         {
+            productModels = productService.GetAllProducts();
+            ViewBag.productModels = productModels;
             return View("../Home/HomeView");
         }
 

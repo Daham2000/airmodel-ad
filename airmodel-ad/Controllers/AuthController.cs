@@ -27,18 +27,36 @@ namespace airmodel_ad.Controllers
             return View("../Auth/SignIn-Page/SignIn");
         }
 
-		public IActionResult ActionSignUp(SignupModel signupModel)
+		[HttpPost]
+		public async Task<IActionResult> ActionSignUp(SignupModel signupModel)
 		{
 			ViewBag.UserName = signupModel.UserName;
 			ViewBag.UserEmail = signupModel.UserEmail;
 			ViewBag.UserPassword = signupModel.UserPassword;
 			bool result = userService.AddUser(signupModel);
-			if(result)
-			{
-				return View("../Home/Index");
-			}
-			return View("../Auth/SignIn-Page/SignIn");
-		}
+            if (result)
+            {
+                List<Claim> claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.NameIdentifier, signupModel.UserEmail),
+                    new Claim("OtherProperties", "User")
+                };
+
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme);
+
+                AuthenticationProperties authenticationProperties = new AuthenticationProperties()
+                {
+                    AllowRefresh = true,
+                    IsPersistent = true
+                };
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authenticationProperties);
+
+                return RedirectToAction("Index", "Home");
+            }
+            return View("../Auth/SignIn-Page/SignIn");
+        }
 
 		[HttpPost]
 		public async Task<IActionResult> ActionLogin(SignupModel signupModel)

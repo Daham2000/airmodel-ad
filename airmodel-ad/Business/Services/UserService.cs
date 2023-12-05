@@ -37,7 +37,7 @@ namespace airmodel_ad.Business.Services
 		public bool FindUserByEmail(string email, string password)
 		{
 			try {
-				User? user = appDbContext.Users.Where((u) => u.userEmail == email).Where((u) => u.userPassword == password).FirstOrDefault();
+				User? user = appDbContext.users.Where((u) => u.userEmail == email).Where((u) => u.userPassword == password).FirstOrDefault();
 				if(user == null)
 				{
 					return false;

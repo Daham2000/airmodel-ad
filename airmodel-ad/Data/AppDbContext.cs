@@ -11,7 +11,11 @@ namespace airmodel_ad.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<ProductModel> Products { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<Category> category { get; set; }
+
+        public DbSet<ProductModel> products { get; set; }
+        public DbSet<VarientModel> varient { get; set; }
+        public DbSet<VarientOptionModel> varientOption { get; set; }
     }
 }

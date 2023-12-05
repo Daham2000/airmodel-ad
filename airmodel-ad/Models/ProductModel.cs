@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace airmodel_ad.Models
 {
@@ -6,10 +7,14 @@ namespace airmodel_ad.Models
     {
         [Key]
         public Guid productId { get; set; }
+        public Category category { get; set; }
+        [ForeignKey("category")]
+        public Guid categoryId { get; set; }
         public string productName { get; set; }
         public string productDescription { get; set; }
         public string productImage { get; set; }
         public int productBasicPrice { get; set; }
+        public int productQty { get; set; }
         public bool hasVarients { get; set; }   
     }
 }
