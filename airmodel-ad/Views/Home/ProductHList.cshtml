@@ -1,0 +1,64 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="owl-stage-outer">
+    <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 1433px;">
+        @{
+            if (@ViewBag.availableProductList != null)
+            {
+                @foreach (var product in @ViewBag.availableProductList)
+                {
+                    <div class="owl-item active" style="width: 266.56px; margin-right: 20px;">
+                        <div class="product product-11 text-center">
+                            <figure class="product-media">
+                                <a href="product.html">
+                                    <img src="@product.productImage" alt="Product image" class="product-image">
+                                </a>
+
+                                <div class="product-action-vertical">
+                                    <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
+                                </div><!-- End .product-action-vertical -->
+                            </figure><!-- End .product-media -->
+
+                            <div class="product-body">
+                                <h3 class="product-title"><a href="product.html">@product.productName</a></h3><!-- End .product-title -->
+                                <div class="product-price">
+                                    $@product.productBasicPrice
+                                </div><!-- End .product-price -->
+                            </div><!-- End .product-body -->
+                            <div class="product-action">
+                                @{
+                                    if (product.productQty == 0)
+                                    {
+                                        <div style="background-color: red" class="product-action">
+                                            <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
+
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                        </div>
+                                    }
+                                }
+                               
+                            </div><!-- End .product-action -->
+                        </div>
+                        <!-- End .product -->
+                    </div>
+
+                }
+            }
+        }
+    </div>
+
+</div>
+
+
+
+

@@ -2,6 +2,7 @@
 using airmodel_ad.Data;
 using airmodel_ad.Models;
 using System.Diagnostics;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace airmodel_ad.Business.Services
 {
@@ -33,6 +34,34 @@ namespace airmodel_ad.Business.Services
                 products = appDbContext.products.ToList();
                 return products;
             } catch (Exception ex) {
+                return products;
+            }
+        }
+
+        public List<ProductModel> GetAllProductsByCategory(Guid categoryId)
+        {
+            List<ProductModel> products = new List<ProductModel>();
+            try
+            {
+                products = appDbContext.products.Where((p) => p.categoryId == categoryId).ToList();
+                return products;
+            }
+            catch (Exception ex)
+            {
+                return products;
+            }
+        }
+
+        public List<ProductModel> GetSearchProduct(string searchInput)
+        {
+            List<ProductModel> products = new List<ProductModel>();
+            try
+            {
+                products = appDbContext.products.Where(u => u.productName.ToLower().Contains(searchInput.ToLower())).ToList();
+                return products;
+            }
+            catch (Exception ex)
+            {
                 return products;
             }
         }
