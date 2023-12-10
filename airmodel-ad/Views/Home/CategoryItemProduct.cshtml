@@ -15,15 +15,15 @@
 
                 <!-- End .heading -->
             }
- 
+
 
             <div class="tab-content grid-container" style="display: grid;
-                                                                                  grid-template-columns: auto auto auto auto;
-                                                                              padding: 10px;" id="tab-search-result">
+                                                                                      grid-template-columns: auto auto auto auto;
+                                                                                  padding: 10px;" id="tab-search-result">
 
                 @foreach (var product in @ViewBag.searchModels)
                 {
-                    <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
+                    <div id="productBtn3" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
                         <div style="width: 260px; height: 425px;" class="product product-11 text-center">
                             <figure class="product-media">
                                 <a href="product.html">
@@ -79,7 +79,7 @@
     {
         @foreach (var product in @ViewBag.selectedCategory)
         {
-            <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
+            <div id="productBt4" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
                 <div style="width: 260px; height: 425px;" class="product product-11 text-center">
                     <figure class="product-media">
                         <a href="product.html">

@@ -142,5 +142,19 @@ namespace airmodel_ad.Controllers
             return RedirectToAction("Index", "Auth");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ViewProduct(Guid searchInput)
+        {
+            try
+            {
+                Debug.WriteLine(searchInput);
+                return View("../Product/ProductView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Product/ProductView");
+            }
+        }
+
     }
 }

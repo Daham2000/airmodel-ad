@@ -3,6 +3,7 @@
 *@
 @{
 }
+
 <div class="owl-stage-outer">
     <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 1433px;">
         @{
@@ -10,47 +11,54 @@
             {
                 @foreach (var product in @ViewBag.availableProductList)
                 {
-                    <div class="owl-item active" style="width: 266.56px; margin-right: 20px;">
-                        <div class="product product-11 text-center">
-                            <figure class="product-media">
-                                <a href="product.html">
-                                    <img src="@product.productImage" alt="Product image" class="product-image">
-                                </a>
+                    <form method="post" asp-controller="Home" asp-action="ViewProduct">
+                        <input type="text" style="display: none" class="form-control" name="searchInput" value="@product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
 
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
-                                </div><!-- End .product-action-vertical -->
-                            </figure><!-- End .product-media -->
+                        <div id="productBtn2" value="@product.productId" class="owl-item active" style="width: 266.56px; margin-right: 20px;">
+                            <div class="product product-11 text-center">
+                                <figure class="product-media">
+                                    <a>
+                                        <img src="@product.productImage" alt="Product image" class="product-image">
+                                    </a>
 
-                            <div class="product-body">
-                                <h3 class="product-title"><a href="product.html">@product.productName</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $@product.productBasicPrice
-                                </div><!-- End .product-price -->
-                            </div><!-- End .product-body -->
-                            <div class="product-action">
-                                @{
-                                    if (product.productQty == 0)
-                                    {
-                                        <div style="background-color: red" class="product-action">
-                                            <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
+                                    <div class="product-action-vertical">
+                                        <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
+                                    </div><!-- End .product-action-vertical -->
+                                </figure><!-- End .product-media -->
 
-                                        </div>
+                                <div class="product-body">
+                                    <button type="submit" style="all: unset;">
+                                        <h3 class="product-title"><a>@product.productName</a></h3><!-- End .product-title -->
+                                    </button>
+                                    <div class="product-price">
+                                        $@product.productBasicPrice
+                                    </div><!-- End .product-price -->
+                                </div><!-- End .product-body -->
+                                <div class="product-action">
+                                    @{
+                                        if (product.productQty == 0)
+                                        {
+                                            <div style="background-color: red" class="product-action">
+                                                <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
 
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                            </div>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
 
-                                        </div>
-                                    }
-                                }
-                               
-                            </div><!-- End .product-action -->
+                                </div><!-- End .product-action -->
+                            </div>
+                            <!-- End .product -->
                         </div>
-                        <!-- End .product -->
-                    </div>
+
+                    </form>
 
                 }
             }

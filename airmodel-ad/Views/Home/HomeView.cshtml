@@ -2,12 +2,10 @@
     ViewData["Title"] = "Home Page";
     Layout = null;
 }
-@model IEnumerable<airmodel_ad.Models.ProductModel>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- molla/index-1.html  22 Nov 2019 09:55:06 GMT -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -92,7 +90,7 @@
                                                 <div class="product">
                                                     <div class="product-cart-details">
                                                         <h4 class="product-title">
-                                                            <a href="product.html">@cartItem.products.productName</a>
+                                                            <a>@cartItem.products.productName</a>
                                                         </h4>
 
                                                         <span class="cart-product-info">
@@ -102,7 +100,7 @@
                                                     </div><!-- End .product-cart-details -->
 
                                                     <figure class="product-image-container">
-                                                        <a href="product.html" class="product-image">
+                                                        <a class="product-image">
                                                             <img src="@cartItem.varientOption.varientImage" alt="product">
                                                         </a>
                                                     </figure>
@@ -318,41 +316,49 @@
                                         {
                                             @foreach (var product in @ViewBag.productModels)
                                             {
-                                                <div class="product product-11 text-center">
-                                                    <figure class="product-media">
-                                                        <a href="product.html">
-                                                            <img src="@product.productImage" alt="Product image" class="product-image">
-                                                        </a>
+                                                <form method="post" asp-controller="Home" asp-action="ViewProduct">
+                                                    <input type="text" style="display: none" class="form-control" name="searchInput" value="@product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
+                                                    <div id="productBtn" value="@product.productId"
+                                             class="product product-11 text-center">
+                                                        <figure class="product-media">
+                                                            <a>
+                                                                <img src="@product.productImage" alt="Product image" class="product-image">
+                                                            </a>
 
-                                                        <div class="product-action-vertical">
-                                                            <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
-                                                        </div><!-- End .product-action-vertical -->
-                                                    </figure><!-- End .product-media -->
+                                                            <div class="product-action-vertical">
+                                                                <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
+                                                            </div><!-- End .product-action-vertical -->
+                                                        </figure><!-- End .product-media -->
 
-                                                    <div class="product-body">
-                                                        <h3 class="product-title"><a href="product.html">@product.productName</a></h3><!-- End .product-title -->
-                                                        <div class="product-price">
-                                                            $@product.productBasicPrice
-                                                        </div><!-- End .product-price -->
-                                                    </div><!-- End .product-body -->
-                                                    @{
-                                                        if (product.productQty == 0)
-                                                        {
-                                                            <div style="background-color: red" class="product-action">
-                                                                <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
+                                                        <div class="product-body">
+                                                        <button type="submit" style="all: unset;">
+                                                                <h3 class="product-title"><a>@product.productName</a></h3><!-- End .product-title -->
+                                                        </button>
+                                                            <div class="product-price">
+                                                                $@product.productBasicPrice
+                                                            </div><!-- End .product-price -->
+                                                        </div><!-- End .product-body -->
+                                                        @{
+                                                            if (product.productQty == 0)
+                                                            {
+                                                                <div style="background-color: red" class="product-action">
+                                                                    <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
 
-                                                            </div>
+                                                                </div>
 
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="product-action">
+                                                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                                                </div>
+                                                            }
                                                         }
-                                                        else
-                                                        {
-                                                            <div class="product-action">
-                                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                    </div>
 
-                                                            </div>
-                                                        }
-                                                    }
-                                                </div>
+                                                </form>
+                                               
 
                                                 <!-- End .product-action -->
                                                 <!-- End .product -->
@@ -462,7 +468,6 @@
                 <!-- End .main -->
             }
         }
-
 
         <footer class="footer footer-2">
             <div class="icon-boxes-container">
@@ -656,7 +661,7 @@
             });
         });
 
-        $("#searchInputField").change(function (e) {
+        $("#searchInputField").click(function (e) {
             e.preventDefault();
             console.log($("#searchInputField").val())
             jQuery.ajax({

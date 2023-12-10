@@ -66,6 +66,20 @@ namespace airmodel_ad.Business.Services
             }
         }
 
+        public ProductModel GetProductById(Guid searchInput)
+        {
+            ProductModel product = new ProductModel();
+            try
+            {
+                product = appDbContext.products.Where(u => u.productId == searchInput).FirstOrDefault();
+                return product;
+            }
+            catch (Exception ex)
+            {
+                return product;
+            }
+        }
+
         bool IProductService.AddProduct(ProductModel product)
         {
             try { 
