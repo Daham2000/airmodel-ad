@@ -7,6 +7,7 @@ namespace airmodel_ad.Business.Interface
         public List<ProductModel> GetAllProducts();
         public List<ProductModel> GetAllProductsByCategory(Guid categoryId);
         public List<ProductModel> GetSearchProduct(string searchInput);
+        public ProductModel GetProductById(Guid searchInput);
         public List<ProductModel> GetAllAvailableProducts();
         public bool AddProduct(ProductModel product);
         public bool AddProductVarient(VarientModel varientModel);

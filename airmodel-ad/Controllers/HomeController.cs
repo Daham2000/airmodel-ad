@@ -23,6 +23,7 @@ namespace airmodel_ad.Controllers
         private readonly ICartService cartService;
         private readonly ICategoryService categoryService;
         int total = 0;
+        string selectedImage = string.Empty;
 
         public HomeController(IUserService user, IProductService product, ICartService cartService, ICategoryService categoryService)
         {
@@ -147,7 +148,18 @@ namespace airmodel_ad.Controllers
         {
             try
             {
-                Debug.WriteLine(searchInput);
+                bool re = await GetHomePageData();
+                ProductModel product = productService.GetProductById(searchInput);
+                ViewBag.product = product;
+                ViewBag.selectedImage = product.productImage;
+
+                ViewBag.productModels = productModels;
+                ViewBag.selectedCategory = selectedCategory;
+                ViewBag.cartModels = cartModels;
+                ViewBag.len = cartModels.Count();
+                ViewBag.total = total;
+                ViewBag.categories = categories;
+
                 return View("../Product/ProductView");
             }
             catch (Exception ex)

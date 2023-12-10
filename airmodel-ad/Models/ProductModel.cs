@@ -15,6 +15,10 @@ namespace airmodel_ad.Models
         public string productImage { get; set; }
         public int productBasicPrice { get; set; }
         public int productQty { get; set; }
-        public bool hasVarients { get; set; }   
+        public bool hasVarients { get; set; }
+        [NotMapped]
+        public List<VarientOptionModel> varientOptionModels { get; set; }
+        [NotMapped]
+        public List<VarientModel> varientModels { get; set; }
     }
 }

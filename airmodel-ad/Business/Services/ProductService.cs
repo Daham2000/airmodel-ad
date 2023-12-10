@@ -72,6 +72,11 @@ namespace airmodel_ad.Business.Services
             try
             {
                 product = appDbContext.products.Where(u => u.productId == searchInput).FirstOrDefault();
+                VarientModel? varientModel = appDbContext.varient.Where(u => u.productId == searchInput).FirstOrDefault();
+                List<VarientOptionModel> varientOptionModels = appDbContext.varientOption.Where(u => u.varientId == varientModel.varientId).ToList();
+                List<VarientModel> varientModels = appDbContext.varient.Where(u => u.productId == product.productId).ToList();
+                product.varientOptionModels = varientOptionModels;
+                product.varientModels = varientModels;
                 return product;
             }
             catch (Exception ex)
