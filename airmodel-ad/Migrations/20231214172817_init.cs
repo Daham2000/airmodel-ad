@@ -101,7 +101,21 @@ namespace airmodel_ad.Migrations
                 {
                     oId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     userId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    total = table.Column<int>(type: "int", nullable: false)
+                    total = table.Column<int>(type: "int", nullable: false),
+                    fName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    lName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    county = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    address = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    city = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    postCode = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    phoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -169,7 +183,7 @@ namespace airmodel_ad.Migrations
                     cartId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     productId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     qty = table.Column<int>(type: "int", nullable: false),
-                    varientOptionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                    varientOptionId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -190,8 +204,7 @@ namespace airmodel_ad.Migrations
                         name: "FK_cartItems_varientOption_varientOptionId",
                         column: x => x.varientOptionId,
                         principalTable: "varientOption",
-                        principalColumn: "varientOptionId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "varientOptionId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 

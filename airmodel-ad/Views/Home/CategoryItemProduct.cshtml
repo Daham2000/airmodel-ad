@@ -18,51 +18,57 @@
 
 
             <div class="tab-content grid-container" style="display: grid;
-                                                                                      grid-template-columns: auto auto auto auto;
-                                                                                  padding: 10px;" id="tab-search-result">
+                                                                                          grid-template-columns: auto auto auto auto;
+                                                                                      padding: 10px;" id="tab-search-result">
 
                 @foreach (var product in @ViewBag.searchModels)
                 {
-                    <div id="productBtn3" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
-                        <div style="width: 260px; height: 425px;" class="product product-11 text-center">
-                            <figure class="product-media">
-                                <a href="product.html">
-                                    <img src="@product.productImage" alt="Product image" class="product-image">
-                                </a>
+                    <form method="post" asp-controller="Home" asp-action="ViewProduct">
+                        <input type="text" style="display: none" class="form-control" name="searchInput" value="@product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
+                        <div id="productBtn3" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
+                            <div style="width: 260px; height: 425px;" class="product product-11 text-center">
+                                <figure class="product-media">
+                                    <a href="product.html">
+                                        <img src="@product.productImage" alt="Product image" class="product-image">
+                                    </a>
 
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist "><span>add to wishlist</span></a>
-                                </div><!-- End .product-action-vertical -->
-                            </figure><!-- End .product-media -->
+                                    <div class="product-action-vertical">
+                                        <a class="btn-product-icon btn-wishlist "><span>add to wishlist</span></a>
+                                    </div><!-- End .product-action-vertical -->
+                                </figure><!-- End .product-media -->
 
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Lighting</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">@product.productName</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $@product.productBasicPrice
-                                </div><!-- End .product-price -->
-                            </div><!-- End .product-body -->
-                            @{
-                                if (product.productQty == 0)
-                                {
-                                    <div style="background-color: red" class="product-action">
-                                        <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
+                                <div class="product-body">
+                                    <div class="product-cat">
+                                        <a href="#">Lighting</a>
+                                    </div><!-- End .product-cat -->
+                                    <button type="submit" style="all: unset;">
+                                        <h3 class="product-title"><a>@product.productName</a></h3><!-- End .product-title -->
+                                    </button>
+                                    <div class="product-price">
+                                        $@product.productBasicPrice
+                                    </div><!-- End .product-price -->
+                                </div><!-- End .product-body -->
+                                @{
+                                    if (product.productQty == 0)
+                                    {
+                                        <div style="background-color: red" class="product-action">
+                                            <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
 
-                                    </div>
+                                        </div>
 
+                                    }
+                                    else
+                                    {
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                        </div>
+                                    }
                                 }
-                                else
-                                {
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                            </div><!-- End .product -->
+                        </div>
 
-                                    </div>
-                                }
-                            }
-                        </div><!-- End .product -->
-                    </div>
+                    </form>
 
                     <!-- End .col-sm-6 col-md-4 col-lg-3 -->
                     <!-- End .product -->
@@ -79,46 +85,52 @@
     {
         @foreach (var product in @ViewBag.selectedCategory)
         {
-            <div id="productBt4" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
-                <div style="width: 260px; height: 425px;" class="product product-11 text-center">
-                    <figure class="product-media">
-                        <a href="product.html">
-                            <img src="@product.productImage" alt="Product image" class="product-image">
-                        </a>
+            <form method="post" asp-controller="Home" asp-action="ViewProduct">
+                <input type="text" style="display: none" class="form-control" name="searchInput" value="@product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
+                <div id="productBt4" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
+                    <div style="width: 260px; height: 425px;" class="product product-11 text-center">
+                        <figure class="product-media">
+                            <a href="product.html">
+                                <img src="@product.productImage" alt="Product image" class="product-image">
+                            </a>
 
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist "><span>add to wishlist</span></a>
-                        </div><!-- End .product-action-vertical -->
-                    </figure><!-- End .product-media -->
+                            <div class="product-action-vertical">
+                                <a href="#" class="btn-product-icon btn-wishlist "><span>add to wishlist</span></a>
+                            </div><!-- End .product-action-vertical -->
+                        </figure><!-- End .product-media -->
 
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Lighting</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">@product.productName</a></h3><!-- End .product-title -->
-                        <div class="product-price">
-                            $@product.productBasicPrice
-                        </div><!-- End .product-price -->
-                    </div><!-- End .product-body -->
-                    @{
-                        if (product.productQty == 0)
-                        {
-                            <div style="background-color: red" class="product-action">
-                                <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
+                        <div class="product-body">
+                            <div class="product-cat">
+                                <a href="#">Lighting</a>
+                            </div><!-- End .product-cat -->
+                            <button type="submit" style="all: unset;">
+                                <h3 class="product-title"><a>@product.productName</a></h3><!-- End .product-title -->
+                            </button>
+                            <div class="product-price">
+                                $@product.productBasicPrice
+                            </div><!-- End .product-price -->
+                        </div><!-- End .product-body -->
+                        @{
+                            if (product.productQty == 0)
+                            {
+                                <div style="background-color: red" class="product-action">
+                                    <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
 
-                            </div>
+                                </div>
 
+                            }
+                            else
+                            {
+                                <div class="product-action">
+                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                </div>
+                            }
                         }
-                        else
-                        {
-                            <div class="product-action">
-                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                    </div><!-- End .product -->
+                </div>
 
-                            </div>
-                        }
-                    }
-                </div><!-- End .product -->
-            </div>
+            </form>
 
             <!-- End .col-sm-6 col-md-4 col-lg-3 -->
             <!-- End .product -->

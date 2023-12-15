@@ -25,7 +25,12 @@ namespace airmodel_ad.Business.Services
 				user.userName = signupModel.UserName;
 
 				appDbContext.Add(user);
-				appDbContext.SaveChanges();
+				CartModel cartModel = new CartModel();
+				cartModel.userId = user.userId;
+                cartModel.cartId = Guid.NewGuid();
+                appDbContext.Add(cartModel);
+
+                appDbContext.SaveChanges();
 				return true;
 			}
 			catch(Exception ex)

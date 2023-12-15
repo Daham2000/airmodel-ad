@@ -8,5 +8,6 @@ namespace airmodel_ad.Business.Interface
         public List<CartItemModel> GetCartItem(Guid id);
         public bool AddCart(CartItemModel item);
         public bool RemoveCartItem(CartItemModel item);
+        public bool CheckProductAvailableInCart(ProductModel item);
     }
 }

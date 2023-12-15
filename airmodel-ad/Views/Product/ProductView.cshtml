@@ -2,42 +2,44 @@
     ViewData["Title"] = "Product View";
     Layout = null;
 }
-<html>
-<body>
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>AirModel E-Shop - Find your favourite</title>
-        <meta name="keywords" content="HTML5 Template">
-        <meta name="description" content="Molla - Bootstrap eCommerce Template">
-        <meta name="author" content="p-themes">
-        <!-- Favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="~/images/icons/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="~/images/icons/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="~/images/icons/favicon-16x16.png">
-        <link rel="manifest" href="~/images/icons/site.html">
-        <link rel="mask-icon" href="~/images/icons/safari-pinned-tab.svg" color="#666666">
-        <link rel="shortcut icon" href="~/images/icons/favicon.ico">
-        <!-- Option 1: Include in HTML -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-        <meta name="apple-mobile-web-app-title" content="Molla">
-        <meta name="application-name" content="Molla">
-        <meta name="msapplication-TileColor" content="#cc9966">
-        <meta name="msapplication-config" content="~/browserconfig.xml">
-        <meta name="theme-color" content="#ffffff">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>AirModel E-Shop - Find your favourite</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="~/images/icons/site.html">
+    <link rel="mask-icon" href="~/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="~/images/icons/favicon.ico">
+    <!-- Option 1: Include in HTML -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="~/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
 
-        <link rel="stylesheet" href="~/css/line-awesome.min.css">
-        <!-- Plugins CSS File -->
-        <link rel="stylesheet" href="~/css/bootstrap.min.css">
-        <link rel="stylesheet" href="~/css/plugins/owl-carousel/owl.carousel.css">
-        <link rel="stylesheet" href="~/css/plugins/magnific-popup/magnific-popup.css">
-        <link rel="stylesheet" href="~/css/plugins/jquery.countdown.css">
-        <!-- Main CSS File -->
-        <link rel="stylesheet" href="~/css/style.css">
-        <link rel="stylesheet" href="~/css/skins/skin-demo-2.css">
-        <link rel="stylesheet" href="~/css/demos/demo-2.css">
-    </head>
+    <link rel="stylesheet" href="~/css/line-awesome.min.css">
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="~/css/plugins/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/css/plugins/jquery.countdown.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/skins/skin-demo-2.css">
+    <link rel="stylesheet" href="~/css/demos/demo-2.css">
+</head>
+
+<body id="bodyId">
     <header class="header header-2 header-intro-clearance">
         <div class="header-middle">
             <div class="container">
@@ -69,55 +71,79 @@
                     @{
                         if (@ViewBag.cartModels != null)
                         {
-                                    <div class="dropdown cart-dropdown">
-                                        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                                            <div class="icon">
-                                                <i class="icon-shopping-cart"></i>
-                                                <span class="cart-count">@ViewBag.len</span>
-                                            </div>
-                                            <p>Cart</p>
-                                        </a>
+                            <div class="dropdown cart-dropdown">
+                                <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                    <div class="icon">
+                                        <i class="icon-shopping-cart"></i>
+                                        <span class="cart-count">@ViewBag.len</span>
+                                    </div>
+                                    <p>Cart</p>
+                                </a>
 
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <div class="dropdown-cart-products">
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-cart-products">
                                         @foreach (var cartItem in @ViewBag.cartModels)
                                         {
-                                                        <div class="product">
-                                                            <div class="product-cart-details">
-                                                                <h4 class="product-title">
-                                                                    <a>@cartItem.products.productName</a>
-                                                                </h4>
+                                            <div class="product">
+                                                <div class="product-cart-details">
+                                                    <h4 class="product-title">
+                                                        <a>@cartItem.products.productName</a>
+                                                    </h4>
 
-                                                                <span class="cart-product-info">
+                                                    <span class="cart-product-info">
+                                                        @{
+                                                            if (@cartItem.varientOption.varientImage == "0")
+                                                            {
+                                                                <div>
+                                                                    <span class="cart-product-qty">@cartItem.qty</span>
+                                                                    x @cartItem.products.productBasicPrice
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div>
                                                                     <span class="cart-product-qty">@cartItem.qty</span>
                                                                     x @cartItem.varientOption.varientPrice
-                                                                </span>
-                                                            </div><!-- End .product-cart-details -->
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </span>
+                                                </div><!-- End .product-cart-details -->
 
-                                                            <figure class="product-image-container">
-                                                                <a class="product-image">
-                                                                    <img src="@cartItem.varientOption.varientImage" alt="product">
-                                                                </a>
-                                                            </figure>
-                                                            <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                                        </div>
+                                                <figure class="product-image-container">
+                                                    <a class="product-image">
+                                                        @{
+                                                            if (@cartItem.varientOption.varientImage == "0")
+                                                            {
+                                                                <img src="@cartItem.products.productImage" alt="product">
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="@cartItem.varientOption.varientImage" alt="product">
+
+                                                            }
+                                                        }
+                                                    </a>
+                                                </figure>
+                                                <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                            </div>
                                         }
-                                            </div><!-- End .cart-product -->
+                                    </div><!-- End .cart-product -->
 
-                                            <div class="dropdown-cart-total">
-                                                <span>Total</span>
+                                    <div class="dropdown-cart-total">
+                                        <span>Total</span>
 
-                                                <span class="cart-total-price">$@ViewBag.total</span>
-                                            </div><!-- End .dropdown-cart-total -->
+                                        <span class="cart-total-price">$@ViewBag.total</span>
+                                    </div><!-- End .dropdown-cart-total -->
 
-                                            <div class="dropdown-cart-action">
-                                                <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                                <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                                            </div><!-- End .dropdown-cart-total -->
-                                        </div><!-- End .dropdown-menu -->
-                                    </div>
+                                    <div class="dropdown-cart-action">
+                                                <a asp-controller="Home" asp-action="LoadCheckOutView" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    </div><!-- End .dropdown-cart-total -->
+                                </div><!-- End .dropdown-menu -->
+                            </div>
 
-                                    <!-- End .cart-dropdown -->
+                            <!-- End .cart-dropdown -->
                         }
                     }
 
@@ -150,7 +176,7 @@
                                         {
                                             @foreach (var category in @ViewBag.categories)
                                             {
-                                                            <li><a href="#">@category.categoryName</a></li>
+                                                <li><a href="#">@category.categoryName</a></li>
                                             }
                                         }
                                     }
@@ -175,29 +201,55 @@
                         <div class="product-gallery product-gallery-vertical">
                             <div class="row">
                                 <figure class="product-main-image">
-                                    <img id="product-zoom" src="@ViewBag.selectedImage" data-zoom-image="assets/images/products/single/1-big.jpg" alt="product image">
+                                    <img id="product-zoom" src="@ViewBag.selectedImage" data-zoom-image="@ViewBag.selectedImage" alt="product image">
 
                                     <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                         <i class="icon-arrows"></i>
                                     </a>
                                 </figure><!-- End .product-main-image -->
 
-                                <div id="product-zoom-gallery" class="product-image-gallery">
-                                    <a class="product-gallery-item active" href="#" data-image="assets/images/products/single/1.jpg" data-zoom-image="assets/images/products/single/1-big.jpg">
-                                        <img src="@ViewBag.product.productImage" alt="product side">
-                                    </a>
+                                <div id="product-zoom-gallery" class="product-image-gallery" style="height:auto">
 
-                                    <a class="product-gallery-item" href="#" data-image="assets/images/products/single/2.jpg" data-zoom-image="assets/images/products/single/2-big.jpg">
-                                        <img src="@ViewBag.product.productImage" alt="product cross">
-                                    </a>
+                                    <form action="">
+                                        <button type="submit" style="all: unset;">
+                                            <input type="text" style="display: none" class="form-control" name="imageSelected" value="@ViewBag.product.productImage" aria-describedby="emailHelp" placeholder="Enter computer name">
 
-                                    <a class="product-gallery-item" href="#" data-image="assets/images/products/single/3.jpg" data-zoom-image="assets/images/products/single/3-big.jpg">
-                                        <img src="@ViewBag.product.productImage" alt="product with model">
-                                    </a>
+                                            <a style="height:115px" class="product-gallery-item active" src="@ViewBag.product.productImage" data-zoom-image="@ViewBag.product.productImage">
+                                                <img src="@ViewBag.product.productImage" alt="product side">
+                                            </a>
+                                        </button>
+                                    </form>
 
-                                    <a class="product-gallery-item" href="#" data-image="assets/images/products/single/4.jpg" data-zoom-image="assets/images/products/single/4-big.jpg">
-                                        <img src="@ViewBag.product.productImage" alt="product back">
-                                    </a>
+                                    @{
+                                        if (@ViewBag.product.hasVarients == true)
+                                        {
+                                            if (ViewBag.product.varientModels != null)
+                                            {
+                                                @foreach (var varient in @ViewBag.product.varientModels)
+                                                {
+                                                    @foreach (var option in @ViewBag.product.varientOptionModels)
+                                                    {
+                                                        if (option.varientId == @varient.varientId)
+                                                        {
+
+                                                            <form action="">
+                                                                <button type="submit" style="all: unset;">
+                                                                    <input type="text" style="display: none" class="form-control" name="imageSelected" value="@option.varientImage" aria-describedby="emailHelp" placeholder="Enter computer name">
+
+                                                                    <a style="height:115px" class="product-gallery-item active" src="@option.varientImage" data-zoom-image="@option.varientImage">
+                                                                        <img src="@option.varientImage" alt="product side">
+                                                                    </a>
+                                                                </button>
+                                                            </form>
+
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+
                                 </div><!-- End .product-image-gallery -->
                             </div><!-- End .row -->
                         </div><!-- End .product-gallery -->
@@ -219,27 +271,31 @@
                                 {
                                     @foreach (var varient in @ViewBag.product.varientModels)
                                     {
-                                                    <div class="details-filter-row details-row-size">
+                                        <div class="details-filter-row details-row-size">
 
-                                                        <label for="@varient.productName">@varient.productName:</label>
-                                                        <div class="select-custom">
-                                                            <select name="@varient.productName" class="form-control">
+                                            <label for="@varient.productName">@varient.productName:</label>
+                                            <div class="select-custom">
+                                                <input type="text" style="display: none" class="form-control" id="productId" value="@ViewBag.product.productId">
+                                                <input type="text" style="display: none" class="form-control" id="VarientId" value="@varient.varientId">
+                                                <select id="optionSelect" name="@varient.productName" class="form-control">
                                                     @{
                                                         if (ViewBag.product.varientModels != null)
                                                         {
                                                             @foreach (var option in @ViewBag.product.varientOptionModels)
                                                             {
-                                                                if (option.varientId == @varient.varientId)
+                                                                if (option.varientId == @varient.varientId && @option.varientName != "0")
                                                                 {
-                                                                                                <option value="xl">@option.varientName</option>
+                                                                    <option value="@option.varientOptionId">@option.varientName</option>
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                            </select>
-                                                        </div><!-- End .select-custom -->
-                                                    </div>
+                                                </select>
+                                            </div><!-- End .select-custom -->
+                                        </div>
                                     }
+                                } else {
+                                    <input type="text" style="display: none" class="form-control" id="productId" value="@ViewBag.product.productId">
                                 }
                             }
 
@@ -252,11 +308,9 @@
                             </div><!-- End .details-filter-row -->
 
                             <div class="product-details-action">
-                                <a href="#" class="btn-product btn-cart"><span>Add to cart</span></a>
-
-                                <div class="details-action-wrapper">
-                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
-                                </div><!-- End .details-action-wrapper -->
+                                <button type="submit" style="all: unset;">
+                                    <a id="AddToCardID" class="btn-product btn-cart"><span>Add to cart</span></a>
+                                </button>
                             </div><!-- End .product-details-action -->
                         </div><!-- End .product-details -->
                     </div><!-- End .col-md-6 -->
@@ -510,10 +564,88 @@
             });
         });
 
+        $("#imageV").click(function (e) {
+            e.preventDefault();
+            console.log($("#imageV").attr('src'))
+            jQuery.ajax({
+                url: '@Url.Action("SearchProduct", "Home")',
+                type: 'GET',
+                data: { searchInput: $("#searchInputField").val() },
+                success: function (data) {
+                    $('#searchProducts').html(data);
+                },
+                error: function () {
+                    // Handle errors if necessary
+                }
+            });
+        });
+
+        $("#AddToCardID").click(function (e) {
+            e.preventDefault();
+            var qty = document.getElementById("qty").value;
+            var productId = document.getElementById("productId").value;
+            var VarientId;
+            if(document.getElementById("optionSelect") !== null) {
+                VarientId = document.getElementById("optionSelect").value;
+            } else {
+                VarientId = "Null"
+            }
+            
+            console.log("qty")
+            jQuery.ajax({
+                url: '@Url.Action("AddToCart", "Home")',
+                type: 'POST',
+                data: { qty: qty, productId: productId, VarientId: VarientId },
+                success: function (data) {
+                    $('#bodyId').replaceWith(data);
+                },
+                error: function () {
+                    // Handle errors if necessary
+                }
+            });
+        });
+
         // Attach click event handler to the button
         $('#products-sale-link').on('click', function () {
             // Call updateData() when the button is clicked
             GetOnSaleItemsData();
+        });
+
+
+        $(document).ready(function () {
+            $("form").submit(function (e) {
+                e.preventDefault();
+                jQuery.ajax({
+                    url: '@Url.Action("SelectImage", "Home")',
+                    type: 'GET',
+                    data: { imageSelected: e.target[1].value },
+                    success: function (data) {
+                        $('#product-zoom').replaceWith(data);
+                    },
+                    error: function () {
+                        // Handle errors if necessary
+                    }
+                });
+            });
+        });
+
+        $("#optionSelect").click(function (e) {
+            e.preventDefault();
+            var x = document.getElementById("optionSelect").value;
+            console.log(productId)
+            console.log(VarientId)
+
+            jQuery.ajax({
+                url: '@Url.Action("SelectImage", "Home")',
+                type: 'GET',
+                data: { imageSelected: x },
+                success: function (data) {
+                    $('#product-zoom').replaceWith(data);
+                },
+                error: function () {
+                    // Handle errors if necessary
+                }
+            });
         });
     </script>
 </body>

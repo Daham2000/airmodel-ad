@@ -34,7 +34,7 @@ namespace airmodel_ad.Migrations
                     b.Property<int>("qty")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("varientOptionId")
+                    b.Property<Guid?>("varientOptionId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("cartItemId");
@@ -113,6 +113,34 @@ namespace airmodel_ad.Migrations
                     b.Property<Guid>("oId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("city")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("county")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("fName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("lName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("phoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("postCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("total")
                         .HasColumnType("int");
@@ -257,9 +285,7 @@ namespace airmodel_ad.Migrations
 
                     b.HasOne("airmodel_ad.Models.VarientOptionModel", "varientOption")
                         .WithMany()
-                        .HasForeignKey("varientOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("varientOptionId");
 
                     b.Navigation("cart");
 

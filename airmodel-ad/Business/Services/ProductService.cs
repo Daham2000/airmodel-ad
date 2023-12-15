@@ -124,5 +124,20 @@ namespace airmodel_ad.Business.Services
                 return false;
             }
         }
+
+        public VarientOptionModel GetProductVarientById(Guid searchInput)
+        {
+            VarientOptionModel varientOptionModels = new VarientOptionModel();
+            try
+            {
+                varientOptionModels = appDbContext.varientOption.Where(u => u.varientOptionId == searchInput).FirstOrDefault();
+
+                return varientOptionModels;
+            }
+            catch (Exception ex)
+            {
+                return varientOptionModels;
+            }
+        }
     }
 }

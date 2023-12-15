@@ -14,8 +14,8 @@ namespace airmodel_ad.Models
         [ForeignKey("products")]
         public Guid productId { get; set; }
         public int qty { get; set; }
-        public VarientOptionModel varientOption { get; set; }
+        public VarientOptionModel? varientOption { get; set; }
         [ForeignKey("varientOption")]
-        public Guid varientOptionId { get; set; }
+        public Guid? varientOptionId { get; set; }
     }
 }

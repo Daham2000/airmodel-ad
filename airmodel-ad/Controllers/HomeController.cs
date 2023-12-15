@@ -24,6 +24,8 @@ namespace airmodel_ad.Controllers
         private readonly ICategoryService categoryService;
         int total = 0;
         string selectedImage = string.Empty;
+        Guid VarientId = Guid.Empty;
+        Guid productId = Guid.Empty;
 
         public HomeController(IUserService user, IProductService product, ICartService cartService, ICategoryService categoryService)
         {
@@ -42,14 +44,12 @@ namespace airmodel_ad.Controllers
                 categories = categoryService.GetAllCategories();
                 selectedCategory = productService.GetAllProductsByCategory(categories.FirstOrDefault().categoryId);
                 CartModel cartModel = cartService.GetCart(emailValue);
-                Debug.WriteLine("cartModel: ");
-                Debug.WriteLine(cartModel.cartId);
 
                 cartModels = cartService.GetCartItem(cartModel.cartId);
 
                 foreach (var item in cartModels)
                 {
-                    if (item.varientOptionId != null)
+                    if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
                     {
                         total += item.varientOption.varientPrice;
                     }
@@ -165,6 +165,122 @@ namespace airmodel_ad.Controllers
             catch (Exception ex)
             {
                 return View("../Product/ProductView");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int qty, Guid productId, string VarientId)
+        {
+            try
+            {
+                ProductModel product = productService.GetProductById(productId);
+                bool ifAvailable = cartService.CheckProductAvailableInCart(product);
+
+                string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                CartModel cartModel = cartService.GetCart(emailValue);
+                Debug.WriteLine("qty");
+                Debug.WriteLine(qty);
+
+
+                CartItemModel newCartItemModel = new CartItemModel();
+                newCartItemModel.cartItemId = Guid.NewGuid();
+                newCartItemModel.cartId = cartModel.cartId;
+                newCartItemModel.productId = productId;
+                newCartItemModel.qty = qty;
+                if (ifAvailable == false)
+                {
+                    if (VarientId != "Null")
+                    {
+
+                        newCartItemModel.varientOptionId = new Guid(VarientId);
+                    } else
+                    {
+                        newCartItemModel.varientOptionId = Guid.Empty;
+                    }
+                    bool result = cartService.AddCart(newCartItemModel);
+                }
+                await GetHomePageData();
+                ViewBag.product = product;
+                ViewBag.selectedImage = product.productImage;
+
+                ViewBag.productModels = productModels;
+                ViewBag.selectedCategory = selectedCategory;
+                ViewBag.cartModels = cartModels;
+                ViewBag.len = cartModels.Count();
+                ViewBag.total = total;
+                ViewBag.categories = categories;
+
+                return View("../Product/ProductView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Product/ProductView");
+            }
+        }
+
+        public async Task<IActionResult> RemoveFromCart(Guid cartItemId)
+        {
+            try
+            {
+                bool re = await GetHomePageData();
+                Debug.WriteLine("cartItemId");
+                Debug.WriteLine(cartModels.Count());
+                CartItemModel cartItem = cartModels.Where((cart) => cart.cartItemId == cartItemId).FirstOrDefault();
+                Debug.WriteLine(cartItem.cartItemId);
+                cartService.RemoveCartItem(cartItem);
+                await GetHomePageData();
+
+                ViewBag.productModels = productModels;
+                ViewBag.selectedCategory = selectedCategory;
+                ViewBag.cartModels = cartModels;
+                ViewBag.len = cartModels.Count();
+                ViewBag.total = total;
+                ViewBag.categories = categories;
+
+                return View("../Home/HomeView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Home/HomeView");
+            }
+        }
+
+        public async Task<PartialViewResult> SelectImage(Guid imageSelected)
+        {
+            try
+            {
+                Debug.WriteLine("imageSelected");
+                Debug.WriteLine(imageSelected);
+                VarientOptionModel varientOptionModel = productService.GetProductVarientById(imageSelected);
+                ViewBag.selectedImage = varientOptionModel.varientImage;
+                
+                return PartialView("../Product/ImageView");
+            }
+            catch (Exception ex)
+            {
+                return PartialView("../Product/ImageView");
+            }
+        }
+
+        public async Task<IActionResult> LoadCheckOutView()
+        {
+            try
+            {
+                Debug.WriteLine("LoadCheckOutView");
+                await GetHomePageData();
+
+                ViewBag.productModels = productModels;
+                ViewBag.selectedCategory = selectedCategory;
+                ViewBag.cartModels = cartModels;
+                ViewBag.len = cartModels.Count();
+                ViewBag.total = total;
+                ViewBag.categories = categories;
+
+                return View("../Home/CheckOutView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Home/CheckOutView");
             }
         }
 
