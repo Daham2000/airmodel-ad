@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Diagnostics.Metrics;
 using System.IO;
 using airmodel_ad.Business.Services;
+using airmodel_ad.Models.ParamModels;
 
 namespace airmodel_ad.Controllers
 {
@@ -76,17 +77,24 @@ namespace airmodel_ad.Controllers
         public async Task<IActionResult> Index()
         {
             try {
-                bool re = await GetHomePageData();
+                string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                User user = userService.GetUserByEmail(emailValue);
+                if (user.userRole == "admin")
+                {
+                    return View("../Admin/AdminView");
+                }
+                else
+                {
+                    bool re = await GetHomePageData();
 
-
-                ViewBag.productModels = productModels;
-                ViewBag.selectedCategory = selectedCategory;
-                ViewBag.cartModels = cartModels;
-                ViewBag.len = cartModels.Count();
-                ViewBag.total = total;
-                ViewBag.categories = categories;
-
-                return View("../Home/HomeView");
+                    ViewBag.productModels = productModels;
+                    ViewBag.selectedCategory = selectedCategory;
+                    ViewBag.cartModels = cartModels;
+                    ViewBag.len = cartModels.Count();
+                    ViewBag.total = total;
+                    ViewBag.categories = categories;
+                    return View("../Home/HomeView");
+                }
             } catch(Exception ex)
             {
                 return View("../Home/HomeView");
