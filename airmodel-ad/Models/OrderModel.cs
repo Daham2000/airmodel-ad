@@ -18,5 +18,9 @@ namespace airmodel_ad.Models
         public string city { get; set; }
         public string postCode { get; set; }
         public string phoneNumber { get; set; }
+        public string orderStatus { get; set; }
+        public string orderNote { get; set; }
+        [NotMapped]
+        public List<OrderItem>? orderItems { get; set; }
     }
 }

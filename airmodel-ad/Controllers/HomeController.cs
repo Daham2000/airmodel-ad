@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using airmodel_ad.Business.Interface;
 using System.Security.Claims;
+using System.Diagnostics.Metrics;
+using System.IO;
+using airmodel_ad.Business.Services;
 
 namespace airmodel_ad.Controllers
 {
@@ -18,21 +21,24 @@ namespace airmodel_ad.Controllers
         List<ProductModel> selectedCategory;
         List<CartItemModel> cartModels;
         List<Category> categories;
+        List<OrderModel> orderModels;
         private readonly IUserService userService;
         private readonly IProductService productService;
         private readonly ICartService cartService;
         private readonly ICategoryService categoryService;
+        private readonly IOrderService orderService;
         int total = 0;
         string selectedImage = string.Empty;
         Guid VarientId = Guid.Empty;
         Guid productId = Guid.Empty;
 
-        public HomeController(IUserService user, IProductService product, ICartService cartService, ICategoryService categoryService)
+        public HomeController(IUserService user, IProductService product, ICartService cartService, ICategoryService categoryService, IOrderService orderService)
         {
             this.userService = user;
             this.productService = product;
             this.cartService = cartService;
             this.categoryService = categoryService;
+            this.orderService = orderService;
         }
 
         private async Task<bool> GetHomePageData()
@@ -46,16 +52,17 @@ namespace airmodel_ad.Controllers
                 CartModel cartModel = cartService.GetCart(emailValue);
 
                 cartModels = cartService.GetCartItem(cartModel.cartId);
-
+                Debug.WriteLine("cartModels");
+                Debug.WriteLine(cartModels.Count());
                 foreach (var item in cartModels)
                 {
                     if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
                     {
-                        total += item.varientOption.varientPrice;
+                        total += item.varientOption.varientPrice * item.qty;
                     }
                     else
                     {
-                        total += item.products.productBasicPrice;
+                        total += item.products.productBasicPrice * item.qty;
                     }
                 }
                 return true;
@@ -71,6 +78,7 @@ namespace airmodel_ad.Controllers
             try {
                 bool re = await GetHomePageData();
 
+
                 ViewBag.productModels = productModels;
                 ViewBag.selectedCategory = selectedCategory;
                 ViewBag.cartModels = cartModels;
@@ -82,6 +90,53 @@ namespace airmodel_ad.Controllers
             } catch(Exception ex)
             {
                 return View("../Home/HomeView");
+            }
+        }
+
+        public async Task<IActionResult> GetAllMyOrdera()
+        {
+            try
+            {
+                bool re = await GetHomePageData();
+                string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                User user = userService.GetUserByEmail(emailValue);
+         
+                orderModels = orderService.GetAllOrders(user.userId);
+
+                for (int i=0; i<=orderModels.Count()-1; i++) {
+                    orderModels[i].orderItems = orderService.GetAllOrderItems(orderModels[i].oId);
+                    Debug.WriteLine("orderModels[i].orderStatus");
+                    Debug.WriteLine(orderModels[i].orderStatus);
+                    if (orderModels[i].orderStatus == "0")
+                    {
+                        orderModels[i].orderStatus = "Pending";
+                    }
+                    else if (orderModels[i].orderStatus == "1")
+                    {
+                        orderModels[i].orderStatus = "Shipped";
+                    }
+                    else
+                    {
+                        orderModels[i].orderStatus = "Delivered";
+                    }
+                }
+                Debug.WriteLine(user.userId);
+                Debug.WriteLine(orderModels.Count());
+
+                ViewBag.orderModels = orderModels;
+
+                ViewBag.productModels = productModels;
+                ViewBag.selectedCategory = selectedCategory;
+                ViewBag.cartModels = cartModels;
+                ViewBag.len = cartModels.Count();
+                ViewBag.total = total;
+                ViewBag.categories = categories;
+
+                return View("../Home/MyOrderView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Home/MyOrderView");
             }
         }
 
@@ -281,6 +336,82 @@ namespace airmodel_ad.Controllers
             catch (Exception ex)
             {
                 return View("../Home/CheckOutView");
+            }
+        }
+
+        public async Task<IActionResult> PlaceOrder(string fName, string lName, string orderNote, string county, string street, string houseNo, string city, string postCode, string phoneNumber)
+        {
+            try
+            {
+                await GetHomePageData();
+                Debug.WriteLine("Fname");
+                Debug.WriteLine(fName);
+                Debug.WriteLine(street);
+                Debug.WriteLine(postCode);
+                string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                User user = userService.GetUserByEmail(emailValue);
+                OrderModel orderModel = new OrderModel();
+                orderModel.oId = new Guid();
+                total = 0;
+                foreach (var item in cartModels)
+                {
+                    if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
+                    {
+                        total += item.varientOption.varientPrice * item.qty;
+                    }
+                    else
+                    {
+                        total += item.products.productBasicPrice * item.qty;
+                    }
+                }
+                orderModel.total = total;
+                orderModel.userId = user.userId;
+                orderModel.fName = fName;
+                orderModel.lName = lName;
+                orderModel.county = county;
+                orderModel.address = houseNo + ", " + street + ", " + county;
+                orderModel.city = city;
+                orderModel.postCode = postCode;
+                orderModel.phoneNumber = phoneNumber;
+                if(orderNote == null)
+                {
+                    orderModel.orderNote = "No order note.";
+
+                } else
+                {
+                    orderModel.orderNote = orderNote;
+                }
+                orderModel.orderStatus = "0";
+
+                List<OrderItem> orderItems= new List<OrderItem>();
+                foreach (CartItemModel item in cartModels)
+                {
+                    OrderItem orderItem= new OrderItem();
+                    orderItem.oItemId = new Guid();
+                    orderItem.productId = item.productId;
+                    orderItem.qty = item.qty;
+                    orderItem.oItemId = new Guid();
+                    orderItem.varientOptionId = item.varientOptionId;
+                    orderItems.Add(orderItem);
+                }
+                Debug.WriteLine(orderItems[0].productId);
+                orderService.AddOrder(orderModel, orderItems, cartModels[0].cartId);
+
+
+                await GetHomePageData();
+
+                ViewBag.productModels = productModels;
+                ViewBag.selectedCategory = selectedCategory;
+                ViewBag.cartModels = cartModels;
+                ViewBag.len = cartModels.Count();
+                ViewBag.total = total;
+                ViewBag.categories = categories;
+
+                return View("../Home/HomeView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Home/HomeView");
             }
         }
 

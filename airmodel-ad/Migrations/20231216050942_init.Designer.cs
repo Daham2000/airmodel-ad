@@ -11,7 +11,7 @@ using airmodel_ad.Data;
 namespace airmodel_ad.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231214172817_init")]
+    [Migration("20231216050942_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -97,7 +97,7 @@ namespace airmodel_ad.Migrations
                     b.Property<int>("qty")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("varientOptionId")
+                    b.Property<Guid?>("varientOptionId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("oItemId");
@@ -134,6 +134,14 @@ namespace airmodel_ad.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("lName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("orderNote")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("orderStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -324,9 +332,7 @@ namespace airmodel_ad.Migrations
 
                     b.HasOne("airmodel_ad.Models.VarientOptionModel", "varientOption")
                         .WithMany()
-                        .HasForeignKey("varientOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("varientOptionId");
 
                     b.Navigation("orders");
 

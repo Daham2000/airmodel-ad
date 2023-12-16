@@ -16,7 +16,8 @@ namespace airmodel_ad.Business.Services
 		}
 		public bool AddUser(SignupModel signupModel)
 		{
-			try {
+			try
+			{
 				User user = new User();
 				user.userId = Guid.NewGuid();
 				user.userRole = "user";
@@ -27,29 +28,49 @@ namespace airmodel_ad.Business.Services
 				appDbContext.Add(user);
 				CartModel cartModel = new CartModel();
 				cartModel.userId = user.userId;
-                cartModel.cartId = Guid.NewGuid();
-                appDbContext.Add(cartModel);
+				cartModel.cartId = Guid.NewGuid();
+				appDbContext.Add(cartModel);
 
-                appDbContext.SaveChanges();
+				appDbContext.SaveChanges();
 				return true;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				return false;
-			}	
+			}
 		}
 
 		public bool FindUserByEmail(string email, string password)
 		{
-			try {
+			try
+			{
 				User? user = appDbContext.users.Where((u) => u.userEmail == email).Where((u) => u.userPassword == password).FirstOrDefault();
-				if(user == null)
+				if (user == null)
 				{
 					return false;
 				}
 				return true;
-			} catch(Exception ex) {
+			}
+			catch (Exception ex)
+			{
 				return false;
+			}
+		}
+
+		public User GetUserByEmail(string email)
+		{
+			try
+			{
+				User? user = appDbContext.users.Where((u) => u.userEmail == email).FirstOrDefault();
+				if (user == null)
+				{
+					return new User();
+				}
+				return user;
+			}
+			catch (Exception ex)
+			{
+				return new User();
 			}
 		}
 	}

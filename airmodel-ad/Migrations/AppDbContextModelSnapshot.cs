@@ -94,7 +94,7 @@ namespace airmodel_ad.Migrations
                     b.Property<int>("qty")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("varientOptionId")
+                    b.Property<Guid?>("varientOptionId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("oItemId");
@@ -131,6 +131,14 @@ namespace airmodel_ad.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("lName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("orderNote")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("orderStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -321,9 +329,7 @@ namespace airmodel_ad.Migrations
 
                     b.HasOne("airmodel_ad.Models.VarientOptionModel", "varientOption")
                         .WithMany()
-                        .HasForeignKey("varientOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("varientOptionId");
 
                     b.Navigation("orders");
 
