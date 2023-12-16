@@ -11,6 +11,8 @@ using System.Diagnostics.Metrics;
 using System.IO;
 using airmodel_ad.Business.Services;
 using airmodel_ad.Models.ParamModels;
+using airmodel_ad.Models.Chart;
+using Newtonsoft.Json;
 
 namespace airmodel_ad.Controllers
 {
@@ -81,6 +83,33 @@ namespace airmodel_ad.Controllers
                 User user = userService.GetUserByEmail(emailValue);
                 if (user.userRole == "admin")
                 {
+                    List<OrderModel> pendingOrders = orderService.GetAllPendingOrders();
+                    for (int i = 0; i <= pendingOrders.Count() - 1; i++)
+                    {
+                        pendingOrders[i].orderItems = orderService.GetAllOrderItems(pendingOrders[i].oId);
+                        if (pendingOrders[i].orderStatus == "0")
+                        {
+                            pendingOrders[i].orderStatus = "Pending";
+                        }
+                        else if (pendingOrders[i].orderStatus == "1")
+                        {
+                            pendingOrders[i].orderStatus = "Shipped";
+                        }
+                        else
+                        {
+                            pendingOrders[i].orderStatus = "Delivered";
+                        }
+                    }
+                    ViewBag.orders = pendingOrders;
+
+                    List<DataPoint> dataPoints = new List<DataPoint>();
+                    for (int i = 0; i < pendingOrders.Count; i++)
+                    {
+                        dataPoints.Add(new DataPoint(pendingOrders[i].userId.ToString(), pendingOrders[i].total));
+                    }
+
+                    ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
+
                     return View("../Admin/AdminView");
                 }
                 else

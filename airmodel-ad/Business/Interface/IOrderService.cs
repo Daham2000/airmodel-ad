@@ -6,6 +6,8 @@ namespace airmodel_ad.Business.Interface
     {
         public bool AddOrder(OrderModel orderModel, List<OrderItem> orderItems, Guid cartId);
         public List<OrderModel> GetAllOrders(Guid userId);
+        public List<OrderModel> GetAllPendingOrders();
         public List<OrderItem> GetAllOrderItems(Guid orderId);
+        public bool ChangeOrderState(Guid orderId, string status);
     }
 }

@@ -49,6 +49,21 @@ namespace airmodel_ad.Business.Services
             }
         }
 
+        public bool ChangeOrderState(Guid orderId, string status)
+        {
+            try
+            {
+                OrderModel? orderModel = appDbContext.orders.Where((o) => o.oId == orderId).FirstOrDefault();
+                orderModel.orderStatus = status;
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public List<OrderItem> GetAllOrderItems(Guid orderId)
         {
             List <OrderItem> orderItems = new List<OrderItem>();  
@@ -74,6 +89,17 @@ namespace airmodel_ad.Business.Services
             }
             catch (Exception e)
             {
+                return orderModels;
+            }
+        }
+
+        public List<OrderModel> GetAllPendingOrders()
+        {
+            List<OrderModel> orderModels = new List<OrderModel>();
+            try {
+                orderModels = appDbContext.orders.Where((or) => or.orderStatus != "2").ToList();
+                return orderModels;
+            } catch (Exception e) {
                 return orderModels;
             }
         }
