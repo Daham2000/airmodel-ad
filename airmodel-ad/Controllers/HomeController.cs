@@ -105,7 +105,7 @@ namespace airmodel_ad.Controllers
                     List<DataPoint> dataPoints = new List<DataPoint>();
                     for (int i = 0; i < pendingOrders.Count; i++)
                     {
-                        dataPoints.Add(new DataPoint(pendingOrders[i].userId.ToString(), pendingOrders[i].total));
+                        dataPoints.Add(new DataPoint(pendingOrders[i].fName.ToString(), pendingOrders[i].total));
                     }
 
                     ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);

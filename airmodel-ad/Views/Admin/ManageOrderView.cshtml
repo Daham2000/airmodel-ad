@@ -1,8 +1,5 @@
-﻿@*
-    
-*@
-@{
-    Layout=null;
+﻿@{
+    Layout = null;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -26,30 +23,6 @@
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-
-    <script>
-        window.onload = function () {
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                theme: "light2", // "light1", "light2", "dark1", "dark2"
-                exportEnabled: true,
-                animationEnabled: true,
-                title: {
-                    text: "Order Total Statistics by Users",
-                    fontSize: 14
-                },
-                data: [{
-                    type: "splineArea",
-                    startAngle: 160,
-                    toolTipContent: "<b>{label}</b>: {y}%",
-                    indexLabel: "{label} - {y}$",
-                    dataPoints: @Html.Raw(ViewBag.DataPoints)
-                    }]
-            });
-            chart.render();
-
-        }
-    </script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -86,7 +59,7 @@
                                 <span class="nav-link-text ms-1">Dashboard</span>
                             </button>
                         </form>
-                        
+
                     </a>
                 </li>
 
@@ -166,53 +139,52 @@
         </nav>
         <!-- End Navbar -->
 
-        <div>
-            @{
-                if (@ViewBag.orders != null)
-                {
-                    <h5 class="mt-4">Available Orders List</h5>
-                    <div class="mt-3">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Order ID</th>
-                                    <th scope="col">Customer ID</th>
-                                    <th scope="col">Order Total</th>
-                                    <th scope="col">Customer Name</th>
-                                    <th scope="col">Customer Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (int i = 0; i < @ViewBag.orders.Count; i++)
-                                {
-                                    var index = i + 1;
-                                    <tr>
-                                        <th scope="row">@index</th>
-                                        <td>@ViewBag.orders[@i].oId</td>
-                                        <td>@ViewBag.orders[@i].userId</td>
-                                        <td>$@ViewBag.orders[@i].total</td>
-                                        <td>@ViewBag.orders[@i].fName</td>
-                                        <td>@ViewBag.orders[@i].orderStatus</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <a asp-controller="Admin" asp-action="GenerateOrderBasicReport" class="btn btn-primary">Download Pending Order's' Report</a>
-                    </div>
-                }
+        <div id="viewId">
+            <h5>Manage Orders</h5>
+            @foreach (var order in @ViewBag.orders)
+            {
+                <div class="card mt-4" style="max-width: 50rem;">
+                    <form method="post" asp-controller="ManageOrderAdmin" asp-action="ChangeStatus">
+                        <div class="card-body">
+                            <h5 class="card-title">Order ID: @order.oId</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Customer name: @order.fName @order.lName</h6>
+                            <p class="card-text">Shipping Address: @order.address, @order.county</p>
+                            <p class="card-text">Order total: $@order.total</p>
+                            <p class="card-text">Shipping City: @order.city</p>
+                            <p class="card-text">Shipping Post Code: @order.postCode</p>
+                            <p class="card-text">Contact Number: @order.phoneNumber</p>
+                            <p class="card-text">Order Note: @order.orderNote</p>
+                            <h6>Order Item List</h6>
+                            @foreach (var item in order.orderItems)
+                            {
+                                <p class="card-text">Item Name: @item.products.productName</p>
+                                <p class="card-text">Item Quantity: @item.qty</p>
+                            }
+                            @if (@order.orderStatus == "Delivered")
+                            {
+                                <h6 class="text-success">Order Status: @order.orderStatus</h6>
+                            }
+                            else
+                            {
+                                <h6 class="text-danger">Order Status: @order.orderStatus</h6>
+                            }
+
+                            <input type="hidden" class="form-control" name="oId" value="@order.oId" aria-describedby="emailHelp" placeholder="Enter computer name">
+                            <div class="d-flex align-items-center">
+                                <select name="orderStatus" class="form-select form-select-sm m-2">
+                                    @foreach (var status in @ViewBag.orderStatus)
+                                    {
+                                        <option>@status</option>
+                                    }
+                                </select>
+                                <button type="submit" class="btn btn-primary m-2">Change Status</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
             }
         </div>
-        <hr class="mt-2 mb-3" />
-        @{
-            if (ViewBag.DataPoints != null)
-            {
-                <div>
-                    <h5>Order Summey Statistics</h5>
-                    <div id="chartContainer" style="height: 370px; width: 100%; margin-top: 50px" class="mt-6"></div>
-                </div>
-            }
-        }
  
     </main>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>

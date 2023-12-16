@@ -5,11 +5,6 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Mail;
-using System.Net;
-using Newtonsoft.Json;
-using airmodel_ad.Models.Chart;
 
 namespace airmodel_ad.Controllers
 {

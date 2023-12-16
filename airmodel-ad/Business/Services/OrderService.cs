@@ -103,5 +103,18 @@ namespace airmodel_ad.Business.Services
                 return orderModels;
             }
         }
+        public List<OrderModel> GetAllUserOrders()
+        {
+            List<OrderModel> orderModels = new List<OrderModel>();
+            try
+            {
+                orderModels = appDbContext.orders.ToList();
+                return orderModels;
+            }
+            catch (Exception e)
+            {
+                return orderModels;
+            }
+        }
     }
 }
