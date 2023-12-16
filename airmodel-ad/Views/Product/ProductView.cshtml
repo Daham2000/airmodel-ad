@@ -49,9 +49,13 @@
                         <i class="icon-bars"></i>
                     </button>
 
-                    <a href="index.html" class="logo">
-                        <img src="~/images/logo.jpg" alt="Molla Logo" width="105" height="25">
-                    </a>
+                    <form method="post" asp-controller="Home" asp-action="Index">
+                        <button type="submit" style="all: unset;">
+                            <a class="logo">
+                                <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
+                            </a>
+                        </button>
+                    </form>
                 </div><!-- End .header-left -->
 
                 <div class="header-center">
