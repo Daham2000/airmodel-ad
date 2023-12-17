@@ -118,13 +118,19 @@
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
         <nav class="d-flex flex-row-reverse navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
-            <div class="d-flex flex-row-reverse container-fluid py-1 px-3">
-                <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            <div class="d-flex flex-row-reverse container-fluid py-1">
+                <div style="justify-content: end;" class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <ul class="navbar-nav  justify-content-end">
                         <li class="nav-item d-flex align-items-center">
                             <a class="nav-link text-body font-weight-bold px-0">
-                                <i class="fa fa-user me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Sign Out</span>
+                                <form method="post" asp-controller="Home" asp-action="Logout">
+                                    <button type="submit" style="all: unset;">
+                                        <i class="fa fa-user me-sm-1"></i>
+
+                                        <span class="d-sm-inline d-none">Sign Out</span>
+                                    </button>
+                                </form>
+
                             </a>
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -140,6 +146,7 @@
                     </ul>
                 </div>
             </div>
+
         </nav>
         <!-- End Navbar -->
 
