@@ -1,8 +1,5 @@
-﻿@*
-    
-*@
-@{
-    Layout=null;
+﻿@{
+    Layout = null;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -26,30 +23,6 @@
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-
-    <script>
-        window.onload = function () {
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                theme: "light2", // "light1", "light2", "dark1", "dark2"
-                exportEnabled: true,
-                animationEnabled: true,
-                title: {
-                    text: "Order Total Statistics by Users",
-                    fontSize: 14
-                },
-                data: [{
-                    type: "splineArea",
-                    startAngle: 160,
-                    toolTipContent: "<b>{label}</b>: {y}%",
-                    indexLabel: "{label} - {y}$",
-                    dataPoints: @Html.Raw(ViewBag.DataPoints)
-                    }]
-            });
-            chart.render();
-
-        }
-    </script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -86,7 +59,7 @@
                                 <span class="nav-link-text ms-1">Dashboard</span>
                             </button>
                         </form>
-                        
+
                     </a>
                 </li>
 
@@ -132,12 +105,7 @@
                                 </g>
                             </svg>
                         </div>
-                        <form method="post" asp-controller="ManageProductAdmin" asp-action="Index">
-                            <button type="submit" style="all: unset;">
-                                <span class="nav-link-text ms-1">Manage Products</span>
-                            </button>
-                        </form>
-
+                        <span class="nav-link-text ms-1">Manage Products</span>
                     </a>
                 </li>
             </ul>
@@ -151,14 +119,8 @@
                     <ul class="navbar-nav  justify-content-end">
                         <li class="nav-item d-flex align-items-center">
                             <a class="nav-link text-body font-weight-bold px-0">
-                                <form method="post" asp-controller="Home" asp-action="Logout">
-                            <button type="submit" style="all: unset;">
-                                        <i class="fa fa-user me-sm-1"></i>
-
-                                        <span class="d-sm-inline d-none">Sign Out</span>
-                            </button>
-                        </form>
-
+                                <i class="fa fa-user me-sm-1"></i>
+                                <span class="d-sm-inline d-none">Sign Out</span>
                             </a>
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -177,54 +139,42 @@
         </nav>
         <!-- End Navbar -->
 
-        <div>
-            @{
-                if (@ViewBag.orders != null)
-                {
-                    <h5 class="mt-4">Available Orders List</h5>
-                    <div class="mt-3">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Order ID</th>
-                                    <th scope="col">Customer ID</th>
-                                    <th scope="col">Order Total</th>
-                                    <th scope="col">Customer Name</th>
-                                    <th scope="col">Customer Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (int i = 0; i < @ViewBag.orders.Count; i++)
-                                {
-                                    var index = i + 1;
-                                    <tr>
-                                        <th scope="row">@index</th>
-                                        <td>@ViewBag.orders[@i].oId</td>
-                                        <td>@ViewBag.orders[@i].userId</td>
-                                        <td>$@ViewBag.orders[@i].total</td>
-                                        <td>@ViewBag.orders[@i].fName</td>
-                                        <td>@ViewBag.orders[@i].orderStatus</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <a asp-controller="Admin" asp-action="GenerateOrderBasicReport" class="btn btn-primary">Download Pending Order's' Report</a>
-                    </div>
-                }
-            }
-        </div>
-        <hr class="mt-2 mb-3" />
-        @{
-            if (ViewBag.DataPoints != null)
-            {
-                <div>
-                    <h5>Order Summey Statistics</h5>
-                    <div id="chartContainer" style="height: 370px; width: 100%; margin-top: 50px" class="mt-6"></div>
+        <div id="viewId">
+            <h5>Manage Products</h5>
+            <div class="container mt-3">
+                <div class="row">
+                    @{
+                        @foreach (var product in @ViewBag.allItemsList)
+                        {
+                            <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <img src="@product.productImage" alt="Product Image" class="img-fluid">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body text-dark">
+                                            <h5 class="card-title">@product.productName</h5>
+                                            <p class="card-text"><strong>Category ID:</strong> @product.categoryId</p>
+                                            <p class="card-text"><strong>Category Type:</strong> @product.categoryName</p>
+                                            <p class="card-text"><strong>Starting Price ($):</strong> @product.productBasicPrice</p>
+                                            <p class="card-text"><strong>Available Qty:</strong> @product.productQty</p>
+                                            <form method="post" asp-controller="EditProduct" asp-action="Index">
+                                                <input type="hidden" class="form-control" name="productId" value="@product.productId">
+                                                <button type="submit" class="btn btn-outline-primary">Edit Product</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
+                    }
                 </div>
-            }
-        }
- 
+            </div>
+         
+        </div>
+
     </main>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>

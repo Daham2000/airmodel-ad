@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<form method="post" asp-controller="ManageProductAdmin" asp-action="Index">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Products Name</label>
+        <input type="text" class="form-control" name="productName" id="cName" value="@ViewBag.item.productName" aria-describedby="emailHelp" placeholder="Enter product name">
+
+    </div>
+    <div class="mb-1">
+        <label>Select category type</label>
+        <select name="categoryName" value="@ViewBag.item.categoryName" class="form-control form-control-sm">
+            @foreach (var type in @ViewBag.categories)
+            {
+                <option>@type.categoryName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Product Genaral Price</label>
+        <input type="number" class="form-control" name="productBasicPrice" id="productBasicPrice" value="@ViewBag.item.productBasicPrice" aria-describedby="emailHelp" placeholder="Enter product price">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Product Image URL</label>
+        <input type="text" class="form-control" name="productBasicPrice" id="productBasicPrice" value="@ViewBag.item.productBasicPrice" aria-describedby="emailHelp" placeholder="Enter computer image URL">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Product Quantity</label>
+        <input type="number" class="form-control" name="productQty" id="productQty" value="@ViewBag.item.productQty" aria-describedby="emailHelp" placeholder="Enter qty">
+    </div>
+    <div class="dropdown-divider w-50 mb-1"></div>
+
+    <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+</form>

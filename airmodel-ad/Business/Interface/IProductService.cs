@@ -11,6 +11,7 @@ namespace airmodel_ad.Business.Interface
         public VarientOptionModel GetProductVarientById(Guid searchInput);
         public List<ProductModel> GetAllAvailableProducts();
         public bool AddProduct(ProductModel product);
+        public bool EditProduct(ProductModel product);
         public bool AddProductVarient(VarientModel varientModel);
         public bool AddProductVarientItem(VarientOptionModel varientOption);
     }

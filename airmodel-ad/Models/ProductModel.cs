@@ -11,6 +11,8 @@ namespace airmodel_ad.Models
         [ForeignKey("category")]
         public Guid categoryId { get; set; }
         public string productName { get; set; }
+        [NotMapped]
+        public string categoryName { get; set; }
         public string productDescription { get; set; }
         public string productImage { get; set; }
         public int productBasicPrice { get; set; }

@@ -31,7 +31,13 @@ namespace airmodel_ad.Business.Services
         {
             List<ProductModel> products = new List<ProductModel>();
             try {
+                List<Category> categories = appDbContext.category.ToList();
+
                 products = appDbContext.products.ToList();
+                for (int i = 0; i <= products.Count() - 1; i++)
+                {
+                    products[i].categoryName = categories.Where((ca) => ca.categoryId == products[i].categoryId).FirstOrDefault().categoryName;
+                }
                 return products;
             } catch (Exception ex) {
                 return products;
@@ -43,7 +49,12 @@ namespace airmodel_ad.Business.Services
             List<ProductModel> products = new List<ProductModel>();
             try
             {
+                List<Category> categories = appDbContext.category.ToList();
                 products = appDbContext.products.Where((p) => p.categoryId == categoryId).ToList();
+                for(int i=0; i<=products.Count()-1; i++)
+                {
+                    products[i].categoryName = categories.Where((ca) => ca.categoryId == products[i].categoryId).FirstOrDefault().categoryName;
+                }
                 return products;
             }
             catch (Exception ex)
@@ -89,6 +100,17 @@ namespace airmodel_ad.Business.Services
         {
             try { 
                 appDbContext.Add(product);
+                appDbContext.SaveChanges();
+                VarientModel colorVarient = new VarientModel();
+                colorVarient.productId = product.productId;
+                colorVarient.varientId = new Guid();
+                colorVarient.productName = "Color";
+                VarientModel sizeVarient = new VarientModel();
+                colorVarient.productId = product.productId;
+                colorVarient.varientId = new Guid();
+                colorVarient.productName = "Size";
+                appDbContext.Add(colorVarient);
+                appDbContext.Add(sizeVarient);
                 appDbContext.SaveChanges();
                 return true;
             } catch (Exception ex)
@@ -137,6 +159,26 @@ namespace airmodel_ad.Business.Services
             catch (Exception ex)
             {
                 return varientOptionModels;
+            }
+        }
+
+        public bool EditProduct(ProductModel product)
+        {
+            try
+            {
+                appDbContext.SaveChanges();
+                foreach (var varientOption in product.varientOptionModels)
+                {
+                    VarientOptionModel? varientOptionModel = appDbContext.varientOption.Where((v) => v.varientId == varientOption.varientId).FirstOrDefault();
+                    varientOptionModel = varientOption;
+                    appDbContext.SaveChanges();
+                }
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

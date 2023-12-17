@@ -105,7 +105,11 @@
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Manage Products</span>
+                        <form method="post" asp-controller="ManageProductAdmin" asp-action="Index">
+                            <button type="submit" style="all: unset;">
+                                <span class="nav-link-text ms-1">Manage Products</span>
+                            </button>
+                        </form>
                     </a>
                 </li>
             </ul>
@@ -141,47 +145,57 @@
 
         <div id="viewId">
             <h5>Manage Orders</h5>
+            <h6 class="mt-2 mb-1 ">Here is the List of Orders (Pending, Shipped, Delivered)</h6>
             @foreach (var order in @ViewBag.orders)
             {
-                <div class="card mt-4" style="max-width: 50rem;">
+                <div class="card mt-4 mb-1 mr-2 custom-card-style">
                     <form method="post" asp-controller="ManageOrderAdmin" asp-action="ChangeStatus">
                         <div class="card-body">
-                            <h5 class="card-title">Order ID: @order.oId</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Customer name: @order.fName @order.lName</h6>
-                            <p class="card-text">Shipping Address: @order.address, @order.county</p>
-                            <p class="card-text">Order total: $@order.total</p>
-                            <p class="card-text">Shipping City: @order.city</p>
-                            <p class="card-text">Shipping Post Code: @order.postCode</p>
-                            <p class="card-text">Contact Number: @order.phoneNumber</p>
-                            <p class="card-text">Order Note: @order.orderNote</p>
-                            <h6>Order Item List</h6>
-                            @foreach (var item in order.orderItems)
-                            {
-                                <p class="card-text">Item Name: @item.products.productName</p>
-                                <p class="card-text">Item Quantity: @item.qty</p>
-                            }
-                            @if (@order.orderStatus == "Delivered")
-                            {
-                                <h6 class="text-success">Order Status: @order.orderStatus</h6>
-                            }
-                            else
-                            {
-                                <h6 class="text-danger">Order Status: @order.orderStatus</h6>
-                            }
-
-                            <input type="hidden" class="form-control" name="oId" value="@order.oId" aria-describedby="emailHelp" placeholder="Enter computer name">
-                            <div class="d-flex align-items-center">
-                                <select name="orderStatus" class="form-select form-select-sm m-2">
-                                    @foreach (var status in @ViewBag.orderStatus)
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="card-title text-primary">Order ID: @order.oId</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">Customer name: @order.fName @order.lName</h6>
+                                    <p class="card-text">Shipping Address: @order.address, @order.county</p>
+                                    <p class="card-text">Order total: $@order.total</p>
+                                    <p class="card-text">Shipping City: @order.city</p>
+                                    <p class="card-text">Shipping Post Code: @order.postCode</p>
+                                    <p class="card-text">Contact Number: @order.phoneNumber</p>
+                                    <p class="card-text">Order Note: @order.orderNote</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-muted">Order Item List</h6>
+                                    @foreach (var item in order.orderItems)
                                     {
-                                        <option>@status</option>
+                                        <p class="card-text">Item Name: @item.products.productName</p>
+                                        <p class="card-text">Item Quantity: @item.qty</p>
                                     }
-                                </select>
-                                <button type="submit" class="btn btn-primary m-2">Change Status</button>
+                                    @if (@order.orderStatus == "Delivered")
+                                    {
+                                        <h6 class="text-success">Order Status: @order.orderStatus</h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="text-danger">Order Status: @order.orderStatus</h6>
+                                    }
+
+                                    <div class="d-flex align-items-center">
+                                        <select name="orderStatus" class="form-select form-select-sm custom-select-style">
+                                            @foreach (var status in @ViewBag.orderStatus)
+                                            {
+                                                <option>@status</option>
+                                            }
+                                        </select>
+                                        <button type="submit" style="font-size:9px; padding-top: 2px !important; padding-bottom: 2px !important;" class="btn p-0 m-0 btn-primary">Change Status</button>
+                                    </div>
+                                </div>
                             </div>
+
+                            <input type="hidden" class="form-control" name="oId" value="@order.oId">
+                            
                         </div>
                     </form>
                 </div>
+
 
             }
         </div>
