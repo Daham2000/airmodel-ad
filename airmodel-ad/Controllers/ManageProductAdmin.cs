@@ -1,4 +1,5 @@
 ﻿using airmodel_ad.Business.Interface;
+using airmodel_ad.Business.Services;
 using airmodel_ad.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,14 +44,43 @@ namespace airmodel_ad.Controllers
             try
             {
                 List<ProductModel> allItemsList = productService.GetAllProducts();
+                ProductModel item = productService.GetProductById(productId);
                 List<Category> categories = categoryService.GetAllCategories();
                 ViewBag.allItemsList = allItemsList;
+                ViewBag.item = item;
                 ViewBag.categories = categories;
-                return View("../Admin/ManageProductsView");
+                return View("../Admin/EditSingleProductAdmin");
             }
             catch (Exception ex)
             {
-                return View("../Admin/ManageProductsView");
+                return View("../Admin/EditSingleProductAdmin");
+            }
+        }
+
+        public IActionResult EditProductOnSubmit(Guid productId, string productName, string categoryName, int productBasicPrice, string productImage, int productQty)
+        {
+            try
+            {
+                List<Category> categories = categoryService.GetAllCategories();
+
+                ProductModel productModel = productService.GetProductById(productId);
+                productModel.productName = productName;
+                productModel.categoryId = categories.Where((ca) => ca.categoryName == categoryName).FirstOrDefault().categoryId;
+                productModel.productBasicPrice = productBasicPrice;
+                productModel.productImage = productImage;
+                productModel.productQty = productQty;
+                productService.EditProduct(productModel);
+
+                List<ProductModel> allItemsList = productService.GetAllProducts();
+                ProductModel item = productService.GetProductById(productId);
+                ViewBag.allItemsList = allItemsList;
+                ViewBag.item = item;
+                ViewBag.categories = categories;
+                return View("../Admin/EditSingleProductAdmin");
+            }
+            catch (Exception ex)
+            {
+                return View("../Admin/EditSingleProductAdmin");
             }
         }
     }

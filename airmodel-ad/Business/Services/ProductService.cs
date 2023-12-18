@@ -86,6 +86,8 @@ namespace airmodel_ad.Business.Services
                 VarientModel? varientModel = appDbContext.varient.Where(u => u.productId == searchInput).FirstOrDefault();
                 List<VarientOptionModel> varientOptionModels = appDbContext.varientOption.Where(u => u.varientId == varientModel.varientId).ToList();
                 List<VarientModel> varientModels = appDbContext.varient.Where(u => u.productId == product.productId).ToList();
+                product.categoryName = appDbContext.category.Where((ca) => ca.categoryId == product.categoryId).FirstOrDefault().categoryName;
+
                 product.varientOptionModels = varientOptionModels;
                 product.varientModels = varientModels;
                 return product;
@@ -167,12 +169,16 @@ namespace airmodel_ad.Business.Services
             try
             {
                 appDbContext.SaveChanges();
-                foreach (var varientOption in product.varientOptionModels)
+                if(product.varientOptionModels != null)
                 {
-                    VarientOptionModel? varientOptionModel = appDbContext.varientOption.Where((v) => v.varientId == varientOption.varientId).FirstOrDefault();
-                    varientOptionModel = varientOption;
-                    appDbContext.SaveChanges();
+                    foreach (var varientOption in product.varientOptionModels)
+                    {
+                        VarientOptionModel? varientOptionModel = appDbContext.varientOption.Where((v) => v.varientId == varientOption.varientId).FirstOrDefault();
+                        varientOptionModel = varientOption;
+                        appDbContext.SaveChanges();
+                    }
                 }
+
                 appDbContext.SaveChanges();
                 return true;
             }

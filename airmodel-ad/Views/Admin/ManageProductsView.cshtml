@@ -165,7 +165,7 @@
                                             <p class="card-text"><strong>Category Type:</strong> @product.categoryName</p>
                                             <p class="card-text"><strong>Starting Price ($):</strong> @product.productBasicPrice</p>
                                             <p class="card-text"><strong>Available Qty:</strong> @product.productQty</p>
-                                            <form method="post" asp-controller="EditProduct" asp-action="Index">
+                                            <form method="post" asp-controller="ManageProductAdmin" asp-action="EditProduct">
                                                 <input type="hidden" class="form-control" name="productId" value="@product.productId">
                                                 <button type="submit" class="btn btn-outline-primary">Edit Product</button>
                                             </form>
