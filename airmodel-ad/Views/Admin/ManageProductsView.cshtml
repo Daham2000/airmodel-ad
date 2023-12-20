@@ -147,7 +147,12 @@
         <!-- End Navbar -->
 
         <div id="viewId">
-            <h5>Manage Products</h5>
+            <div class="d-flex" style="flex-direction: row; justify-content:center; align-content: center; align-items:center;">
+                <h5>Manage Products</h5>
+                <form style="margin-left: 10px" method="post" asp-controller="ManageProductAdmin" asp-action="AddProduct">
+                    <button type="submit" class="btn btn-primary mt-2">Add New Product</button>
+                </form>
+            </div>
             <div class="container mt-3">
                 <div class="row">
                     @{

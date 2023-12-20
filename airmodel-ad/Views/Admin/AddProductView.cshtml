@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
-        Air-Model Dashboard
+        Air-Model - Add Product
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -111,6 +111,7 @@
             </ul>
         </div>
     </aside>
+    
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
         <nav class="d-flex flex-row-reverse navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
@@ -147,13 +148,10 @@
         <!-- End Navbar -->
 
         <div id="viewId">
-            <div class="d-flex" style="flex-direction: row; justify-content:center; align-content: center; align-items:center;">
-                <h5>Manage Products</h5>
-                <form style="margin-left: 10px" method="post" asp-controller="ManageProductAdmin" asp-action="AddProduct">
-                    <button type="submit" class="btn btn-primary mt-2">Add New Product</button>
-                </form>
+            <div class="d-flex" style="flex-direction: row;">
+                <h5>Add New Product</h5>
             </div>
-            <form method="post" asp-controller="ManageProductAdmin" asp-action="EditProductOnSubmit">
+            <form method="post" asp-controller="ManageProductAdmin" asp-action="AddProductOnSubmit">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Products Name</label>
                     <input type="text" class="form-control" name="productName" id="cName" value="@ViewBag.item.productName" aria-describedby="emailHelp" placeholder="Enter product name">
@@ -167,7 +165,8 @@
                             {
                                 <option selected>@type.categoryName</option>
 
-                            } else
+                            }
+                            else
                             {
                                 <option>@type.categoryName</option>
                             }
@@ -198,6 +197,10 @@
                 <div class="form-group">
                     <label for="exampleInputEmail1">Product Image URL</label>
                     <input type="text" class="form-control" name="productImage" id="productBasicPrice" value="@ViewBag.item.productImage" aria-describedby="emailHelp" placeholder="Enter computer image URL">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Product Description</label>
+                    <input type="text" class="form-control" name="productDescription" id="productDescription" value="@ViewBag.item.productDescription" aria-describedby="emailHelp" placeholder="Enter Product Description">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Product Quantity</label>

@@ -100,7 +100,9 @@ namespace airmodel_ad.Business.Services
 
         bool IProductService.AddProduct(ProductModel product)
         {
-            try { 
+            try {
+                Debug.WriteLine("Here...");
+                Debug.WriteLine(product.productId);
                 appDbContext.Add(product);
                 appDbContext.SaveChanges();
                 VarientModel colorVarient = new VarientModel();
@@ -108,9 +110,9 @@ namespace airmodel_ad.Business.Services
                 colorVarient.varientId = new Guid();
                 colorVarient.productName = "Color";
                 VarientModel sizeVarient = new VarientModel();
-                colorVarient.productId = product.productId;
-                colorVarient.varientId = new Guid();
-                colorVarient.productName = "Size";
+                sizeVarient.productId = product.productId;
+                sizeVarient.varientId = new Guid();
+                sizeVarient.productName = "Size";
                 appDbContext.Add(colorVarient);
                 appDbContext.Add(sizeVarient);
                 appDbContext.SaveChanges();
@@ -179,6 +181,19 @@ namespace airmodel_ad.Business.Services
                     }
                 }
 
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool EditProductVarientItem(VarientOptionModel varientOption)
+        {
+            try
+            {
                 appDbContext.SaveChanges();
                 return true;
             }

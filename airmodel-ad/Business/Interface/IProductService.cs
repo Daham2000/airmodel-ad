@@ -14,5 +14,5 @@ namespace airmodel_ad.Business.Interface
         public bool EditProduct(ProductModel product);
         public bool AddProductVarient(VarientModel varientModel);
         public bool AddProductVarientItem(VarientOptionModel varientOption);
-    }
+        public bool EditProductVarientItem(VarientOptionModel varientOption);    }
 }
