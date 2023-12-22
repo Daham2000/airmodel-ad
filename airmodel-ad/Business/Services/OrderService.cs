@@ -116,5 +116,19 @@ namespace airmodel_ad.Business.Services
                 return orderModels;
             }
         }
+
+        public List<OrderModel> GetOrderByStatus(string status)
+        {
+            List<OrderModel> orderModels = new List<OrderModel>();
+            try
+            {
+                orderModels = appDbContext.orders.Where((or) => or.orderStatus == status).ToList();
+                return orderModels;
+            }
+            catch (Exception e)
+            {
+                return orderModels;
+            }
+        }
     }
 }

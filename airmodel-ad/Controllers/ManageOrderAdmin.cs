@@ -4,6 +4,7 @@ using iText.Kernel.Pdf;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace airmodel_ad.Controllers
 {
@@ -45,11 +46,117 @@ namespace airmodel_ad.Controllers
                         pendingOrders[i].orderStatus = "Delivered";
                     }
                 }
+                ViewBag.orders = null;
+                List<string> orderStatusList = new List<string>();
+                orderStatusList.Add("Shipped");
+                orderStatusList.Add("Delivered");
+                ViewBag.orderStatus = orderStatusList;
+
+                List<string> orderStatusFilter = new List<string>();
+                orderStatusFilter.Add("Shipped");
+                orderStatusFilter.Add("Delivered");
+                orderStatusFilter.Add("Pending");
+                ViewBag.orderStatusFilter = orderStatusFilter;
+
+                return View("../Admin/ManageOrderView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Admin/ManageOrderView");
+            }
+        }
+
+        public IActionResult GetOrderById(Guid oId)
+        {
+            try
+            {
+                List<OrderModel> pendingOrders = orderService.GetAllUserOrders();
+                for (int i = 0; i <= pendingOrders.Count() - 1; i++)
+                {
+                    pendingOrders[i].orderItems = orderService.GetAllOrderItems(pendingOrders[i].oId);
+                    if (pendingOrders[i].orderStatus == "0")
+                    {
+                        pendingOrders[i].orderStatus = "Pending";
+                    }
+                    else if (pendingOrders[i].orderStatus == "1")
+                    {
+                        pendingOrders[i].orderStatus = "Shipped";
+                    }
+                    else
+                    {
+                        pendingOrders[i].orderStatus = "Delivered";
+                    }
+                }
+                ViewBag.orders = null;
+                pendingOrders = pendingOrders.Where((or) => or.oId == oId).ToList();
+                ViewBag.fOrders = pendingOrders;
+                List<string> orderStatusList = new List<string>();
+                orderStatusList.Add("Shipped");
+                orderStatusList.Add("Delivered");
+                ViewBag.orderStatus = orderStatusList;
+
+                List<string> orderStatusFilter = new List<string>();
+                orderStatusFilter.Add("Shipped");
+                orderStatusFilter.Add("Delivered");
+                orderStatusFilter.Add("Pending");
+                ViewBag.orderStatusFilter = orderStatusFilter;
+
+                return View("../Admin/ManageOrderView");
+            }
+            catch (Exception ex)
+            {
+                return View("../Admin/ManageOrderView");
+            }
+        }
+
+        public IActionResult FilterOrderList(string orderStatusSelected)
+        {
+            try
+            {
+                string orderStatusSelectedF = orderStatusSelected;
+                if (orderStatusSelected == "Pending")
+                {
+                    orderStatusSelected = "0";
+                }
+                else if (orderStatusSelected == "Shipped")
+                {
+                    orderStatusSelected = "1";
+                }
+                else
+                {
+                    orderStatusSelected = "2";
+                }
+
+                List<OrderModel> pendingOrders = orderService.GetOrderByStatus(orderStatusSelected);
+                for (int i = 0; i <= pendingOrders.Count() - 1; i++)
+                {
+                    pendingOrders[i].orderItems = orderService.GetAllOrderItems(pendingOrders[i].oId);
+                    if (pendingOrders[i].orderStatus == "0")
+                    {
+                        pendingOrders[i].orderStatus = "Pending";
+                    }
+                    else if (pendingOrders[i].orderStatus == "1")
+                    {
+                        pendingOrders[i].orderStatus = "Shipped";
+                    }
+                    else
+                    {
+                        pendingOrders[i].orderStatus = "Delivered";
+                    }
+                }
                 ViewBag.orders = pendingOrders;
                 List<string> orderStatusList = new List<string>();
                 orderStatusList.Add("Shipped");
                 orderStatusList.Add("Delivered");
                 ViewBag.orderStatus = orderStatusList;
+
+                List<string> orderStatusFilter = new List<string>();
+                orderStatusFilter.Add("Shipped");
+                orderStatusFilter.Add("Delivered");
+                orderStatusFilter.Add("Pending");
+                ViewBag.orderStatusFilter = orderStatusFilter;
+                ViewBag.orderStatusSelected = orderStatusSelectedF;
+
                 return View("../Admin/ManageOrderView");
             }
             catch (Exception ex)
@@ -92,6 +199,12 @@ namespace airmodel_ad.Controllers
                 orderStatusList.Add("Shipped");
                 orderStatusList.Add("Delivered");
                 ViewBag.orderStatus = orderStatusList;
+
+                List<string> orderStatusFilter = new List<string>();
+                orderStatusFilter.Add("Shipped");
+                orderStatusFilter.Add("Delivered");
+                orderStatusFilter.Add("Pending");
+                ViewBag.orderStatusFilter = orderStatusFilter;
                 return View("../Admin/ManageOrderView");
             }
             catch (Exception ex)

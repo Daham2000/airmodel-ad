@@ -73,5 +73,22 @@ namespace airmodel_ad.Business.Services
 				return new User();
 			}
 		}
-	}
+
+        public User GetUserByUid(Guid uId)
+        {
+            try
+            {
+                User? user = appDbContext.users.Where((u) => u.userId == uId).FirstOrDefault();
+                if (user == null)
+                {
+                    return new User();
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                return new User();
+            }
+        }
+    }
 }

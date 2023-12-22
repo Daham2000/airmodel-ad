@@ -20,6 +20,7 @@
     <link href="~/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="~/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -152,59 +153,136 @@
 
         <div id="viewId">
             <h5>Manage Orders</h5>
-            <h6 class="mt-2 mb-1 ">Here is the List of Orders (Pending, Shipped, Delivered)</h6>
-            @foreach (var order in @ViewBag.orders)
-            {
-                <div class="card mt-4 mb-1 mr-2 custom-card-style">
-                    <form method="post" asp-controller="ManageOrderAdmin" asp-action="ChangeStatus">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5 class="card-title text-primary">Order ID: @order.oId</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Customer name: @order.fName @order.lName</h6>
-                                    <p class="card-text">Shipping Address: @order.address, @order.county</p>
-                                    <p class="card-text">Order total: $@order.total</p>
-                                    <p class="card-text">Shipping City: @order.city</p>
-                                    <p class="card-text">Shipping Post Code: @order.postCode</p>
-                                    <p class="card-text">Contact Number: @order.phoneNumber</p>
-                                    <p class="card-text">Order Note: @order.orderNote</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <h6 class="text-muted">Order Item List</h6>
-                                    @foreach (var item in order.orderItems)
-                                    {
-                                        <p class="card-text">Item Name: @item.products.productName</p>
-                                        <p class="card-text">Item Quantity: @item.qty</p>
-                                    }
-                                    @if (@order.orderStatus == "Delivered")
-                                    {
-                                        <h6 class="text-success">Order Status: @order.orderStatus</h6>
-                                    }
-                                    else
-                                    {
-                                        <h6 class="text-danger">Order Status: @order.orderStatus</h6>
-                                    }
+            <div class="d-flex align-items">
+                <form style="display:flex; flex-direction:row; align-items: center; align-content: center;" method="post" asp-controller="ManageOrderAdmin" asp-action="FilterOrderList">
+                    <h6 class="card-text" style="margin: 0;">Select Orders by Status</h6>
 
-                                    <div class="d-flex align-items-center">
-                                        <select name="orderStatus" class="form-select form-select-sm custom-select-style">
-                                            @foreach (var status in @ViewBag.orderStatus)
-                                            {
-                                                <option>@status</option>
-                                            }
-                                        </select>
-                                        <button type="submit" style="font-size:9px; padding-top: 2px !important; padding-bottom: 2px !important;" class="btn p-0 m-0 btn-primary">Change Status</button>
-                                    </div>
-                                </div>
+                    <select style="width: 125px; margin-right: 10px; margin-left: 10px;" name="orderStatusSelected" class="mr-2 ml-2 form-select form-select-sm custom-select-style">
+                        @foreach (var status in @ViewBag.orderStatusFilter)
+                        {
+                            if (@ViewBag.orderStatusSelected == status)
+                            {
+                                <option selected>@status</option>
+
+                            }
+                            else
+                            {
+                                <option>@status</option>
+                            }
+                        }
+                    </select>
+                    <button type="submit" style="height:20px; font-size:9px; padding-top: 2px !important; padding-bottom: 2px !important;" class="btn p-1 m-0 mr-2 btn-primary">Search Orders</button>
+                </form>
+            </div>
+            @{
+                if (@ViewBag.fOrders == null)
+                {
+                    if (@ViewBag.orders != null)
+                    {
+                        <h6 class="mt-2 mb-1 ">Here is the List of Orders</h6>
+                        if (@ViewBag.orders != null)
+                        {
+                            <h5 class="mt-4">Available Orders List</h5>
+                            <div class="mt-3">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Order ID</th>
+                                            <th scope="col">Customer ID</th>
+                                            <th scope="col">Order Total</th>
+                                            <th scope="col">Customer Name</th>
+                                            <th scope="col">Customer Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < @ViewBag.orders.Count; i++)
+                                        {
+                                            var index = i + 1;
+                                            <tr onclick="location.href = '@Url.Action("GetOrderById", "ManageOrderAdmin", new { oId = @ViewBag.orders[@i].oId })'">
+                                                <th scope="row">@index</th>
+                                                <td>@ViewBag.orders[@i].oId</td>
+                                                <td>@ViewBag.orders[@i].userId</td>
+                                                <td>$@ViewBag.orders[@i].total</td>
+                                                <td>@ViewBag.orders[@i].fName</td>
+                                                <td>@ViewBag.orders[@i].orderStatus</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <form method="post" asp-controller="Admin" asp-action="GenerateOrderBasicReportByStatus">
+                                    <input type="text" style="display: none" class="form-control" name="orderStatusSelected" value="@ViewBag.orderStatusSelected">
+
+                                    <button type="submit" class="btn btn-primary">Download Order's' Report</button>
+                                </form>
                             </div>
+                        }
 
-                            <input type="hidden" class="form-control" name="oId" value="@order.oId">
-                            
+                    }
+
+                }
+
+                if (@ViewBag.fOrders != null)
+                {
+                    @foreach (var order in @ViewBag.fOrders)
+                    {
+                        <div class="card mt-4 mb-1 mr-2 custom-card-style">
+                            <form method="post" asp-controller="ManageOrderAdmin" asp-action="ChangeStatus">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="card-title text-primary">Order ID: @order.oId</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">Customer name: @order.fName @order.lName</h6>
+                                            <p class="card-text">Shipping Address: @order.address, @order.county</p>
+                                            <p class="card-text">Order total: $@order.total</p>
+                                            <p class="card-text">Shipping City: @order.city</p>
+                                            <p class="card-text">Shipping Post Code: @order.postCode</p>
+                                            <p class="card-text">Contact Number: @order.phoneNumber</p>
+                                            <p class="card-text">Order Note: @order.orderNote</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="text-muted">Order Item List</h6>
+                                            @foreach (var item in order.orderItems)
+                                            {
+                                                <p class="card-text">Item Name: @item.products.productName</p>
+                                                <p class="card-text">Item Quantity: @item.qty</p>
+                                            }
+                                            @if (@order.orderStatus == "Delivered")
+                                            {
+                                                <h6 class="text-success">Order Status: @order.orderStatus</h6>
+                                            }
+                                            else
+                                            {
+                                                <h6 class="text-danger">Order Status: @order.orderStatus</h6>
+                                            }
+
+                                            <div class="d-flex align-items-center">
+                                                <select name="orderStatus" class="form-select form-select-sm custom-select-style">
+                                                    @foreach (var status in @ViewBag.orderStatus)
+                                                    {
+                                                        <option>@status</option>
+                                                    }
+                                                </select>
+                                                <button type="submit" style="font-size:9px; padding-top: 2px !important; padding-bottom: 2px !important;" class="btn p-0 m-0 btn-primary">Change Status</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" class="form-control" name="oId" value="@order.oId">
+
+                                </div>
+                            </form>
+
+                            <form method="post" asp-controller="Admin" class="mr-2" style="margin-left: 20px" asp-action="GenerateOrderBasicReportByID">
+                                <input type="text" style="display: none" class="form-control mt-2" name="id" value="@order.oId">
+
+                                <button type="submit" class="btn btn-primary">Download Report</button>
+                            </form>
                         </div>
-                    </form>
-                </div>
-
-
+                    }
+                }
             }
+
         </div>
  
     </main>

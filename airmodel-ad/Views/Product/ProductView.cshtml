@@ -263,9 +263,22 @@
                         <div class="product-details">
                             <h1 class="product-title">@ViewBag.product.productName</h1><!-- End .product-title -->
 
-                            <div class="product-price">
-                                $@ViewBag.product.productBasicPrice
-                            </div><!-- End .product-price -->
+                            @{
+                                if (@ViewBag.selectedProPrice != null)
+                                {
+                                    <div class="product-price">
+                                        $@ViewBag.selectedProPrice
+                                    </div>
+                                    <!-- End .product-price -->
+                                }
+                                else
+                                {
+                                    <div class="product-price">
+                                        $@ViewBag.product.productBasicPrice
+                                    </div>
+                                    <!-- End .product-price -->                                    
+                                }
+                            }
 
                             <div class="product-content">
                                 <p>@ViewBag.product.productDescription</p>

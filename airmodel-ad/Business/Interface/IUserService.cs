@@ -8,5 +8,7 @@ namespace airmodel_ad.Business.Interface
 		public bool AddUser(SignupModel signupModel);
 		public bool FindUserByEmail(string email, string password);
 		public User GetUserByEmail(string email);
+
+		public User GetUserByUid(Guid uId);
     }
 }

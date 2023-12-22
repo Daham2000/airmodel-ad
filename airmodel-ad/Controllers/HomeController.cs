@@ -345,7 +345,10 @@ namespace airmodel_ad.Controllers
                 Debug.WriteLine(imageSelected);
                 VarientOptionModel varientOptionModel = productService.GetProductVarientById(imageSelected);
                 ViewBag.selectedImage = varientOptionModel.varientImage;
-                
+                ViewBag.selectedProPrice = varientOptionModel.varientPrice;
+                Debug.WriteLine("varientOptionModel.varientPrice");
+                Debug.WriteLine(varientOptionModel.varientPrice);
+
                 return PartialView("../Product/ImageView");
             }
             catch (Exception ex)
