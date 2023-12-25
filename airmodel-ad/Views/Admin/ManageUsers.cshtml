@@ -20,6 +20,7 @@
     <link href="~/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="~/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -177,126 +178,140 @@
         </nav>
         <!-- End Navbar -->
 
-        <div id="viewId">
-            <div class="d-flex" style="flex-direction: row; justify-content:center; align-content: center; align-items:center;">
-                <h5>Manage Products</h5>
-                <form style="margin-left: 10px" method="post" asp-controller="ManageProductAdmin" asp-action="AddProduct">
-                    <button type="submit" class="btn btn-primary mt-2">Add New Product</button>
-                </form>
-            </div>
-            <form method="post" asp-controller="ManageProductAdmin" asp-action="EditProductOnSubmit">
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Products Name</label>
-                    <input type="text" class="form-control" name="productName" id="cName" value="@ViewBag.item.productName" aria-describedby="emailHelp" placeholder="Enter product name">
-                </div>
-                <div class="mb-1">
-                    <label>Select category type</label>
-                    <select name="categoryName" value="@ViewBag.item.categoryName" class="form-control form-control-sm">
-                        @foreach (var type in @ViewBag.categories)
-                        {
-                            if (@ViewBag.item.categoryName == type.categoryName)
-                            {
-                                <option selected>@type.categoryName</option>
-
-                            } else
-                            {
-                                <option>@type.categoryName</option>
-                            }
-                        }
-                    </select>
-                </div>
-                <div class="mb-1">
-                    <label>Select If varient product</label>
-                    <select name="hasVarients" value="@ViewBag.hasVarients" class="form-control form-control-sm">
-                        @foreach (var booll in @ViewBag.booll)
-                        {
-                            if (booll == @ViewBag.hasVarients)
-                            {
-                                <option selected>@booll</option>
-
-                            }
-                            else
-                            {
-                                <option>@booll</option>
-                            }
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Product Genaral Price</label>
-                    <input type="number" class="form-control" name="productBasicPrice" id="productBasicPrice" value="@ViewBag.item.productBasicPrice" aria-describedby="emailHelp" placeholder="Enter product price">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Product Image URL</label>
-                    <input type="text" class="form-control" name="productImage" id="productBasicPrice" value="@ViewBag.item.productImage" aria-describedby="emailHelp" placeholder="Enter computer image URL">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Product Quantity</label>
-                    <input type="number" class="form-control" name="productQty" id="productQty" value="@ViewBag.item.productQty" aria-describedby="emailHelp" placeholder="Enter qty">
-                </div>
-                <div class="dropdown-divider w-50 mb-1"></div>
-                <input type="text" style="display: none" class="form-control" name="productId" value="@ViewBag.item.productId">
-
-                <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
-            </form>
-
-            <div class="mb-1 mt-2">
-                @{
-                    if (@ViewBag.item.varientModels != null)
+        <div id="mainViewId">
+            <h5>Manage Users</h5>
+            @{
+                if (@ViewBag.users != null)
+                {
+                    if (ViewBag.isUserEdit == false)
                     {
-                        if (@ViewBag.item.hasVarients == true)
-                        {
-                            <h5>Edit Variation options</h5>
-                            @foreach (var varient in @ViewBag.item.varientModels)
-                            {
-                                <div class="text-sm-lef mb-1 mt-1">
-                                    Variation name: @varient.productName
-                                    <div class="m-2 ml-3" style="padding-left: 20px;">
-                                        <h6>Variation Options</h6>
-                                        @foreach (var option in @ViewBag.item.varientOptionModels)
-                                        {
-                                            if (option.varientId == varient.varientId)
-                                            {
-                                                if (option.varientOptionId != new Guid("00000000-0000-0000-0000-000000000000"))
-                                                {
-                                                    <div>
-                                                        <form method="post" asp-controller="ManageProductAdmin" asp-action="EditVarientOnSubmit">
-                                                            <input type="text" class="form-control mb-1" name="varientName" id="varientName" value="@option.varientName" placeholder="Enter Variation Option Name">
-                                                            <input type="number" class="form-control mb-1" name="varientPrice" id="varientPrice" value="@option.varientPrice" aria-describedby="emailHelp" placeholder="Enter Variation Option Price">
-                                                            <input type="number" class="form-control mb-1" name="varientQty" id="varientQty" value="@option.varientQty" aria-describedby="emailHelp" placeholder="Enter Variation Option Qty">
-                                                            <input type="text" class="form-control mb-1" name="varientImage" id="varientImage" value="@option.varientImage" aria-describedby="emailHelp" placeholder="Enter Variation Option Image">
-                                                            <input type="text" style="display: none" class="form-control" name="varientOptionId" value="@option.varientOptionId">
-                                                            <input type="text" style="display: none" class="form-control" name="varientId" value="@option.varientId">
-                                                            <input type="text" style="display: none" class="form-control" name="productId" value="@ViewBag.item.productId">
-
-                                                            <button type="submit" class="btn btn-success mt-2 mb-2">Edit Variation Option</button>
-                                                        </form>
-                                                    </div>
-                                                }
-                                            }
-                                        }
-                                        <div class="mt-2 mb-2">
-                                            <div class="dropdown-divider w-50 mb-1"></div>
-                                            <form method="post" asp-controller="ManageProductAdmin" asp-action="AddVarientOnSubmit">
-                                                <input type="text" class="form-control mb-1" name="varientName" id="varientName" placeholder="Enter Variation Option Name">
-                                                <input type="number" class="form-control mb-1" name="varientPrice" id="varientPrice" aria-describedby="emailHelp" placeholder="Enter Variation Option Price">
-                                                <input type="number" class="form-control mb-1" name="varientQty" id="varientQty" aria-describedby="emailHelp" placeholder="Enter Variation Option Qty">
-                                                <input type="text" class="form-control mb-1" name="varientImage" id="varientImage" aria-describedby="emailHelp" placeholder="Enter Variation Option Image">
-                                                <input type="text" style="display: none" class="form-control" name="varientId" value="@varient.varientId">
-                                                <input type="text" style="display: none" class="form-control" name="productId" value="@ViewBag.item.productId">
-                                                <button type="submit" class="btn btn-success mt-2 mb-2">Add New Variation Option</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-divider w-50 mb-1"></div>
-                                </div>
-                            }
-                        }
-
+                        <div class="mt-3">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">User ID</th>
+                                        <th scope="col">User Name</th>
+                                        <th scope="col">User Email</th>
+                                        <th scope="col">User Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < @ViewBag.users.Count; i++)
+                                    {
+                                        var index = i + 1;
+                                        <tr onclick="location.href = '@Url.Action("EditUserView", "Admin", new { userId = @ViewBag.users[@i].userId })'">
+                                            <th scope="row">@index</th>
+                                            <td>@ViewBag.users[@i].userId</td>
+                                            <td>@ViewBag.users[@i].userName</td>
+                                            <td>@ViewBag.users[@i].userEmail</td>
+                                            <td>@ViewBag.users[@i].userRole</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <form method="post" asp-controller="Admin" asp-action="DownloadUserReport">
+                                <button type="submit" class="btn btn-primary">Download User's' Report</button>
+                            </form>
+                        </div>
                     }
+                    
                 }
 
-            </div>
+                if (ViewBag.isUserEdit == true)
+                {
+                    <form method="post" asp-controller="Admin" asp-action="EditUserAction">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Name</label>
+                            <input type="text" required class="form-control" name="userName" id="userName" value="@ViewBag.user.userName" aria-describedby="emailHelp" placeholder="Enter user name">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Email</label>
+                            <input type="email" required class="form-control" name="userEmail" id="userEmail" value="@ViewBag.user.userEmail" aria-describedby="emailHelp" placeholder="Enter user Email">
+                        </div>
+                        <div class="mb-1">
+                            <label>Select User Role</label>
+                            <select name="userRole" required value="@ViewBag.user.userRole" class="form-control form-control-sm">
+                                @foreach (var booll in @ViewBag.userRoles)
+                                {
+                                    if (booll == @ViewBag.user.userRole)
+                                    {
+                                        <option selected>@booll</option>
+
+                                    }
+                                    else
+                                    {
+                                        <option>@booll</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <input type="text" style="display: none" class="form-control" name="userId" value="@ViewBag.user.userId">
+
+                        <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+                    </form>
+
+                    if (@ViewBag.fOrders != null)
+                    {
+                        @foreach (var order in @ViewBag.fOrders)
+                        {
+                            <div class="card mt-4 mb-1 mr-2 custom-card-style">
+                                <form method="post" asp-controller="ManageOrderAdmin" asp-action="ChangeStatus">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h5 class="card-title text-primary">Order ID: @order.oId</h5>
+                                                <h6 class="card-subtitle mb-2 text-muted">Customer name: @order.fName @order.lName</h6>
+                                                <p class="card-text">Shipping Address: @order.address, @order.county</p>
+                                                <p class="card-text">Order total: $@order.total</p>
+                                                <p class="card-text">Shipping City: @order.city</p>
+                                                <p class="card-text">Shipping Post Code: @order.postCode</p>
+                                                <p class="card-text">Contact Number: @order.phoneNumber</p>
+                                                <p class="card-text">Order Note: @order.orderNote</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6 class="text-muted">Order Item List</h6>
+                                                @foreach (var item in order.orderItems)
+                                                {
+                                                    <p class="card-text">Item Name: @item.products.productName</p>
+                                                    <p class="card-text">Item Quantity: @item.qty</p>
+                                                }
+                                                @if (@order.orderStatus == "Delivered")
+                                                {
+                                                    <h6 class="text-success">Order Status: @order.orderStatus</h6>
+                                                }
+                                                else
+                                                {
+                                                    <h6 class="text-danger">Order Status: @order.orderStatus</h6>
+                                                }
+
+                                                <div class="d-flex align-items-center">
+                                                    <select name="orderStatus" class="form-select form-select-sm custom-select-style">
+                                                        @foreach (var status in @ViewBag.orderStatus)
+                                                        {
+                                                            <option>@status</option>
+                                                        }
+                                                    </select>
+                                                    <button type="submit" style="font-size:9px; padding-top: 2px !important; padding-bottom: 2px !important;" class="btn p-0 m-0 btn-primary">Change Status</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" class="form-control" name="oId" value="@order.oId">
+
+                                    </div>
+                                </form>
+
+                                <form method="post" asp-controller="Admin" class="mr-2" style="margin-left: 20px" asp-action="GenerateOrderBasicReportByID">
+                                    <input type="text" style="display: none" class="form-control mt-2" name="id" value="@order.oId">
+
+                                    <button type="submit" class="btn btn-primary">Download Report</button>
+                                </form>
+                            </div>
+                        }
+                    }
+                }
+            }
         </div>
 
     </main>

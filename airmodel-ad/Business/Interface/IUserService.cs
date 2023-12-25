@@ -10,5 +10,7 @@ namespace airmodel_ad.Business.Interface
 		public User GetUserByEmail(string email);
 
 		public User GetUserByUid(Guid uId);
+		public bool EditUser(Guid uId, User user);
+        public List<User> GetAllUsers();
     }
 }

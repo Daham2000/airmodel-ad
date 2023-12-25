@@ -257,5 +257,147 @@ namespace airmodel_ad.Controllers
 
             return View("../Admin/AdminView");
         }
+
+        public IActionResult GetAllUsers()
+        {
+            List<User> users = userService.GetAllUsers();
+            ViewBag.users = users;
+            ViewBag.isUserEdit = false;
+
+            return View("../Admin/ManageUsers");
+        }
+
+        public IActionResult DownloadUserReport()
+        {
+            List<User> users = userService.GetAllUsers();
+            ViewBag.users = users;
+            ViewBag.isUserEdit = false;
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new PdfWriter(stream))
+                {
+                    using (var pdf = new PdfDocument(writer))
+                    {
+                        var document = new Document(pdf);
+
+                        if (users.Count != 0)
+                        {
+                            //Create report title and subtitles
+                            document.Add(new Paragraph("All Users Report").SetTextAlignment(TextAlignment.CENTER).SetFontSize(12));
+                            document.Add(new Paragraph("Date: " + DateTime.Now.ToString("dd/MM/yyyy")).SetTextAlignment(TextAlignment.CENTER).SetFontSize(10));
+
+                            //Create report table
+                            var table = new Table(new float[] { 1, 1, 1, 1, 1 }).SetFontSize(8);
+                            table.AddHeaderCell(new Cell().Add(new Paragraph("#")));
+                            table.AddHeaderCell(new Cell().Add(new Paragraph("User ID")));
+                            table.AddHeaderCell(new Cell().Add(new Paragraph("User Name")));
+                            table.AddHeaderCell(new Cell().Add(new Paragraph("User Email")));
+                            table.AddHeaderCell(new Cell().Add(new Paragraph("User Role")));
+
+                            for (int i = 0; i < users.Count; i++)
+                            {
+                                table.AddCell(new Cell().Add(new Paragraph((i + 1).ToString())));
+                                table.AddCell(new Cell().Add(new Paragraph(users[i].userId.ToString())));
+                                table.AddCell(new Cell().Add(new Paragraph(users[i].userName)));
+                                table.AddCell(new Cell().Add(new Paragraph(users[i].userEmail.ToString())));
+                                table.AddCell(new Cell().Add(new Paragraph(users[i].userRole.ToString())));
+                            }
+                            document.Add(table);
+                        }
+                        else
+                        {
+                            document.Add(new Paragraph("No user data!").SetTextAlignment(TextAlignment.CENTER).SetFontSize(9));
+                        }
+
+                        document.Close();
+                    }
+                }
+                return File(stream.ToArray(), "application/pdf", "All Users Report.pdf");
+            }
+
+            return View("../Admin/ManageUsers");
+        }
+
+        public IActionResult EditUserAction(Guid userId, string userName, string userEmail, string userRole)
+        {
+            User user = userService.GetUserByUid(userId);
+            user.userName = userName;
+            user.userEmail = userEmail;
+            user.userRole = userRole;
+            userService.EditUser(user.userId, user);
+            ViewBag.isUserEdit = true;
+            user = userService.GetUserByUid(userId);
+            ViewBag.user = user;
+            List<string> userRoles = new List<string>();
+            userRoles.Add("user");
+            userRoles.Add("admin");
+            ViewBag.userRoles = userRoles;
+
+
+            List<OrderModel> ordersList = orderService.GetAllOrders(userId);
+            for (int i = 0; i <= ordersList.Count() - 1; i++)
+            {
+                ordersList[i].orderItems = orderService.GetAllOrderItems(ordersList[i].oId);
+                if (ordersList[i].orderStatus == "0")
+                {
+                    ordersList[i].orderStatus = "Pending";
+                }
+                else if (ordersList[i].orderStatus == "1")
+                {
+                    ordersList[i].orderStatus = "Shipped";
+                }
+                else
+                {
+                    ordersList[i].orderStatus = "Delivered";
+                }
+            }
+            ViewBag.fOrders = ordersList;
+
+            List<string> orderStatusList = new List<string>();
+            orderStatusList.Add("Shipped");
+            orderStatusList.Add("Delivered");
+            ViewBag.orderStatus = orderStatusList;
+
+            return View("../Admin/ManageUsers");
+        }
+
+        public IActionResult EditUserView(Guid userId)
+        {
+            User user = userService.GetUserByUid(userId);
+            ViewBag.isUserEdit = true;
+            ViewBag.user = user;
+            List<string> userRoles = new List<string>();
+            userRoles.Add("user");
+            userRoles.Add("admin");
+            ViewBag.userRoles = userRoles;
+
+            List<OrderModel> ordersList = orderService.GetAllOrders(userId);
+            for (int i = 0; i <= ordersList.Count() - 1; i++)
+            {
+                ordersList[i].orderItems = orderService.GetAllOrderItems(ordersList[i].oId);
+                if (ordersList[i].orderStatus == "0")
+                {
+                    ordersList[i].orderStatus = "Pending";
+                }
+                else if (ordersList[i].orderStatus == "1")
+                {
+                    ordersList[i].orderStatus = "Shipped";
+                }
+                else
+                {
+                    ordersList[i].orderStatus = "Delivered";
+                }
+            }
+            ViewBag.fOrders = ordersList;
+            List<string> orderStatusList = new List<string>();
+            orderStatusList.Add("Shipped");
+            orderStatusList.Add("Delivered");
+            ViewBag.orderStatus = orderStatusList;
+
+
+            return View("../Admin/ManageUsers");
+        }
     }
+
 }

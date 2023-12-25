@@ -40,7 +40,20 @@ namespace airmodel_ad.Business.Services
 			}
 		}
 
-		public bool FindUserByEmail(string email, string password)
+        public bool EditUser(Guid uId, User user)
+        {
+            try
+            {
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool FindUserByEmail(string email, string password)
 		{
 			try
 			{
@@ -57,7 +70,20 @@ namespace airmodel_ad.Business.Services
 			}
 		}
 
-		public User GetUserByEmail(string email)
+        public List<User> GetAllUsers()
+        {
+            try
+            {
+                List<User> users = appDbContext.users.ToList();
+				return users;
+            }
+            catch (Exception ex)
+            {
+                return new List<User>();
+            }
+        }
+
+        public User GetUserByEmail(string email)
 		{
 			try
 			{

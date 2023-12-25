@@ -1,6 +1,7 @@
 ﻿using airmodel_ad.Business.Interface;
 using airmodel_ad.Data;
 using airmodel_ad.Models;
+using iText.Layout.Borders;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -85,6 +86,16 @@ namespace airmodel_ad.Business.Services
             try
             {
                 orderModels = appDbContext.orders.Where((o) => o.userId == userId).ToList();
+                for (int i = 0; i <= orderModels.Count(); i++)
+                {
+                    List<OrderItem> orderItems = appDbContext.orderItem.Where((o) => o.oId == orderModels[i].oId).ToList();
+                    for (int j = 0; j <= orderItems.Count(); j++)
+                    {
+                        orderItems[j].products = appDbContext.products.Where((p) => p.productId == orderItems[j].productId).FirstOrDefault();
+                    }
+                    orderModels[i].orderItems = orderItems;
+
+                }
                 return orderModels;
             }
             catch (Exception e)
