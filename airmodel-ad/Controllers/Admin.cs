@@ -284,6 +284,21 @@ namespace airmodel_ad.Controllers
             return View("../Admin/ManageUsers");
         }
 
+        public IActionResult DeleteUser(Guid userId)
+        {
+            userService.DeleteUser(userId);
+
+            List<User> users = userService.GetAllUsers();
+            ViewBag.users = users;
+            ViewBag.isUserEdit = false;
+            List<string> userRoles = new List<string>();
+            userRoles.Add("user");
+            userRoles.Add("admin");
+            ViewBag.userRoles = userRoles;
+
+            return View("../Admin/ManageUsers");
+        }
+
         public IActionResult AddUserAction(string userName, string userEmail, string userRole, string userPassword)
         {
             SignupModel signupModel = new SignupModel();
@@ -299,7 +314,6 @@ namespace airmodel_ad.Controllers
             userRoles.Add("user");
             userRoles.Add("admin");
             ViewBag.userRoles = userRoles;
-
 
             return View("../Admin/ManageUsers");
         }

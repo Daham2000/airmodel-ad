@@ -45,6 +45,21 @@ namespace airmodel_ad.Business.Services
 			}
 		}
 
+        public bool DeleteUser(Guid uId)
+        {
+            try
+            {
+                User? user = appDbContext.users.Where((u) => u.userId == uId).FirstOrDefault();
+                appDbContext.users.Remove(user);
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public bool EditUser(Guid uId, User user)
         {
             try
