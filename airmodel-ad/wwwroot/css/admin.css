@@ -37,3 +37,50 @@ body {
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
+
+#toast_types button {
+    margin: 5px;
+    min-width: 160px;
+    max-width: 160px;
+}
+
+.toast-icons {
+    font-family: 'Toast_icons' !important;
+    speak: none;
+    font-size: 55px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#toast_type .e-toast-icon.e-icons {
+    height: auto;
+    font-size: 30px;
+}
+
+.bootstrap5 #toast_type .e-toast-icon.e-icons,
+.bootstrap5-dark #toast_type .e-toast-icon.e-icons,
+.material3 #toast_type .e-toast-icon.e-icons,
+.material3-dark #toast_type .e-toast-icon.e-icons {
+    height: 25px;
+}
+
+.toast-icons.e-success::before {
+    content: "\e701";
+}
+
+.toast-icons.e-error::before {
+    content: "\e700";
+}
+
+.toast-icons.e-info::before {
+    content: "\e704";
+}
+
+.toast-icons.e-warning::before {
+    content: "\e703";
+}

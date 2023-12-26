@@ -1,6 +1,8 @@
 ﻿@{
     Layout = null;
 }
+@using Syncfusion.EJ2
+@using Syncfusion.EJ2.Notifications;
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,12 +23,14 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="~/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
+    @Html.EJS().Toast("toast_type").Position(p => p.X("Right")).TimeOut(5000).Close("onclose").Created("created").BeforeOpen("onBeforeOpen").Render()
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
@@ -179,7 +183,12 @@
         <!-- End Navbar -->
 
         <div id="mainViewId">
-            <h5>Manage Users</h5>
+            <div style="display:flex; flex-direction: row;">
+                <h5>Manage Users</h5>
+                <form method="post" asp-controller="Admin" asp-action="OpenAddUserView">
+                    <button type="submit" class="btn btn-primary ml-2" style="margin-left: 20px;">Add New User</button>
+                </form>
+            </div>
             @{
                 if (@ViewBag.users != null)
                 {
@@ -310,11 +319,45 @@
                             </div>
                         }
                     }
+
+
+                }
+
+                if(ViewBag.isAddUser != null)
+                {
+                    <form method="post" asp-controller="Admin" asp-action="AddUserAction">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Name</label>
+                            <input type="text" required class="form-control" name="userName" id="userName" aria-describedby="emailHelp" placeholder="Enter user name">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Email</label>
+                            <input type="email" required class="form-control" name="userEmail" id="userEmail" aria-describedby="emailHelp" placeholder="Enter user Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Password</label>
+                            <input type="text" required class="form-control" name="userPassword" id="userPassword" aria-describedby="emailHelp" placeholder="Enter user Password">
+                        </div>
+                        <div class="mb-1">
+                            <label>Select User Role</label>
+                            <select name="userRole" required class="form-control form-control-sm">
+                                @foreach (var booll in @ViewBag.userRoles)
+                                {
+                                    <option>@booll</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Add User</button>
+                    </form>
                 }
             }
         </div>
 
     </main>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.success('Have fun storming the castle!')
+    </script>
 </body>
 </html>

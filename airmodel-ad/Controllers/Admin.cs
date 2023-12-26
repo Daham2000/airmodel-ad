@@ -1,5 +1,6 @@
 ﻿using airmodel_ad.Business.Interface;
 using airmodel_ad.Models;
+using airmodel_ad.Models.ParamModels;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
@@ -263,6 +264,42 @@ namespace airmodel_ad.Controllers
             List<User> users = userService.GetAllUsers();
             ViewBag.users = users;
             ViewBag.isUserEdit = false;
+            List<string> userRoles = new List<string>();
+            userRoles.Add("user");
+            userRoles.Add("admin");
+            ViewBag.userRoles = userRoles;
+            ViewBag.message = "Added";
+
+            return View("../Admin/ManageUsers");
+        }
+
+        public IActionResult OpenAddUserView()
+        {
+            ViewBag.isUserEdit = false;
+            ViewBag.isAddUser = true;
+            List<string> userRoles = new List<string>();
+            userRoles.Add("user");
+            userRoles.Add("admin");
+            ViewBag.userRoles = userRoles;
+            return View("../Admin/ManageUsers");
+        }
+
+        public IActionResult AddUserAction(string userName, string userEmail, string userRole, string userPassword)
+        {
+            SignupModel signupModel = new SignupModel();
+            signupModel.UserName = userName;
+            signupModel.UserEmail = userEmail;
+            signupModel.UserPassword = userPassword;
+            userService.AddUser(signupModel);
+
+            List<User> users = userService.GetAllUsers();
+            ViewBag.users = users;
+            ViewBag.isUserEdit = false;
+            List<string> userRoles = new List<string>();
+            userRoles.Add("user");
+            userRoles.Add("admin");
+            ViewBag.userRoles = userRoles;
+
 
             return View("../Admin/ManageUsers");
         }

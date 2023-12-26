@@ -18,6 +18,11 @@ namespace airmodel_ad.Business.Services
 		{
 			try
 			{
+                List<User> users = appDbContext.users.Where((u) => u.userEmail == signupModel.UserEmail).ToList();
+				if(users.Count > 0)
+				{
+					return false;
+				}
 				User user = new User();
 				user.userId = Guid.NewGuid();
 				user.userRole = "user";
