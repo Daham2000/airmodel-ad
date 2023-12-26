@@ -25,6 +25,7 @@ namespace airmodel_ad.Business.Services
                 {
                     appDbContext.cartItems.Remove(cartItemModel);
                 }
+                orderModel.orderTime = DateTime.Now;
                 appDbContext.orders.Add(orderModel);
                 appDbContext.SaveChanges();
                 for (int i = 0; i<=orderItems.Count()-1; i++)
@@ -120,6 +121,20 @@ namespace airmodel_ad.Business.Services
             try
             {
                 orderModels = appDbContext.orders.ToList();
+                return orderModels;
+            }
+            catch (Exception e)
+            {
+                return orderModels;
+            }
+        }
+
+        public List<OrderModel> GetOrderByDateTime(DateTime date)
+        {
+            List<OrderModel> orderModels = new List<OrderModel>();
+            try
+            {
+                orderModels = appDbContext.orders.Where((or) => or.orderTime >= date).ToList();
                 return orderModels;
             }
             catch (Exception e)

@@ -10,6 +10,7 @@ namespace airmodel_ad.Business.Interface
         public List<OrderModel> GetAllUserOrders();
         public List<OrderItem> GetAllOrderItems(Guid orderId);
         public List<OrderModel> GetOrderByStatus(string status);
+        public List<OrderModel> GetOrderByDateTime(DateTime date);
         public bool ChangeOrderState(Guid orderId, string status);
     }
 }

@@ -22,5 +22,6 @@ namespace airmodel_ad.Models
         public string orderNote { get; set; }
         [NotMapped]
         public List<OrderItem>? orderItems { get; set; }
+        public DateTime orderTime { get; set; }
     }
 }

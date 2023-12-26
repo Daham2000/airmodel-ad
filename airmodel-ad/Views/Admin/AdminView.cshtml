@@ -35,7 +35,7 @@
                 exportEnabled: true,
                 animationEnabled: true,
                 title: {
-                    text: "Order Total Statistics by Users",
+                    text: "Order Sales Statistics Current Month",
                     fontSize: 14
                 },
                 data: [{
@@ -46,7 +46,26 @@
                     dataPoints: @Html.Raw(ViewBag.DataPoints)
                     }]
             });
+
+            var chart2 = new CanvasJS.Chart("chartContainer2", {
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                exportEnabled: true,
+                animationEnabled: true,
+                title: {
+                    text: "Order Sales Statistics Current Year",
+                    fontSize: 14
+                },
+                data: [{
+                    type: "splineArea",
+                    startAngle: 160,
+                    toolTipContent: "<b>{label}</b>: {y}%",
+                    indexLabel: "{label} - {y}$",
+                    dataPoints: @Html.Raw(ViewBag.OrderPerYearDataPoints)
+                            }]
+            });
+
             chart.render();
+            chart2.render();
 
         }
     </script>
@@ -203,51 +222,35 @@
   
         </nav>
         <!-- End Navbar -->
-
-        <div>
-            @{
-                if (@ViewBag.orders != null)
-                {
-                    <h5 class="mt-4">Available Orders List</h5>
-                    <div class="mt-3">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Order ID</th>
-                                    <th scope="col">Customer ID</th>
-                                    <th scope="col">Order Total</th>
-                                    <th scope="col">Customer Name</th>
-                                    <th scope="col">Customer Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (int i = 0; i < @ViewBag.orders.Count; i++)
-                                {
-                                    var index = i + 1;
-                                    <tr>
-                                        <th scope="row">@index</th>
-                                        <td>@ViewBag.orders[@i].oId</td>
-                                        <td>@ViewBag.orders[@i].userId</td>
-                                        <td>$@ViewBag.orders[@i].total</td>
-                                        <td>@ViewBag.orders[@i].fName</td>
-                                        <td>@ViewBag.orders[@i].orderStatus</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <a asp-controller="Admin" asp-action="GenerateOrderBasicReport" class="btn btn-primary">Download Pending Order's' Report</a>
-                    </div>
-                }
-            }
-        </div>
         <hr class="mt-2 mb-3" />
         @{
+            <div style="display: flex; flex-direction: row; justify-content: flex-start; margin-bottom: 25px; margin-top: 20px;">
+                <div style="height:auto background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 20px; width: auto; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); font-family: 'Arial', sans-serif;">
+                    <h5 style="margin: 0; color: #333; font-family: 'Verdana', sans-serif;">Total Users</h5>
+                    <h6 style="font-size: 24px; margin: 10px 0; color: #4285f4; font-weight: bold;">@ViewBag.usersC</h6>
+                </div>
+                <div style="margin-left:25px; height:auto background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 20px; width: auto; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); font-family: 'Arial', sans-serif;">
+                    <h5 style="margin: 0; color: #333; font-family: 'Verdana', sans-serif;">Orders this year</h5>
+                    <h6 style="font-size: 24px; margin: 10px 0; color: #4285f4; font-weight: bold;">@ViewBag.orderPerYearC</h6>
+                </div>
+                <div style="margin-left:25px; height:auto background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 20px; width: auto; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); font-family: 'Arial', sans-serif;">
+                    <h5 style="margin: 0; color: #333; font-family: 'Verdana', sans-serif;">Orders this Month</h5>
+                    <h6 style="font-size: 24px; margin: 10px 0; color: #4285f4; font-weight: bold;">@ViewBag.ordersC</h6>
+                </div>
+            </div>
             if (ViewBag.DataPoints != null)
             {
-                <div>
-                    <h5>Order Summey Statistics</h5>
-                    <div id="chartContainer" style="height: 370px; width: 100%; margin-top: 50px" class="mt-6"></div>
+                <div style="margin-top: 25px;">
+                    <h5>Order Sales Statistics This Month</h5>
+                    <div id="chartContainer" style="height: 370px; width: 100%; margin-top: 10px" class="mt-6"></div>
+                </div>
+            }
+
+            if (ViewBag.OrderPerYearDataPoints != null)
+            {
+                <div style="margin-top: 45px">
+                    <h5>Order Sales Statistics This Year</h5>
+                    <div id="chartContainer2" style="height: 370px; width: 100%; margin-top: 10px" class="mt-6"></div>
                 </div>
             }
         }

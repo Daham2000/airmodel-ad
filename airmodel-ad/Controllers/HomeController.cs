@@ -84,7 +84,11 @@ namespace airmodel_ad.Controllers
                 User user = userService.GetUserByEmail(emailValue);
                 if (user.userRole == "admin")
                 {
-                    List<OrderModel> pendingOrders = orderService.GetAllPendingOrders();
+                    DateTime currentMonthDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    DateTime currentYearDateTime = new DateTime(DateTime.Now.Year, 1, 1);
+                    List<User> users = userService.GetAllUsers();
+                    List<OrderModel> pendingOrders = orderService.GetOrderByDateTime(currentMonthDateTime);
+                    List<OrderModel> orderPerYear = orderService.GetOrderByDateTime(currentYearDateTime);
                     for (int i = 0; i <= pendingOrders.Count() - 1; i++)
                     {
                         pendingOrders[i].orderItems = orderService.GetAllOrderItems(pendingOrders[i].oId);
@@ -101,15 +105,42 @@ namespace airmodel_ad.Controllers
                             pendingOrders[i].orderStatus = "Delivered";
                         }
                     }
+                    Debug.WriteLine(orderPerYear.Count());
+                    for (int i = 0; i <= orderPerYear.Count() - 1; i++)
+                    {
+                        orderPerYear[i].orderItems = orderService.GetAllOrderItems(orderPerYear[i].oId);
+                        if (orderPerYear[i].orderStatus == "0")
+                        {
+                            orderPerYear[i].orderStatus = "Pending";
+                        }
+                        else if (orderPerYear[i].orderStatus == "1")
+                        {
+                            orderPerYear[i].orderStatus = "Shipped";
+                        }
+                        else
+                        {
+                            orderPerYear[i].orderStatus = "Delivered";
+                        }
+                    }
                     ViewBag.orders = pendingOrders;
+                    ViewBag.ordersC = pendingOrders.Count();
+                    ViewBag.orderPerYear = orderPerYear;
+                    ViewBag.orderPerYearC = orderPerYear.Count();
+                    ViewBag.usersC = users.Count();
 
                     List<DataPoint> dataPoints = new List<DataPoint>();
+                    List<DataPoint> orderPerYearDataPoints = new List<DataPoint>();
                     for (int i = 0; i < pendingOrders.Count; i++)
                     {
-                        dataPoints.Add(new DataPoint(pendingOrders[i].fName.ToString(), pendingOrders[i].total));
+                        dataPoints.Add(new DataPoint("Month - " + pendingOrders[i].orderTime.Month.ToString() + ": Day - " + pendingOrders[i].orderTime.Day.ToString(), pendingOrders[i].total));
+                    }
+                    for (int i = 0; i < orderPerYear.Count; i++)
+                    {
+                        orderPerYearDataPoints.Add(new DataPoint(pendingOrders[i].orderTime.Month.ToString() + ":" + pendingOrders[i].orderTime.Day.ToString(), orderPerYear[i].total));
                     }
 
                     ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
+                    ViewBag.OrderPerYearDataPoints = JsonConvert.SerializeObject(orderPerYearDataPoints);
 
                     return View("../Admin/AdminView");
                 }
