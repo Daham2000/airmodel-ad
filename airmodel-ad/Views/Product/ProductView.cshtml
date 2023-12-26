@@ -48,13 +48,11 @@
                         <span class="sr-only">Toggle mobile menu</span>
                         <i class="icon-bars"></i>
                     </button>
-                    <form method="post" asp-controller="Home" asp-action="Index">
-                        <button type="submit" style="all: unset;">
+                        <button onclick="location.href = '@Url.Action("Index", "Home")'" type="submit" style="all: unset;">
                             <a class="logo">
                                 <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
                             </a>
                         </button>
-                    </form>
                 </div><!-- End .header-left -->
 
                 <div class="header-center">

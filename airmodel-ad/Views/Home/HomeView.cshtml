@@ -39,6 +39,32 @@
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/skins/skin-demo-2.css">
     <link rel="stylesheet" href="~/css/demos/demo-2.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .filter-card {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .filter-checkbox {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body id="bodyId">
@@ -222,6 +248,7 @@
         </header><!-- End .header -->
         <div id="cardViewId"></div>
         @{
+
             if (ViewBag.searchModels != null)
             {
                         <div class="container">
@@ -260,6 +287,7 @@
 
                                 <span class="slider-loader text-white"></span><!-- End .slider-loader -->
                             </div><!-- End .intro-slider-container -->
+
 
                             <div class="brands-border owl-carousel owl-simple" data-toggle="owl"
                          data-owl-options='{
@@ -317,6 +345,79 @@
                                 </a>
                             </div><!-- End .owl-carousel -->
 
+                    <div id="filteredViewId" style="display: flex; flex-direction: row; justify-content: start;">
+                        <div class="filter-card" style="margin-bottom: 15px; width: 200px; height: 150px; margin-left: 20px; margin-right: 20px;">
+                            <h6 class="filter-label">Filter Products</h6>
+                            <div class="filter-checkbox" onclick="location.href = '@Url.Action("FilterProducts", "Home", new { value = 1 })'">
+                                <input type="checkbox" id="inStock" name="availability" value="inStock">
+                                <label for="inStock">In Stock</label>
+                            </div>
+                            <div class="filter-checkbox" onclick="location.href = '@Url.Action("FilterProducts", "Home", new { value = 0 })'">
+                                <input type="checkbox" id="outOfStock" name="availability" value="outOfStock">
+                                <label for="outOfStock">Out of Stock</label>
+                            </div>
+                        </div>
+                        @{
+                            if (ViewBag.filteredProductModels != null)
+                            {
+                                <div class="tab-content grid-container" style="display: grid;
+                                                                              grid-template-columns: auto auto auto;
+                                                                              padding: 10px;" id="filter-products">
+                                    @foreach (var product in @ViewBag.filteredProductModels)
+                                    {
+                                        <form method="post" asp-controller="Home" asp-action="ViewProduct">
+                                            <input type="text" style="display: none" class="form-control" name="searchInput" value="@product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
+                                            <div id="productBtn3" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
+                                                <div style="width: 260px; height: 425px;" class="product product-11 text-center">
+                                                    <figure class="product-media">
+                                                        <a href="product.html">
+                                                            <img src="@product.productImage" alt="Product image" class="product-image">
+                                                        </a>
+
+                                                        <div class="product-action-vertical">
+                                                            <a class="btn-product-icon btn-wishlist "><span>add to wishlist</span></a>
+                                                        </div><!-- End .product-action-vertical -->
+                                                    </figure><!-- End .product-media -->
+
+                                                    <div class="product-body">
+                                                        <div class="product-cat">
+                                                            <a href="#">Lighting</a>
+                                                        </div><!-- End .product-cat -->
+                                                        <button type="submit" style="all: unset;">
+                                                            <h3 class="product-title"><a>@product.productName</a></h3><!-- End .product-title -->
+                                                        </button>
+                                                        <div class="product-price">
+                                                            $@product.productBasicPrice
+                                                        </div><!-- End .product-price -->
+                                                    </div><!-- End .product-body -->
+                                                    @{
+                                                        if (product.productQty == 0)
+                                                        {
+                                                            <div style="background-color: red" class="product-action">
+                                                                <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
+
+                                                            </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="product-action">
+                                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div><!-- End .product -->
+                                            </div>
+                                        </form>
+                                    }
+                                </div>
+                                <!-- End .tab-content -->
+                            }
+                        }
+
+                    </div>
+
                             <div class="mb-3 mb-lg-5"></div><!-- End .mb-3 mb-lg-5 -->
 
                             <div class="container">
@@ -369,48 +470,48 @@
                                         {
                                             @foreach (var product in @ViewBag.productModels)
                                             {
-                                                                    <form method="post" asp-controller="Home" asp-action="ViewProduct">
-                                                                        <input type="text" style="display: none" class="form-control" name="searchInput" value="@product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
-                                                                        <div id="productBtn" value="@product.productId"
-                                                     class="product product-11 text-center">
-                                                                            <figure class="product-media">
-                                                                                <a>
-                                                                                    <img src="@product.productImage" alt="Product image" class="product-image">
-                                                                                </a>
+                                                <form method="post" asp-controller="Home" asp-action="ViewProduct">
+                                                    <input type="text" style="display: none" class="form-control" name="searchInput" value="@product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
+                                                    <div id="productBtn" value="@product.productId"
+                                             class="product product-11 text-center">
+                                                        <figure class="product-media">
+                                                            <a>
+                                                                <img src="@product.productImage" alt="Product image" class="product-image">
+                                                            </a>
 
-                                                                                <div class="product-action-vertical">
-                                                                                    <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
-                                                                                </div><!-- End .product-action-vertical -->
-                                                                            </figure><!-- End .product-media -->
+                                                            <div class="product-action-vertical">
+                                                                <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
+                                                            </div><!-- End .product-action-vertical -->
+                                                        </figure><!-- End .product-media -->
 
-                                                                            <div class="product-body">
-                                                                            <button type="submit" style="all: unset;">
-                                                                                    <h3 class="product-title"><a>@product.productName</a></h3><!-- End .product-title -->
-                                                                            </button>
-                                                                                <div class="product-price">
-                                                                                    $@product.productBasicPrice
-                                                                                </div><!-- End .product-price -->
-                                                                            </div><!-- End .product-body -->
+                                                        <div class="product-body">
+                                                            <button type="submit" style="all: unset;">
+                                                                <h3 class="product-title"><a>@product.productName</a></h3><!-- End .product-title -->
+                                                            </button>
+                                                            <div class="product-price">
+                                                                $@product.productBasicPrice
+                                                            </div><!-- End .product-price -->
+                                                        </div><!-- End .product-body -->
                                                         @{
                                                             if (product.productQty == 0)
                                                             {
-                                                                                            <div style="background-color: red" class="product-action">
-                                                                                                <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
+                                                                <div style="background-color: red" class="product-action">
+                                                                    <a href="#" style="color: white" class="btn-product btn-cart"><span style="color: white">Out of Stock</span></a>
 
-                                                                                            </div>
+                                                                </div>
 
                                                             }
                                                             else
                                                             {
-                                                                                            <div class="product-action">
-                                                                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                                <div class="product-action">
+                                                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
 
-                                                                                            </div>
+                                                                </div>
                                                             }
                                                         }
-                                                                        </div>
+                                                    </div>
 
-                                                                    </form>
+                                                </form>
 
 
                                                                     <!-- End .product-action -->

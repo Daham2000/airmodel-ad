@@ -10,6 +10,7 @@ namespace airmodel_ad.Business.Interface
         public ProductModel GetProductById(Guid searchInput);
         public VarientOptionModel GetProductVarientById(Guid searchInput);
         public List<ProductModel> GetAllAvailableProducts();
+        public List<ProductModel> GetAllUnavailableProducts();
         public bool AddProduct(ProductModel product);
         public bool EditProduct(ProductModel product);
         public bool DeleteProduct(Guid productId);

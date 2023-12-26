@@ -240,5 +240,19 @@ namespace airmodel_ad.Business.Services
                 return false;
             }
         }
+
+        public List<ProductModel> GetAllUnavailableProducts()
+        {
+            List<ProductModel> products = new List<ProductModel>();
+            try
+            {
+                products = appDbContext.products.Where((p) => p.productQty <= 0).ToList();
+                return products;
+            }
+            catch (Exception ex)
+            {
+                return products;
+            }
+        }
     }
 }

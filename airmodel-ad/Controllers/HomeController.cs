@@ -20,6 +20,7 @@ namespace airmodel_ad.Controllers
     public class HomeController : Controller
     {
         List<ProductModel> productModels;
+        List<ProductModel> filteredProductModels;
         List<ProductModel> searchModels;
         List<ProductModel> selectedCategory;
         List<CartItemModel> cartModels;
@@ -50,6 +51,7 @@ namespace airmodel_ad.Controllers
                 ClaimsPrincipal claimsPrincipal = HttpContext.User;
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 productModels = productService.GetAllProducts();
+                filteredProductModels = productService.GetAllAvailableProducts();
                 categories = categoryService.GetAllCategories();
                 selectedCategory = productService.GetAllProductsByCategory(categories.FirstOrDefault().categoryId);
                 CartModel cartModel = cartService.GetCart(emailValue);
@@ -154,6 +156,7 @@ namespace airmodel_ad.Controllers
                     bool re = await GetHomePageData();
 
                     ViewBag.productModels = productModels;
+                    ViewBag.filteredProductModels = filteredProductModels;
                     ViewBag.selectedCategory = selectedCategory;
                     ViewBag.cartModels = cartModels;
                     ViewBag.len = cartModels.Count();
@@ -165,6 +168,25 @@ namespace airmodel_ad.Controllers
             {
                 return View("../Home/HomeView");
             }
+        }
+
+        public async Task<IActionResult> FilterProducts(int value) {
+            await GetHomePageData();
+            if(value == 1)
+            {
+                filteredProductModels = productService.GetAllAvailableProducts();
+            } else
+            {
+                filteredProductModels = productService.GetAllUnavailableProducts();
+            }
+            ViewBag.productModels = productModels;
+            ViewBag.filteredProductModels = filteredProductModels;
+            ViewBag.selectedCategory = selectedCategory;
+            ViewBag.cartModels = cartModels;
+            ViewBag.len = cartModels.Count();
+            ViewBag.total = total;
+            ViewBag.categories = categories;
+            return View("../Home/HomeView");
         }
 
         public async Task<IActionResult> GetAllMyOrdera()
