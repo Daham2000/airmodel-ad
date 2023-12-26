@@ -6,6 +6,7 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace airmodel_ad.Controllers
 {
@@ -250,7 +251,8 @@ namespace airmodel_ad.Controllers
                     }
                     return File(stream.ToArray(), "application/pdf", "Order Report.pdf");
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
 
             }
@@ -448,6 +450,64 @@ namespace airmodel_ad.Controllers
 
 
             return View("../Admin/ManageUsers");
+        }
+
+        public IActionResult OpenManageCategories()
+        {
+            List<Category> categories1 = categoryService.GetAllCategories();
+            ViewBag.categories1 = categories1;
+            ViewBag.editCategory = false;
+            ViewBag.addCategory = false;
+            return View("../Admin/ManageCategoriesView");
+        }
+
+        public IActionResult OpenAddCategories()
+        {
+            List<Category> categories1 = categoryService.GetAllCategories();
+            ViewBag.categories1 = categories1;
+            ViewBag.editCategory = false;
+            ViewBag.addCategory = true;
+            return View("../Admin/ManageCategoriesView");
+        }
+
+        public IActionResult OpenEditCategories(Guid categoryId, string categoryName)
+        {
+            Category category = new Category();
+            category.categoryId = categoryId;
+            category.categoryName = categoryName;
+            ViewBag.category = category;
+
+            List<Category> categories1 = categoryService.GetAllCategories();
+            ViewBag.categories1 = categories1;
+            ViewBag.editCategory = true;
+            ViewBag.addCategory = false;
+            return View("../Admin/ManageCategoriesView");
+        }
+
+        public IActionResult EditCategoriesAction(Guid categoryId, string categoryName)
+        {
+            Debug.WriteLine("categoryId");
+            Debug.WriteLine(categoryId);
+            categoryService.EditCategory(categoryName, categoryId);
+            List<Category> categories1 = categoryService.GetAllCategories();
+            ViewBag.categories1 = categories1;
+            ViewBag.editCategory = false;
+            ViewBag.addCategory = false;
+            return View("../Admin/ManageCategoriesView");
+        }
+
+        public IActionResult AddCategoriesAction(string categoryName)
+        {
+            Category category = new Category();
+            category.categoryId = new Guid();
+            category.categoryName = categoryName;
+            categoryService.AddCategory(category);
+            List<Category> categories1 = categoryService.GetAllCategories();
+            ViewBag.categories1 = categories1;
+            ViewBag.editCategory = false;
+            ViewBag.addCategory = false;
+
+            return View("../Admin/ManageCategoriesView");
         }
     }
 

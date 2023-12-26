@@ -71,7 +71,7 @@ namespace airmodel_ad.Business.Services
             List <OrderItem> orderItems = new List<OrderItem>();  
             try {
                 orderItems = appDbContext.orderItem.Where((o) => o.oId== orderId).ToList();
-                for(int i=0; i<=orderItems.Count(); i++)
+                for(int i=0; i<=orderItems.Count()-1; i++)
                 {
                     orderItems[i].products = appDbContext.products.Where((p) => p.productId == orderItems[i].productId).FirstOrDefault();  
                 } 
@@ -87,7 +87,7 @@ namespace airmodel_ad.Business.Services
             try
             {
                 orderModels = appDbContext.orders.Where((o) => o.userId == userId).ToList();
-                for (int i = 0; i <= orderModels.Count(); i++)
+                for (int i = 0; i <= orderModels.Count()-1; i++)
                 {
                     List<OrderItem> orderItems = appDbContext.orderItem.Where((o) => o.oId == orderModels[i].oId).ToList();
                     for (int j = 0; j <= orderItems.Count(); j++)
@@ -121,10 +121,16 @@ namespace airmodel_ad.Business.Services
             try
             {
                 orderModels = appDbContext.orders.ToList();
+                for(int i=0; i<=orderModels.Count()-1 ; i++)
+                {
+                    User? user = appDbContext.users.Where((u) => u.userId == orderModels[i].userId).FirstOrDefault();
+                    orderModels[i].users = user;
+                }
                 return orderModels;
             }
             catch (Exception e)
             {
+                Debug.WriteLine("e... Here");
                 return orderModels;
             }
         }
@@ -134,12 +140,30 @@ namespace airmodel_ad.Business.Services
             List<OrderModel> orderModels = new List<OrderModel>();
             try
             {
-                orderModels = appDbContext.orders.Where((or) => or.orderTime >= date).ToList();
+                orderModels = appDbContext.orders.Where((or) => or.orderTime >= date).Where((or) => or.orderStatus == "2").ToList();
+                Debug.WriteLine("orderModels");
+                Debug.WriteLine(date);
+                Debug.WriteLine(orderModels.Count());
                 return orderModels;
             }
             catch (Exception e)
             {
                 return orderModels;
+            }
+        }
+
+        public OrderModel GetOrderByID(Guid oId)
+        {
+            try
+            {
+                OrderModel? orderModel = appDbContext.orders.Where((or) => or.oId == oId).FirstOrDefault();
+                User? user = appDbContext.users.Where((u) => u.userId == orderModel.userId).FirstOrDefault();
+                orderModel.users = user;
+                return orderModel;
+            }
+            catch (Exception e)
+            {
+                return new OrderModel();
             }
         }
 

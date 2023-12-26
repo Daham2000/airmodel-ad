@@ -5,6 +5,8 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Mail;
 
 namespace airmodel_ad.Controllers
 {
@@ -168,7 +170,8 @@ namespace airmodel_ad.Controllers
         public IActionResult ChangeStatus(string orderStatus, Guid oId)
         {
             try {
-                if(orderStatus == "Shipped")
+                string o = orderStatus;
+                if (orderStatus == "Shipped")
                 {
                     orderStatus = "1";
                 } else
@@ -205,6 +208,32 @@ namespace airmodel_ad.Controllers
                 orderStatusFilter.Add("Delivered");
                 orderStatusFilter.Add("Pending");
                 ViewBag.orderStatusFilter = orderStatusFilter;
+
+                OrderModel orderModel = orderService.GetOrderByID(oId);
+                var senderEmail = new MailAddress("courseworkt810@gmail.com");
+                var receiverEmail = new MailAddress(orderModel.users.userEmail, "Receiver");
+                var password = "drmgqctqxnvlagvg";
+
+                var sub = "Your order " + oId.ToString().Substring(0, 10);
+                var body = "Hi " + orderModel.users.userName + "\nYour order has been moved to " + o + " status...";
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(senderEmail.Address, password),
+                    EnableSsl = true
+                };
+                using (var mess = new MailMessage(senderEmail, receiverEmail)
+                {
+                    Subject = sub,
+                    Body = body
+                })
+                {
+                    smtp.Send(mess);
+                }
+
                 return View("../Admin/ManageOrderView");
             }
             catch (Exception ex)

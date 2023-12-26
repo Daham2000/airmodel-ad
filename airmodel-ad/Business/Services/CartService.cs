@@ -28,10 +28,11 @@ namespace airmodel_ad.Business.Services
             }
         }
 
-        public bool CheckProductAvailableInCart(ProductModel item)
+        public bool CheckProductAvailableInCart(ProductModel item, Guid userId)
         {
             try {
-                CartItemModel cartItemModel = appDbContext.cartItems.Where((p) => p.productId == item.productId).FirstOrDefault();
+                CartModel? cartModel = appDbContext.carts.Where((u) => u.userId == userId).FirstOrDefault();
+                CartItemModel cartItemModel = appDbContext.cartItems.Where((p) => p.productId == item.productId).Where((u) => u.cartId == cartModel.cartId).FirstOrDefault();
                 Debug.WriteLine(cartItemModel); 
                 if(cartItemModel != null)
                 {

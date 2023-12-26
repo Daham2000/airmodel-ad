@@ -639,7 +639,7 @@
                     type: 'GET',
                     data: { imageSelected: e.target[1].value },
                     success: function (data) {
-                        $('#product-zoom').html(data);
+                        $('#product-zoom').replaceWith(data);
                     },
                     error: function () {
                         // Handle errors if necessary

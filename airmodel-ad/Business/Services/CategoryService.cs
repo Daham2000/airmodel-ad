@@ -1,6 +1,7 @@
 ﻿using airmodel_ad.Business.Interface;
 using airmodel_ad.Data;
 using airmodel_ad.Models;
+using System.Diagnostics;
 
 namespace airmodel_ad.Business.Services
 {
@@ -16,6 +17,22 @@ namespace airmodel_ad.Business.Services
             try
             {
                 appDbContext.Add(item);
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool EditCategory(string name, Guid categoryId)
+        {
+            try
+            {
+          
+                Category category = appDbContext.category.Where((c)=> c.categoryId == categoryId).FirstOrDefault(); 
+                category.categoryName = name;
                 appDbContext.SaveChanges();
                 return true;
             }
@@ -44,6 +61,7 @@ namespace airmodel_ad.Business.Services
             try
             {
                 appDbContext.category.Remove(item);
+                appDbContext.SaveChanges();
                 return true;
             }
             catch (Exception ex)

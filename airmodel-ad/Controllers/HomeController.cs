@@ -55,8 +55,7 @@ namespace airmodel_ad.Controllers
                 CartModel cartModel = cartService.GetCart(emailValue);
 
                 cartModels = cartService.GetCartItem(cartModel.cartId);
-                Debug.WriteLine("cartModels");
-                Debug.WriteLine(cartModels.Count());
+                
                 foreach (var item in cartModels)
                 {
                     if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
@@ -82,6 +81,8 @@ namespace airmodel_ad.Controllers
                 Debug.WriteLine("Loading Index");
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 User user = userService.GetUserByEmail(emailValue);
+                Debug.WriteLine(user.userRole == "admin");
+                Debug.WriteLine(user.userRole);
                 if (user.userRole == "admin")
                 {
                     DateTime currentMonthDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -106,6 +107,7 @@ namespace airmodel_ad.Controllers
                         }
                     }
                     Debug.WriteLine(orderPerYear.Count());
+                    Debug.WriteLine("Here");
                     for (int i = 0; i <= orderPerYear.Count() - 1; i++)
                     {
                         orderPerYear[i].orderItems = orderService.GetAllOrderItems(orderPerYear[i].oId);
@@ -130,14 +132,17 @@ namespace airmodel_ad.Controllers
 
                     List<DataPoint> dataPoints = new List<DataPoint>();
                     List<DataPoint> orderPerYearDataPoints = new List<DataPoint>();
-                    for (int i = 0; i < pendingOrders.Count; i++)
+                    Debug.WriteLine("Here 2");
+
+                    for (int i = 0; i <= pendingOrders.Count() - 1; i++)
                     {
                         dataPoints.Add(new DataPoint("Month - " + pendingOrders[i].orderTime.Month.ToString() + ": Day - " + pendingOrders[i].orderTime.Day.ToString(), pendingOrders[i].total));
                     }
-                    for (int i = 0; i < orderPerYear.Count; i++)
+                    for (int i = 0; i <= orderPerYear.Count() - 1; i++)
                     {
-                        orderPerYearDataPoints.Add(new DataPoint(pendingOrders[i].orderTime.Month.ToString() + ":" + pendingOrders[i].orderTime.Day.ToString(), orderPerYear[i].total));
+                        orderPerYearDataPoints.Add(new DataPoint(orderPerYear[i].orderTime.Month.ToString() + ":" + orderPerYear[i].orderTime.Day.ToString(), orderPerYear[i].total));
                     }
+                    Debug.WriteLine("Here 3");
 
                     ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
                     ViewBag.OrderPerYearDataPoints = JsonConvert.SerializeObject(orderPerYearDataPoints);
@@ -297,10 +302,11 @@ namespace airmodel_ad.Controllers
         {
             try
             {
-                ProductModel product = productService.GetProductById(productId);
-                bool ifAvailable = cartService.CheckProductAvailableInCart(product);
-
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                User user = userService.GetUserByEmail(emailValue);
+                ProductModel product = productService.GetProductById(productId);
+                bool ifAvailable = cartService.CheckProductAvailableInCart(product, user.userId);
+
                 CartModel cartModel = cartService.GetCart(emailValue);
                 Debug.WriteLine("qty");
                 Debug.WriteLine(qty);
