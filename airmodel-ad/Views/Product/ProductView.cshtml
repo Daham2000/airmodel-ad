@@ -49,13 +49,11 @@
                         <i class="icon-bars"></i>
                     </button>
 
-                    <form method="post" asp-controller="Home" asp-action="Index">
                         <button type="submit" style="all: unset;">
-                            <a class="logo">
+                            <a onclick="location.href = '@Url.Action("Index", "Home")'" class="logo">
                                 <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
                             </a>
                         </button>
-                    </form>
                 </div><!-- End .header-left -->
 
                 <div class="header-center">
@@ -194,7 +192,7 @@
         </div><!-- End .header-bottom -->
     </header><!-- End .header -->
 
-    <div class="page-content mt-4">
+    <div class="page-content mt-4" id="mainPro">
         <div id="searchProducts">
         </div><!-- End .container -->
 
@@ -216,7 +214,7 @@
 
                                     <form action="">
                                         <button type="submit" style="all: unset;">
-                                            <input type="text" style="display: none" class="form-control" name="imageSelected" value="@ViewBag.product.productImage" aria-describedby="emailHelp" placeholder="Enter computer name">
+                                            <input type="text" style="display: none" class="form-control" name="imageSelected" value="@ViewBag.product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
 
                                             <a style="height:115px" class="product-gallery-item active" src="@ViewBag.product.productImage" data-zoom-image="@ViewBag.product.productImage">
                                                 <img src="@ViewBag.product.productImage" alt="product side">
@@ -235,16 +233,20 @@
                                                     {
                                                         if (option.varientId == @varient.varientId)
                                                         {
+                                                            if (option.varientOptionId != new Guid("00000000-0000-0000-0000-000000000000"))
+                                                            {
+                                                                <form action="">
+                                                                    <button type="submit" style="all: unset;">
+                                                                        <input type="text" style="display: none" class="form-control" name="imageSelected" value="@option.varientOptionId" aria-describedby="emailHelp" placeholder="Enter computer name">
 
-                                                            <form action="">
-                                                                <button type="submit" style="all: unset;">
-                                                                    <input type="text" style="display: none" class="form-control" name="imageSelected" value="@option.varientImage" aria-describedby="emailHelp" placeholder="Enter computer name">
+                                                                        <a style="height:115px" class="product-gallery-item active" src="@option.varientImage" data-zoom-image="@option.varientImage">
+                                                                            <img src="@option.varientImage" alt="product side">
+                                                                        </a>
+                                                                    </button>
+                                                                </form>
+                                                            }
 
-                                                                    <a style="height:115px" class="product-gallery-item active" src="@option.varientImage" data-zoom-image="@option.varientImage">
-                                                                        <img src="@option.varientImage" alt="product side">
-                                                                    </a>
-                                                                </button>
-                                                            </form>
+                                                         
 
                                                         }
                                                     }
@@ -260,7 +262,7 @@
                     </div><!-- End .col-md-6 -->
 
                     <div class="col-md-6">
-                        <div class="product-details">
+                        <div class="product-details" id="priceID">
                             <h1 class="product-title">@ViewBag.product.productName</h1><!-- End .product-title -->
 
                             @{
@@ -637,7 +639,7 @@
                     type: 'GET',
                     data: { imageSelected: e.target[1].value },
                     success: function (data) {
-                        $('#product-zoom').replaceWith(data);
+                        $('#product-zoom').html(data);
                     },
                     error: function () {
                         // Handle errors if necessary

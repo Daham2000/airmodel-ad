@@ -12,6 +12,8 @@ namespace airmodel_ad.Business.Interface
         public List<ProductModel> GetAllAvailableProducts();
         public bool AddProduct(ProductModel product);
         public bool EditProduct(ProductModel product);
+        public bool DeleteProduct(Guid productId);
+        public bool DeleteProductVarientOption(Guid optionId);
         public bool AddProductVarient(VarientModel varientModel);
         public bool AddProductVarientItem(VarientOptionModel varientOption);
         public bool EditProductVarientItem(VarientOptionModel varientOption);    }

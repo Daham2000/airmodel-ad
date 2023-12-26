@@ -83,8 +83,16 @@ namespace airmodel_ad.Business.Services
             try
             {
                 product = appDbContext.products.Where(u => u.productId == searchInput).FirstOrDefault();
-                VarientModel? varientModel = appDbContext.varient.Where(u => u.productId == searchInput).FirstOrDefault();
-                List<VarientOptionModel> varientOptionModels = appDbContext.varientOption.Where(u => u.varientId == varientModel.varientId).ToList();
+                List<VarientModel> varientModels1 = appDbContext.varient.Where(u => u.productId == searchInput).ToList();
+                List<VarientOptionModel> varientOptionModels = new List<VarientOptionModel>();
+                foreach (var varientModel in varientModels1)
+                {
+                    List<VarientOptionModel> varientOptionModels1 = appDbContext.varientOption.Where(u => u.varientId == varientModel.varientId).ToList();
+                    foreach(var varientOptionModel in varientOptionModels1)
+                    {
+                        varientOptionModels.Add(varientOptionModel);
+                    }
+                }
                 List<VarientModel> varientModels = appDbContext.varient.Where(u => u.productId == product.productId).ToList();
                 product.categoryName = appDbContext.category.Where((ca) => ca.categoryId == product.categoryId).FirstOrDefault().categoryName;
 
@@ -112,7 +120,7 @@ namespace airmodel_ad.Business.Services
                 VarientModel sizeVarient = new VarientModel();
                 sizeVarient.productId = product.productId;
                 sizeVarient.varientId = new Guid();
-                sizeVarient.productName = "Size";
+                sizeVarient.productName = "Sheet";
                 appDbContext.Add(colorVarient);
                 appDbContext.Add(sizeVarient);
                 appDbContext.SaveChanges();
@@ -194,6 +202,36 @@ namespace airmodel_ad.Business.Services
         {
             try
             {
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteProduct(Guid productId)
+        {
+            try
+            {
+                ProductModel? productModel = appDbContext.products.Where((u) => u.productId == productId).FirstOrDefault();
+                appDbContext.products.Remove(productModel);
+                appDbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteProductVarientOption(Guid optionId)
+        {
+            try
+            {
+                VarientOptionModel? varientOptionModel = appDbContext.varientOption.Where((u) => u.varientOptionId == optionId).FirstOrDefault();
+                appDbContext.varientOption.Remove(varientOptionModel);
                 appDbContext.SaveChanges();
                 return true;
             }

@@ -79,6 +79,7 @@ namespace airmodel_ad.Controllers
         public async Task<IActionResult> Index()
         {
             try {
+                Debug.WriteLine("Loading Index");
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 User user = userService.GetUserByEmail(emailValue);
                 if (user.userRole == "admin")
@@ -344,10 +345,18 @@ namespace airmodel_ad.Controllers
                 Debug.WriteLine("imageSelected");
                 Debug.WriteLine(imageSelected);
                 VarientOptionModel varientOptionModel = productService.GetProductVarientById(imageSelected);
-                ViewBag.selectedImage = varientOptionModel.varientImage;
-                ViewBag.selectedProPrice = varientOptionModel.varientPrice;
-                Debug.WriteLine("varientOptionModel.varientPrice");
-                Debug.WriteLine(varientOptionModel.varientPrice);
+                if(varientOptionModel == null) {
+                    ProductModel productModel = productService.GetProductById(imageSelected);
+                    ViewBag.selectedImage = productModel.productImage;
+                    ViewBag.selectedProPrice = productModel.productBasicPrice;
+
+                }
+                else
+                {
+                    ViewBag.selectedImage = varientOptionModel.varientImage;
+                    ViewBag.selectedProPrice = varientOptionModel.varientPrice;
+
+                }
 
                 return PartialView("../Product/ImageView");
             }
