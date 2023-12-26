@@ -48,12 +48,13 @@
                         <span class="sr-only">Toggle mobile menu</span>
                         <i class="icon-bars"></i>
                     </button>
-
+                    <form method="post" asp-controller="Home" asp-action="Index">
                         <button type="submit" style="all: unset;">
-                            <a onclick="location.href = '@Url.Action("Index", "Home")'" class="logo">
+                            <a class="logo">
                                 <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
                             </a>
                         </button>
+                    </form>
                 </div><!-- End .header-left -->
 
                 <div class="header-center">
@@ -128,7 +129,13 @@
                                                         }
                                                     </a>
                                                 </figure>
-                                                <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                                <form method="post" asp-controller="Home" asp-action="RemoveFromCart">
+                                                    <input type="text" style="display: none" class="form-control" name="cartItemId" value="@cartItem.cartItemId">
+
+                                                    <button type="submit" style="all: unset;">
+                                                        <a class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                                    </button>
+                                                </form>
                                             </div>
                                         }
                                     </div><!-- End .cart-product -->
@@ -140,7 +147,11 @@
                                     </div><!-- End .dropdown-cart-total -->
 
                                     <div class="dropdown-cart-action">
-                                                <a asp-controller="Home" asp-action="LoadCheckOutView" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                        <form method="post" asp-controller="Home" asp-action="LoadCheckOutView">
+                                            <button type="submit" style="all: unset;">
+                                                <a class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                            </button>
+                                        </form>
                                     </div><!-- End .dropdown-cart-total -->
                                 </div><!-- End .dropdown-menu -->
                             </div>
@@ -149,11 +160,26 @@
                         }
                     }
 
-
+                    <div class="account">
+                        <a class="ml-3" asp-controller="Home" asp-action="GetAllMyOrdera" title="GetAllMyOrdera">
+                            <div class="icon">
+                                <i class="icon-turkish-lira"></i>
+                            </div>
+                            <p>My Orders</p>
+                        </a>
+                    </div><!-- End .compare-dropdown -->
+                    <div class="account">
+                        <a class="ml-3" asp-controller="Home" asp-action="OpenEditUser" title="Profile">
+                            <div class="icon">
+                                <i class="icon-user"></i>
+                            </div>
+                            <p>My Profile</p>
+                        </a>
+                    </div><!-- End .compare-dropdown -->
                     <div class="account">
                         <a class="ml-3" asp-controller="Home" asp-action="Logout" title="Logout">
                             <div class="icon">
-                                <i class="icon-user"></i>
+                                <i class="icon-unlock"></i>
                             </div>
                             <p>Logout</p>
                         </a>

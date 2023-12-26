@@ -222,68 +222,36 @@
     <main class="main">
         <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
             <div class="container">
-                <h1 class="page-title">My Orders<span>Shop</span></h1>
+                <h2 class="page-title">My Profile</h2>
+
+                @{
+                    if (ViewBag.user != null)
+                    {
+                        <form method="post" asp-controller="Home" asp-action="EditUserAction">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">My User Name</label>
+                                <input type="text" required class="form-control" name="userName" id="userName" value="@ViewBag.user.userName" aria-describedby="emailHelp" placeholder="Enter user name">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="email" required class="form-control" name="userEmail" id="userEmail" value="@ViewBag.user.userEmail" aria-describedby="emailHelp" placeholder="Enter user Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Password</label>
+                                <input type="text" required class="form-control" name="password" id="password" value="@ViewBag.user.userPassword" aria-describedby="emailHelp" placeholder="Enter user Password">
+                            </div>
+
+                            <input type="text" style="display: none" class="form-control" name="userId" value="@ViewBag.user.userId">
+
+                            <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+
+                        </form>
+                    }
+                }
             </div><!-- End .container -->
         </div><!-- End .page-header -->
 
-        <div class="page-content">
-            <div class="container">
-                <table class="table table-wishlist table-mobile">
-                    <thead>
-                        <tr>
-                            <th>Products</th>
-                            <th>Total</th>
-                            <th>Order Status</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    @{
-                        if (@ViewBag.orderModels != null)
-                        {
-                            <tbody>
-                                @foreach (var order in @ViewBag.orderModels)
-                                {
-                                    <tr>
-                                        <td class="product-col">
-                                            <div class="product">
-                                                <figure class="product-media">
-                                                    <a href="#">
-                                                        <img src="@order.orderItems[0].products.productImage" alt="Product image">
-                                                    </a>
-                                                </figure>
-
-                                                <h3 class="product-title">
-                                                    @foreach (var orderItem in order.orderItems)
-                                                    {
-                                                        <a href="#">@orderItem.products.productName</a>
-                                                        <a href="#">Qty: @orderItem.qty</a>
-                                                        <a href="#">  </a>
-                                                    }
-                                                </h3><!-- End .product-title -->
-                                            </div><!-- End .product -->
-                                        </td>
-                                        <td class="price-col">$@order.total</td>
-                                        <td class="stock-col"><span class="in-stock">@order.orderStatus</span></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        }
-                    }
-            
-                </table><!-- End .table table-wishlist -->
-                <div class="wishlist-share">
-                    <div class="social-icons social-icons-sm mb-2">
-                        <label class="social-label">Share on:</label>
-                        <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                        <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                        <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                        <a href="#" class="social-icon" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
-                        <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
-                    </div><!-- End .soial-icons -->
-                </div><!-- End .wishlist-share -->
-            </div><!-- End .container -->
-        </div><!-- End .page-content -->
+        
     </main><!-- End .main -->
 
     <footer class="footer footer-2">

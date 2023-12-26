@@ -177,6 +177,26 @@ namespace airmodel_ad.Controllers
             }
         }
 
+        public IActionResult DeleteVariationOption(Guid productId, Guid varientOptionId)
+        {
+            List<Category> categories = categoryService.GetAllCategories();
+
+            productService.DeleteProductVarientOption(varientOptionId);
+
+            List<ProductModel> allItemsList = productService.GetAllProducts();
+            ProductModel item = productService.GetProductById(productId);
+            item.categoryName = categories.Where((ca) => ca.categoryId == item.categoryId).FirstOrDefault().categoryName;
+            ViewBag.allItemsList = allItemsList;
+            ViewBag.item = item;
+            ViewBag.categories = categories;
+            List<string> booll = new List<string>();
+            booll.Add("Yes");
+            booll.Add("No");
+            ViewBag.booll = booll;
+            ViewBag.hasVarients = item.hasVarients == true ? "Yes" : "No";
+
+            return View("../Admin/EditSingleProductAdmin");
+        }
         public IActionResult AddProduct()
         {
             try

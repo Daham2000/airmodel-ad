@@ -501,5 +501,26 @@ namespace airmodel_ad.Controllers
             }
         }
 
+        public IActionResult OpenEditUser()
+        {
+            string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            User user = userService.GetUserByEmail(emailValue);
+            ViewBag.user = user;
+            return View("../Home/MyProfile");
+        }
+
+        public IActionResult EditUserAction(Guid userId, string userName, string userEmail, string password)
+        {
+            User user = userService.GetUserByUid(userId);
+            user.userName = userName;
+            user.userEmail = userEmail;
+            user.userPassword = password;
+            userService.EditUser(user.userId, user);
+            user = userService.GetUserByUid(userId);
+            ViewBag.user = user;
+
+            return View("../Home/MyProfile");
+        }
+
     }
 }

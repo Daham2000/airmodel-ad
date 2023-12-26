@@ -77,104 +77,112 @@
                         @{
                             if (@ViewBag.cartModels != null)
                             {
-                                        <div class="dropdown cart-dropdown">
-                                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                                                <div class="icon">
-                                                    <i class="icon-shopping-cart"></i>
-                                                    <span class="cart-count">@ViewBag.len</span>
-                                                </div>
-                                                <p>Cart</p>
-                                            </a>
+                                <div class="dropdown cart-dropdown">
+                                    <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                        <div class="icon">
+                                            <i class="icon-shopping-cart"></i>
+                                            <span class="cart-count">@ViewBag.len</span>
+                                        </div>
+                                        <p>Cart</p>
+                                    </a>
 
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <div class="dropdown-cart-products">
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-cart-products">
                                             @foreach (var cartItem in @ViewBag.cartModels)
                                             {
-                                                            <div class="product">
-                                                                <div class="product-cart-details">
-                                                                    <h4 class="product-title">
-                                                                        <a>@cartItem.products.productName</a>
-                                                                    </h4>
+                                                <div class="product">
+                                                    <div class="product-cart-details">
+                                                        <h4 class="product-title">
+                                                            <a>@cartItem.products.productName</a>
+                                                        </h4>
 
-                                                                    <span class="cart-product-info">
+                                                        <span class="cart-product-info">
                                                             @{
                                                                 if (@cartItem.varientOption.varientImage == "0")
                                                                 {
-                                                                                        <div>
-                                                                                            <span class="cart-product-qty">@cartItem.qty</span>
-                                                                                            x @cartItem.products.productBasicPrice
-                                                                                        </div>
+                                                                    <div>
+                                                                        <span class="cart-product-qty">@cartItem.qty</span>
+                                                                        x @cartItem.products.productBasicPrice
+                                                                    </div>
                                                                 }
                                                                 else
                                                                 {
-                                                                                        <div>
-                                                                                            <span class="cart-product-qty">@cartItem.qty</span>
-                                                                                            x @cartItem.varientOption.varientPrice
-                                                                                        </div>
+                                                                    <div>
+                                                                        <span class="cart-product-qty">@cartItem.qty</span>
+                                                                        x @cartItem.varientOption.varientPrice
+                                                                    </div>
                                                                 }
                                                             }
-                                                                    </span>
-                                                                </div><!-- End .product-cart-details -->
+                                                        </span>
+                                                    </div><!-- End .product-cart-details -->
 
-                                                                <figure class="product-image-container">
-                                                                    <a class="product-image">
+                                                    <figure class="product-image-container">
+                                                        <a class="product-image">
                                                             @{
                                                                 if (@cartItem.varientOption.varientImage == "0")
                                                                 {
-                                                                                        <img src="@cartItem.products.productImage" alt="product">
+                                                                    <img src="@cartItem.products.productImage" alt="product">
 
                                                                 }
                                                                 else
                                                                 {
-                                                                                        <img src="@cartItem.varientOption.varientImage" alt="product">
+                                                                    <img src="@cartItem.varientOption.varientImage" alt="product">
 
                                                                 }
                                                             }
-                                                                    </a>
-                                                                </figure>
-                                                                <form method="post" asp-controller="Home" asp-action="RemoveFromCart">
-                                                                    <input type="text" style="display: none" class="form-control" name="cartItemId" value="@cartItem.cartItemId">
+                                                        </a>
+                                                    </figure>
+                                                    <form method="post" asp-controller="Home" asp-action="RemoveFromCart">
+                                                        <input type="text" style="display: none" class="form-control" name="cartItemId" value="@cartItem.cartItemId">
 
-                                                                    <button type="submit" style="all: unset;">
-                                                                        <a class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                                                    </button>
-                                                                </form>
-                                                            </div>
-                                            }
-                                                </div><!-- End .cart-product -->
-
-                                                <div class="dropdown-cart-total">
-                                                    <span>Total</span>
-
-                                                    <span class="cart-total-price">$@ViewBag.total</span>
-                                                </div><!-- End .dropdown-cart-total -->
-
-                                                <div class="dropdown-cart-action">
-                                                    <form method="post" asp-controller="Home" asp-action="LoadCheckOutView">
                                                         <button type="submit" style="all: unset;">
-                                                            <a class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                                            <a class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                                         </button>
                                                     </form>
-                                                </div><!-- End .dropdown-cart-total -->
-                                            </div><!-- End .dropdown-menu -->
-                                        </div>
+                                                </div>
+                                            }
+                                        </div><!-- End .cart-product -->
 
-                                        <!-- End .cart-dropdown -->
+                                        <div class="dropdown-cart-total">
+                                            <span>Total</span>
+
+                                            <span class="cart-total-price">$@ViewBag.total</span>
+                                        </div><!-- End .dropdown-cart-total -->
+
+                                        <div class="dropdown-cart-action">
+                                            <form method="post" asp-controller="Home" asp-action="LoadCheckOutView">
+                                                <button type="submit" style="all: unset;">
+                                                    <a class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                                </button>
+                                            </form>
+                                        </div><!-- End .dropdown-cart-total -->
+                                    </div><!-- End .dropdown-menu -->
+                                </div>
+
+                                <!-- End .cart-dropdown -->
                             }
                         }
 
                         <div class="account">
                             <a class="ml-3" asp-controller="Home" asp-action="GetAllMyOrdera" title="GetAllMyOrdera">
                                 <div class="icon">
-                                    <i class="icon-user"></i>
+                                    <i class="icon-turkish-lira"></i>
                                 </div>
                                 <p>My Orders</p>
                             </a>
                         </div><!-- End .compare-dropdown -->
                         <div class="account">
-                            <a class="ml-3" asp-controller="Home" asp-action="Logout" title="Logout">
+                            <a class="ml-3" asp-controller="Home" asp-action="OpenEditUser" title="Profile">
                                 <div class="icon">
                                     <i class="icon-user"></i>
+                                </div>
+                                <p>My Profile</p>
+                            </a>
+                        </div><!-- End .compare-dropdown -->
+                        <div class="account">
+                            <a class="ml-3" asp-controller="Home" asp-action="Logout" title="Logout">
+                                <div class="icon">
+                                    <i class="icon-unlock"></i>
                                 </div>
                                 <p>Logout</p>
                             </a>
@@ -199,7 +207,7 @@
                                             {
                                                 @foreach (var category in @ViewBag.categories)
                                                 {
-                                                                <li><a href="#">@category.categoryName</a></li>
+                                                    <li><a href="#">@category.categoryName</a></li>
                                                 }
                                             }
                                         }
