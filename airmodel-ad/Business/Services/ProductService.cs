@@ -11,6 +11,45 @@ namespace airmodel_ad.Business.Services
         AppDbContext appDbContext;
         public ProductService(AppDbContext context) { 
             appDbContext = context;
+            updateInventaryAuto();
+        }
+
+        private void updateInventaryAuto()
+        {
+            Debug.WriteLine("updateInventaryAuto");
+            try {
+                if (appDbContext != null)
+                {
+                    List<ProductModel> productModels = appDbContext.products.ToList();
+                    foreach (ProductModel product in productModels)
+                    {
+                        if (product.hasVarients == true)
+                        {
+                            int total = 0;
+
+                            List<VarientModel> varientModels1 = appDbContext.varient.Where(u => u.productId == product.productId).ToList();
+                            foreach (var varientModel in varientModels1)
+                            {
+                                List<VarientOptionModel> varientOptionModels1 = appDbContext.varientOption.Where(u => u.varientId == varientModel.varientId).ToList();
+                                foreach (var varientOptionModel in varientOptionModels1)
+                                {
+                                    if (varientOptionModel.varientQty > 0)
+                                    {
+                                        total = total + varientOptionModel.varientQty;
+                                    }
+                                }
+                                product.productQty = total;
+                                appDbContext.SaveChanges();
+                                Debug.WriteLine(total);
+
+                            }
+                        }
+                    }
+                }
+            } catch(Exception ex)
+            {
+                Debug.WriteLine(ex.ToString()); 
+            }
         }
 
         public List<ProductModel> GetAllAvailableProducts()
@@ -137,6 +176,7 @@ namespace airmodel_ad.Business.Services
             {
                 appDbContext.Add(varientModel);
                 appDbContext.SaveChanges();
+                updateInventaryAuto();
                 return true;
             }
             catch (Exception ex)
@@ -151,6 +191,7 @@ namespace airmodel_ad.Business.Services
             {
                 appDbContext.Add(varientOption);
                 appDbContext.SaveChanges();
+                updateInventaryAuto();
                 return true;
             }
             catch (Exception ex)
@@ -190,6 +231,7 @@ namespace airmodel_ad.Business.Services
                 }
 
                 appDbContext.SaveChanges();
+                updateInventaryAuto();
                 return true;
             }
             catch (Exception ex)
@@ -203,6 +245,7 @@ namespace airmodel_ad.Business.Services
             try
             {
                 appDbContext.SaveChanges();
+                updateInventaryAuto();
                 return true;
             }
             catch (Exception ex)
