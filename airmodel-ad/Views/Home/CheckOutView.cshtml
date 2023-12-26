@@ -51,13 +51,11 @@
                             <span class="sr-only">Toggle mobile menu</span>
                             <i class="icon-bars"></i>
                         </button>
-                        <form method="post" asp-controller="Home" asp-action="Index">
-                            <button type="submit" style="all: unset;">
-                                <a class="logo">
-                                    <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
-                                </a>
-                            </button>
-                        </form>
+                        <button onclick="location.href = '@Url.Action("Index", "Home")'" type="submit" style="all: unset;">
+                            <a class="logo">
+                                <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
+                            </a>
+                        </button>
                     </div><!-- End .header-left -->
 
                     <div class="header-center">
@@ -98,7 +96,7 @@
 
                                                         <span class="cart-product-info">
                                                             @{
-                                                                if (@cartItem.varientOption.varientImage == "0")
+                                                                if (@cartItem.varientOptionId == null)
                                                                 {
                                                                     <div>
                                                                         <span class="cart-product-qty">@cartItem.qty</span>
@@ -119,7 +117,7 @@
                                                     <figure class="product-image-container">
                                                         <a class="product-image">
                                                             @{
-                                                                if (@cartItem.varientOption.varientImage == "0")
+                                                                if (@cartItem.varientOptionId == null)
                                                                 {
                                                                     <img src="@cartItem.products.productImage" alt="product">
 
@@ -298,7 +296,7 @@
                                                     <tr>
                                                         <td><a href="#">@cartItem.products.productName</a></td>
                                                         @{
-                                                            if (@cartItem.varientOption.varientImage == "0")
+                                                            if (@cartItem.varientOption == null)
                                                             {
                                                                 <td>
                                                                     <span class="cart-product-qty">@cartItem.qty</span>

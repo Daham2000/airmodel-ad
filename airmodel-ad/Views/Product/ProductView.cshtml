@@ -93,7 +93,7 @@
 
                                                     <span class="cart-product-info">
                                                         @{
-                                                            if (@cartItem.varientOption.varientImage == "0")
+                                                            if (@cartItem.varientOptionId == null)
                                                             {
                                                                 <div>
                                                                     <span class="cart-product-qty">@cartItem.qty</span>
@@ -114,7 +114,7 @@
                                                 <figure class="product-image-container">
                                                     <a class="product-image">
                                                         @{
-                                                            if (@cartItem.varientOption.varientImage == "0")
+                                                            if (@cartItem.varientOptionId == null)
                                                             {
                                                                 <img src="@cartItem.products.productImage" alt="product">
 
@@ -310,33 +310,38 @@
                                 <p>@ViewBag.product.productDescription</p>
                             </div><!-- End .product-content -->
                             @{
+                                <input type="text" style="display: none" class="form-control" id="productId" value="@ViewBag.product.productId">
                                 if (ViewBag.product.varientModels != null)
                                 {
-                                    @foreach (var varient in @ViewBag.product.varientModels)
+                                    if (@ViewBag.product.hasVarients == true)
                                     {
-                                        <div class="details-filter-row details-row-size">
+                                        @foreach (var varient in @ViewBag.product.varientModels)
+                                        {
+                                            <div class="details-filter-row details-row-size">
 
-                                            <label for="@varient.productName">@varient.productName:</label>
-                                            <div class="select-custom">
-                                                <input type="text" style="display: none" class="form-control" id="productId" value="@ViewBag.product.productId">
-                                                <input type="text" style="display: none" class="form-control" id="VarientId" value="@varient.varientId">
-                                                <select id="optionSelect" name="@varient.productName" class="form-control">
-                                                    @{
-                                                        if (ViewBag.product.varientModels != null)
-                                                        {
-                                                            @foreach (var option in @ViewBag.product.varientOptionModels)
+                                                <label for="@varient.productName">@varient.productName:</label>
+                                                <div class="select-custom">
+                                                    
+                                                    <input type="text" style="display: none" class="form-control" id="VarientId" value="@varient.varientId">
+                                                    <select id="optionSelect" name="@varient.productName" class="form-control">
+                                                        @{
+                                                            if (ViewBag.product.varientModels != null)
                                                             {
-                                                                if (option.varientId == @varient.varientId && @option.varientName != "0")
+                                                                @foreach (var option in @ViewBag.product.varientOptionModels)
                                                                 {
-                                                                    <option value="@option.varientOptionId">@option.varientName</option>
+                                                                    if (option.varientId == @varient.varientId && @option.varientName != "0")
+                                                                    {
+                                                                        <option value="@option.varientOptionId">@option.varientName</option>
+                                                                    }
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                </select>
-                                            </div><!-- End .select-custom -->
-                                        </div>
+                                                    </select>
+                                                </div><!-- End .select-custom -->
+                                            </div>
+                                        }
                                     }
+                                 
                                 } else {
                                     <input type="text" style="display: none" class="form-control" id="productId" value="@ViewBag.product.productId">
                                 }
@@ -346,7 +351,7 @@
                             <div class="details-filter-row details-row-size">
                                 <label for="qty">Qty:</label>
                                 <div class="product-details-quantity">
-                                    <input type="number" id="qty" name="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                    <input type="number" id="qty" name="qty" class="form-control" min="1" value="1" max="@ViewBag.product.productQty" step="1" data-decimals="0" required>
                                 </div><!-- End .product-details-quantity -->
                             </div><!-- End .details-filter-row -->
 
@@ -625,10 +630,14 @@
 
         $("#AddToCardID").click(function (e) {
             e.preventDefault();
+            console.log("AddToCardID");
             var qty = document.getElementById("qty").value;
+
             var productId = document.getElementById("productId").value;
+            console.log(productId);
+
             var VarientId;
-            if(document.getElementById("optionSelect") !== null) {
+            if (document.getElementById("optionSelect") !== null) {
                 VarientId = document.getElementById("optionSelect").value;
             } else {
                 VarientId = "Null"

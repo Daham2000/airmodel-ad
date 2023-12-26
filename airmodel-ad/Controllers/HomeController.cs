@@ -60,14 +60,18 @@ namespace airmodel_ad.Controllers
                 
                 foreach (var item in cartModels)
                 {
-                    if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
+                    if(item.varientOptionId != null)
                     {
-                        total += item.varientOption.varientPrice * item.qty;
+                        if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
+                        {
+                            total += item.varientOption.varientPrice * item.qty;
+                        }
+                        else
+                        {
+                            total += item.products.productBasicPrice * item.qty;
+                        }
                     }
-                    else
-                    {
-                        total += item.products.productBasicPrice * item.qty;
-                    }
+          
                 }
                 return true;
             } catch (Exception ex)
@@ -324,15 +328,22 @@ namespace airmodel_ad.Controllers
         {
             try
             {
+                total = 0;
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 User user = userService.GetUserByEmail(emailValue);
                 ProductModel product = productService.GetProductById(productId);
                 bool ifAvailable = cartService.CheckProductAvailableInCart(product, user.userId);
-
+                if(VarientId != "Null")
+                {
+                    VarientOptionModel varientOptionModel = productService.GetProductVarientById(new Guid(VarientId));
+                    total = varientOptionModel.varientPrice * qty;
+                } else
+                {
+                    total = product.productBasicPrice * qty;
+                }
                 CartModel cartModel = cartService.GetCart(emailValue);
                 Debug.WriteLine("qty");
                 Debug.WriteLine(qty);
-
 
                 CartItemModel newCartItemModel = new CartItemModel();
                 newCartItemModel.cartItemId = Guid.NewGuid();
@@ -347,7 +358,7 @@ namespace airmodel_ad.Controllers
                         newCartItemModel.varientOptionId = new Guid(VarientId);
                     } else
                     {
-                        newCartItemModel.varientOptionId = Guid.Empty;
+                        newCartItemModel.varientOptionId = null;
                     }
                     bool result = cartService.AddCart(newCartItemModel);
                 }
@@ -463,14 +474,18 @@ namespace airmodel_ad.Controllers
                 total = 0;
                 foreach (var item in cartModels)
                 {
-                    if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
+                    if (item.varientOptionId != null)
                     {
-                        total += item.varientOption.varientPrice * item.qty;
+                        if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
+                        {
+                            total += item.varientOption.varientPrice * item.qty;
+                        }
+                        else
+                        {
+                            total += item.products.productBasicPrice * item.qty;
+                        }
                     }
-                    else
-                    {
-                        total += item.products.productBasicPrice * item.qty;
-                    }
+                        
                 }
                 orderModel.total = total;
                 orderModel.userId = user.userId;

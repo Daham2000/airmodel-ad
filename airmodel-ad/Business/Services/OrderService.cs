@@ -35,12 +35,16 @@ namespace airmodel_ad.Business.Services
                     ProductModel? productModel = appDbContext.products.Where((p) => p.productId == orderItems[i].productId).FirstOrDefault();
                     productModel.productQty = productModel.productQty - orderItems[i].qty;
                     appDbContext.SaveChanges();
-                    if (orderItems[i].varientOptionId != new Guid("00000000-0000-0000-0000-000000000000"))
+                    if(orderItems[i].varientOptionId != null)
                     {
-                        VarientOptionModel? varientOptionModel = appDbContext.varientOption.Where((p) => p.varientOptionId == orderItems[i].varientOptionId).FirstOrDefault();
-                        varientOptionModel.varientQty = varientOptionModel.varientQty- orderItems[i].qty;
-                        appDbContext.SaveChanges();
+                        if (orderItems[i].varientOptionId != new Guid("00000000-0000-0000-0000-000000000000"))
+                        {
+                            VarientOptionModel? varientOptionModel = appDbContext.varientOption.Where((p) => p.varientOptionId == orderItems[i].varientOptionId).FirstOrDefault();
+                            varientOptionModel.varientQty = varientOptionModel.varientQty - orderItems[i].qty;
+                            appDbContext.SaveChanges();
+                        }
                     }
+                 
                 }
                 appDbContext.SaveChanges();
                 return true;
