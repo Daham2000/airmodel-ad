@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace airmodel_ad.Controllers
 {
-    public class UserOrder : Controller
+    public class UserOrderController : Controller
     {
         List<ProductModel> productModels;
         List<ProductModel> filteredProductModels;
@@ -27,7 +27,7 @@ namespace airmodel_ad.Controllers
         Guid VarientId = Guid.Empty;
         Guid productId = Guid.Empty;
 
-        public UserOrder(IUserService user, IProductService product, ICartService cartService, ICategoryService categoryService, IOrderService orderService)
+        public UserOrderController(IUserService user, IProductService product, ICartService cartService, ICategoryService categoryService, IOrderService orderService)
         {
             this.userService = user;
             this.productService = product;
