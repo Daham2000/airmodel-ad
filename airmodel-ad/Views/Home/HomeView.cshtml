@@ -218,27 +218,7 @@
             <div class="header-bottom sticky-header">
                 <div class="container">
                     <div class="header-left">
-                        <div class="dropdown category-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" title="Browse Categories">
-                                Browse Categories
-                            </a>
 
-                            <div class="dropdown-menu">
-                                <nav class="side-nav">
-                                    <ul class="menu-vertical sf-arrows">
-                                        @{
-                                            if (ViewBag.categories != null)
-                                            {
-                                                @foreach (var category in @ViewBag.categories)
-                                                {
-                                                    <li><a href="#">@category.categoryName</a></li>
-                                                }
-                                            }
-                                        }
-                                    </ul><!-- End .menu-vertical -->
-                                </nav><!-- End .side-nav -->
-                            </div><!-- End .dropdown-menu -->
-                        </div><!-- End .category-dropdown -->
                     </div><!-- End .header-left -->
 
                 </div><!-- End .container -->
@@ -368,7 +348,7 @@
                                             <div id="productBtn3" value="@product.productId" class="col-6 col-md-4 col-lg-3 col-xl-5col">
                                                 <div style="width: 260px; height: 425px;" class="product product-11 text-center">
                                                     <figure class="product-media">
-                                                        <a href="product.html">
+                                                        <a>
                                                             <img src="@product.productImage" alt="Product image" class="product-image">
                                                         </a>
 

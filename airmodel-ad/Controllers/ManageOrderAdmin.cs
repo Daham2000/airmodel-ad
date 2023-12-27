@@ -214,7 +214,7 @@ namespace airmodel_ad.Controllers
                 var receiverEmail = new MailAddress(orderModel.users.userEmail, "Receiver");
                 var password = "drmgqctqxnvlagvg";
 
-                var sub = "Your order " + oId.ToString().Substring(0, 10);
+                var sub = "Order Status Changed - Your order " + oId.ToString().Substring(0, 10);
                 var body = "Hi " + orderModel.users.userName + "\nYour order has been moved to " + o + " status...";
                 var smtp = new SmtpClient
                 {
@@ -225,12 +225,24 @@ namespace airmodel_ad.Controllers
                     Credentials = new NetworkCredential(senderEmail.Address, password),
                     EnableSsl = true
                 };
-                using (var mess = new MailMessage(senderEmail, receiverEmail)
+                using (var mess = new MailMessage("courseworkt810@gmail.com", orderModel.users.userEmail, sub, " <body>\r\n    <h2>Order Status Confirmation</h2>\r\n\r\n    " +
+                    "<p>Dear " + orderModel.users.userName + ",</p>\r\n\r\n    <p>Thank you for placing an order with us. Here are the details " +
+                    "of your order:</p>\r\n\r\n    <table>\r\n        <tr>\r\n            <td><strong>Order ID: "+ orderModel.oId + "</strong></td>\r\n " +
+                    "         \r\n        </tr>\r\n        <tr>\r\n            <td><strong>Total Amount:</strong></td>\r\n  " +
+                    "          <td>$"+ orderModel.total + "</td>\r\n        </tr>\r\n        <!-- Add more details as needed -->\r\n\r\n     " +
+                    "   <tr>\r\n            <td><strong>Delivery Address:</strong></td>\r\n            <td>\r\n  " +
+                    "              " + orderModel.fName + " " + orderModel.lName + "< br>\r\n                "+ orderModel.address + "<br>\r\n" +
+                    "                " + orderModel.city + ", " + orderModel.county + "<br>\r\n                " + orderModel.postCode + "\r\n " +
+                    "           </td>\r\n        </tr>\r\n    </table>\r\n\r\n  <ul>\r\n      " +
+
+                    "  <p><strong>Order Status:</strong> " + o + "</p>\r\n    <p><strong>Order Note:</strong> " + orderModel.orderNote + "</p>\r\n\r\n" +
+                    "    <p>If you have any questions or concerns about your order, please feel free to contact us.</p>\r\n\r\n   " +
+                    " <p>Thank you for choosing our service!</p>\r\n\r\n    <p>Best regards,<br>\r\n    AirModel UK inc.</p>\r\n</body> ")
                 {
-                    Subject = sub,
-                    Body = body
+                    
                 })
                 {
+                    mess.IsBodyHtml = true;
                     smtp.Send(mess);
                 }
 
