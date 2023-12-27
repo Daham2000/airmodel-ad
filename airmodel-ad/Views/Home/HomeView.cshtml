@@ -254,8 +254,8 @@
                                             <h3 class="intro-subtitle">Bedroom Furniture</h3><!-- End .h3 intro-subtitle -->
                                             <h1 class="intro-title">Find Comfort <br>That Suits You.</h1><!-- End .intro-title -->
 
-                                            <a href="category.html" class="btn btn-primary">
-                                                <span>Shop Now</span>
+                                    <a onClick="scrollTo()" class="btn btn-primary">
+                                                <span style="color: white;">Shop Now</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </a>
                                         </div><!-- End .container intro-content -->
@@ -339,7 +339,7 @@
                             if (ViewBag.filteredProductModels != null)
                             {
                                 <div class="tab-content grid-container" style="display: grid;
-                                                                              grid-template-columns: auto auto auto;
+                                                                                      grid-template-columns: auto auto auto auto;
                                                                               padding: 10px;" id="filter-products">
                                     @foreach (var product in @ViewBag.filteredProductModels)
                                     {
@@ -814,6 +814,21 @@
             // Call updateData() when the button is clicked
             GetOnSaleItemsData();
         });
+
+     
+    </script>
+
+    <script>
+        function scrollTo() {
+            var targetElement = document.getElementById('filteredViewId');
+
+            // Check if the target element exists
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth' // Use smooth scrolling
+                });
+            }
+        }
     </script>
 
     <!-- Plugins JS File -->

@@ -370,6 +370,7 @@ namespace airmodel_ad.Controllers
 
                 ViewBag.productModels = productModels;
                 ViewBag.selectedCategory = selectedCategory;
+                ViewBag.filteredProductModels = filteredProductModels;
                 ViewBag.cartModels = cartModels;
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
@@ -397,6 +398,7 @@ namespace airmodel_ad.Controllers
 
                 ViewBag.productModels = productModels;
                 ViewBag.selectedCategory = selectedCategory;
+                ViewBag.filteredProductModels = filteredProductModels;
                 ViewBag.cartModels = cartModels;
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
@@ -414,20 +416,14 @@ namespace airmodel_ad.Controllers
         {
             try
             {
-                Debug.WriteLine("imageSelected");
-                Debug.WriteLine(imageSelected);
                 VarientOptionModel varientOptionModel = productService.GetProductVarientById(imageSelected);
                 if(varientOptionModel == null) {
                     ProductModel productModel = productService.GetProductById(imageSelected);
                     ViewBag.selectedImage = productModel.productImage;
-                    ViewBag.selectedProPrice = productModel.productBasicPrice;
-
                 }
                 else
                 {
                     ViewBag.selectedImage = varientOptionModel.varientImage;
-                    ViewBag.selectedProPrice = varientOptionModel.varientPrice;
-
                 }
 
                 return PartialView("../Product/ImageView");
@@ -435,6 +431,39 @@ namespace airmodel_ad.Controllers
             catch (Exception ex)
             {
                 return PartialView("../Product/ImageView");
+            }
+        }
+
+        public async Task<PartialViewResult> SelectImageChangePrice(Guid imageSelected)
+        {
+            try
+            {
+                Debug.WriteLine("imageSelected");
+                Debug.WriteLine(imageSelected);
+                VarientOptionModel varientOptionModel = productService.GetProductVarientById(imageSelected);
+                if (varientOptionModel == null)
+                {
+                    ProductModel productModel = productService.GetProductById(imageSelected);
+                    ViewBag.selectedProPrice = productModel.productBasicPrice;
+                    Debug.WriteLine("productBasicPrice");
+
+                    Debug.WriteLine(productModel.productBasicPrice);
+
+                }
+                else
+                {
+                    ViewBag.selectedProPrice = varientOptionModel.varientPrice;
+                    Debug.WriteLine("varientPrice");
+
+                    Debug.WriteLine(varientOptionModel.varientPrice);
+
+                }
+
+                return PartialView("../Product/ProductPriceComponent");
+            }
+            catch (Exception ex)
+            {
+                return PartialView("../Product/ProductPriceComponent");
             }
         }
 
@@ -457,120 +486,6 @@ namespace airmodel_ad.Controllers
             catch (Exception ex)
             {
                 return View("../Home/CheckOutView");
-            }
-        }
-
-        public async Task<IActionResult> PlaceOrder(string fName, string lName, string orderNote, string county, string street, string houseNo, string city, string postCode, string phoneNumber)
-        {
-            try
-            {
-                await GetHomePageData();
-                Debug.WriteLine("Fname");
-                Debug.WriteLine(fName);
-                Debug.WriteLine(street);
-                Debug.WriteLine(postCode);
-                string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                User user = userService.GetUserByEmail(emailValue);
-                OrderModel orderModel = new OrderModel();
-                orderModel.oId = new Guid();
-                total = 0;
-                foreach (var item in cartModels)
-                {
-                    if (item.varientOptionId != null)
-                    {
-                        if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
-                        {
-                            total += item.varientOption.varientPrice * item.qty;
-                        }
-                        else
-                        {
-                            total += item.products.productBasicPrice * item.qty;
-                        }
-                    }
-                        
-                }
-                orderModel.total = total;
-                orderModel.userId = user.userId;
-                orderModel.fName = fName;
-                orderModel.lName = lName;
-                orderModel.county = county;
-                orderModel.address = houseNo + ", " + street + ", " + county;
-                orderModel.city = city;
-                orderModel.postCode = postCode;
-                orderModel.phoneNumber = phoneNumber;
-                if(orderNote == null)
-                {
-                    orderModel.orderNote = "No order note.";
-
-                } else
-                {
-                    orderModel.orderNote = orderNote;
-                }
-                orderModel.orderStatus = "0";
-
-                List<OrderItem> orderItems= new List<OrderItem>();
-                foreach (CartItemModel item in cartModels)
-                {
-                    OrderItem orderItem= new OrderItem();
-                    orderItem.oItemId = new Guid();
-                    orderItem.productId = item.productId;
-                    orderItem.qty = item.qty;
-                    orderItem.oItemId = new Guid();
-                    orderItem.varientOptionId = item.varientOptionId;
-                    orderItems.Add(orderItem);
-                }
-                Debug.WriteLine(orderItems[0].productId);
-                orderService.AddOrder(orderModel, orderItems, cartModels[0].cartId);
-
-                var senderEmail = new MailAddress("courseworkt810@gmail.com");
-                var receiverEmail = new MailAddress(orderModel.users.userEmail, "Receiver");
-                var password = "drmgqctqxnvlagvg";
-
-                var sub = "Your order placed Order ID: " + orderModel.oId.ToString().Substring(0, 10);
-                var smtp = new SmtpClient
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(senderEmail.Address, password),
-                    EnableSsl = true
-                };
-                using (var mess = new MailMessage("courseworkt810@gmail.com", orderModel.users.userEmail, sub, " <body>\r\n    <h2>Order Status Confirmation</h2>\r\n\r\n    " +
-                    "<p>Dear " + orderModel.users.userName + ",</p>\r\n\r\n    <p>Thank you for placing an order with us. Here are the details " +
-                    "of your order:</p>\r\n\r\n    <table>\r\n        <tr>\r\n            <td><strong>Order ID: " + orderModel.oId + "</strong></td>\r\n " +
-                    "         \r\n        </tr>\r\n        <tr>\r\n            <td><strong>Total Amount:</strong></td>\r\n  " +
-                    "          <td>$" + orderModel.total + "</td>\r\n        </tr>\r\n        <!-- Add more details as needed -->\r\n\r\n     " +
-                    "   <tr>\r\n            <td><strong>Delivery Address:</strong></td>\r\n            <td>\r\n  " +
-                    "              " + orderModel.fName + " " + orderModel.lName + "< br>\r\n                " + orderModel.address + "<br>\r\n" +
-                    "                " + orderModel.city + ", " + orderModel.county + "<br>\r\n                " + orderModel.postCode + "\r\n " +
-                    "           </td>\r\n        </tr>\r\n    </table>\r\n\r\n  <ul>\r\n      " +
-
-                    "  <p><strong>Order Status: </strong> " + "Pending" + "</p>\r\n    <p><strong>Order Note:</strong> " + orderModel.orderNote + "</p>\r\n\r\n" +
-                    "    <p>If you have any questions or concerns about your order, please feel free to contact us.</p>\r\n\r\n   " +
-                    " <p>Thank you for choosing our service!</p>\r\n\r\n    <p>Best regards,<br>\r\n    AirModel UK inc.</p>\r\n</body> ")
-                {
-
-                })
-                {
-                    mess.IsBodyHtml = true;
-                    smtp.Send(mess);
-                }
-
-                await GetHomePageData();
-
-                ViewBag.productModels = productModels;
-                ViewBag.selectedCategory = selectedCategory;
-                ViewBag.cartModels = cartModels;
-                ViewBag.len = cartModels.Count();
-                ViewBag.total = total;
-                ViewBag.categories = categories;
-
-                return View("../Home/HomeView");
-            }
-            catch (Exception ex)
-            {
-                return View("../Home/HomeView");
             }
         }
 

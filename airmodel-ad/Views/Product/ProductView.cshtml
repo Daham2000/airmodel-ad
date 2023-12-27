@@ -127,13 +127,11 @@
                                                         }
                                                     </a>
                                                 </figure>
-                                                <form method="post" asp-controller="Home" asp-action="RemoveFromCart">
                                                     <input type="text" style="display: none" class="form-control" name="cartItemId" value="@cartItem.cartItemId">
 
-                                                    <button type="submit" style="all: unset;">
+                                                    <button style="all: unset;" onclick="location.href = '@Url.Action("RemoveFromCart", "Home", new { cartItemId = @cartItem.cartItemId })'">
                                                         <a class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                                     </button>
-                                                </form>
                                             </div>
                                         }
                                     </div><!-- End .cart-product -->
@@ -268,20 +266,9 @@
                             <h1 class="product-title">@ViewBag.product.productName</h1><!-- End .product-title -->
 
                             @{
-                                if (@ViewBag.selectedProPrice != null)
-                                {
-                                    <div class="product-price">
-                                        $@ViewBag.selectedProPrice
-                                    </div>
-                                    <!-- End .product-price -->
-                                }
-                                else
-                                {
-                                    <div class="product-price">
-                                        $@ViewBag.product.productBasicPrice
-                                    </div>
-                                    <!-- End .product-price -->                                    
-                                }
+                                <div class="product-price" id="priceDiv">
+                                    $@ViewBag.product.productBasicPrice
+                                </div>
                             }
 
                             <div class="product-content">
@@ -301,7 +288,7 @@
                                                 <div class="select-custom">
                                                     
                                                     <input type="text" style="display: none" class="form-control" id="VarientId" value="@varient.varientId">
-                                                    <select id="optionSelect" name="@varient.productName" class="form-control">
+                                                    <select id="optionSelect-@varient.varientId" name="@varient.productName" class="form-control">
                                                         @{
                                                             if (ViewBag.product.varientModels != null)
                                                             {
@@ -659,24 +646,122 @@
             });
         });
 
-        $("#optionSelect").click(function (e) {
-            e.preventDefault();
-            var x = document.getElementById("optionSelect").value;
-            console.log(productId)
-            console.log(VarientId)
-
-            jQuery.ajax({
-                url: '@Url.Action("SelectImage", "Home")',
-                type: 'GET',
-                data: { imageSelected: x },
-                success: function (data) {
-                    $('#product-zoom').replaceWith(data);
-                },
-                error: function () {
-                    // Handle errors if necessary
-                }
+        $(document).ready(function () {
+            $("form").submit(function (e) {
+                e.preventDefault();
+                jQuery.ajax({
+                    url: '@Url.Action("SelectImageChangePrice", "Home")',
+                    type: 'GET',
+                    data: { imageSelected: e.target[1].value },
+                    success: function (data) {
+                        $('#priceDiv').replaceWith(data);
+                    },
+                    error: function () {
+                        // Handle errors if necessary
+                    }
+                });
             });
         });
+
+        
+
+    </script>
+
+    <script>
+        @{
+            if (@ViewBag.product.varientModels != null)
+            {
+                @foreach (var varient in @ViewBag.product.varientModels)
+                {
+                <script>
+                        $(document).ready(function () {
+                                    $("#optionSelect-@varient.varientId").click(function (e) {
+                                        e.preventDefault();
+                                        var x = document.getElementById("optionSelect-@varient.varientId").value;
+                                        console.log(productId)
+                                        console.log(VarientId)
+
+                                        jQuery.ajax({
+                                            url: '@Url.Action("SelectImage", "Home")',
+                                            type: 'GET',
+                                            data: { imageSelected: x },
+                                            success: function (data) {
+                                                $('#product-zoom').replaceWith(data);
+                                            },
+                                            error: function () {
+                                                // Handle errors if necessary
+                                            }
+                                        });
+                                    });
+                        })
+                        
+
+                        $("#optionSelect-@varient.varientId").click(function (e) {
+                            e.preventDefault();
+                            var x = document.getElementById("optionSelect-@varient.varientId").value;
+                            console.log(productId)
+                            console.log(VarientId)
+
+                            jQuery.ajax({
+                                url: '@Url.Action("SelectImageChangePrice", "Home")',
+                                type: 'GET',
+                                data: { imageSelected: x },
+                                success: function (data) {
+                                    $('#priceDiv').replaceWith(data);
+                                },
+                                error: function () {
+                                    // Handle errors if necessary
+                                }
+                            });
+                        });
+                </script>
+
+
+                <script>
+                    $(document).ready(function () {
+                        $("#optionSelect-@varient.varientId").click(function (e) {
+                            e.preventDefault();
+                            var x = document.getElementById("optionSelect-@varient.varientId").value;
+                            console.log(productId)
+                            console.log(VarientId)
+
+                            jQuery.ajax({
+                                url: '@Url.Action("SelectImage", "Home")',
+                                type: 'GET',
+                                data: { imageSelected: x },
+                                success: function (data) {
+                                    $('#product-zoom').replaceWith(data);
+                                },
+                                error: function () {
+                                    // Handle errors if necessary
+                                }
+                            });
+                        });
+                    })
+
+
+                    $("#optionSelect-@varient.varientId").click(function (e) {
+                        e.preventDefault();
+                        var x = document.getElementById("optionSelect-@varient.varientId").value;
+                        console.log(productId)
+                        console.log(VarientId)
+
+                        jQuery.ajax({
+                            url: '@Url.Action("SelectImageChangePrice", "Home")',
+                            type: 'GET',
+                            data: { imageSelected: x },
+                            success: function (data) {
+                                $('#priceDiv').replaceWith(data);
+                            },
+                            error: function () {
+                                // Handle errors if necessary
+                            }
+                        });
+                    });
+                </script>
+                }
+            }
+        }
     </script>
 </body>
 </html>

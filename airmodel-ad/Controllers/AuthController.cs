@@ -55,7 +55,8 @@ namespace airmodel_ad.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
-            return View("../Auth/SignIn-Page/SignIn");
+			ViewBag.error = "true";
+			return View("../Auth/SignIn-Page/SignIn");
         }
 
 		[HttpPost]
@@ -86,7 +87,8 @@ namespace airmodel_ad.Controllers
 				return RedirectToAction("Index", "Home");
 			}
             ViewBag.ValidateMessage = "User not found";
-            return View("../Auth/SignIn-Page/SignIn");
+			ViewBag.error = "true";
+			return View("../Auth/SignIn-Page/SignIn");
 		}
 	}
 }

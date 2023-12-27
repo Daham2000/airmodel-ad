@@ -212,7 +212,7 @@
                 <div class="container">
                     <div class="checkout-discount">
                     </div><!-- End .checkout-discount -->
-                    <form method="post" asp-controller="Home" asp-action="PlaceOrder">
+                    <form method="post" asp-controller="UserOrder" asp-action="PlaceOrder">
                         <div class="row">
                             <div class="col-lg-9">
                                 <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
@@ -250,7 +250,7 @@
 
                                     <div class="col-sm-6">
                                         <label>Phone *</label>
-                                        <input name="phoneNumber" type="tel" class="form-control" required>
+                                        <input type="tel" id="phone" name="phoneNumber" pattern="[0-9]{10}" required>
                                     </div><!-- End .col-sm-6 -->
                                 </div><!-- End .row -->
 
