@@ -211,17 +211,16 @@
                                 </figure><!-- End .product-main-image -->
 
                                 <div id="product-zoom-gallery" class="product-image-gallery" style="height:auto">
-
-                                    <form action="">
-                                        <button type="submit" style="all: unset;">
+                                        <button style="all: unset;">
                                             <input type="text" style="display: none" class="form-control" name="imageSelected" value="@ViewBag.product.productId" aria-describedby="emailHelp" placeholder="Enter computer name">
-
+                                            @{
+                                               <input type="text" style="display: none" class="form-control" name="VarientId" id="newVarientId" value="@ViewBag.varientId">
+                                            }
                                             <a style="height:115px" class="product-gallery-item active" src="@ViewBag.product.productImage" data-zoom-image="@ViewBag.product.productImage">
                                                 <img src="@ViewBag.product.productImage" alt="product side">
                                             </a>
                                         </button>
-                                    </form>
-
+                          
                                     @{
                                         if (@ViewBag.product.hasVarients == true)
                                         {
@@ -235,19 +234,14 @@
                                                         {
                                                             if (option.varientOptionId != new Guid("00000000-0000-0000-0000-000000000000"))
                                                             {
-                                                                <form action="">
-                                                                    <button type="submit" style="all: unset;">
-                                                                        <input type="text" style="display: none" class="form-control" name="imageSelected" value="@option.varientOptionId" aria-describedby="emailHelp" placeholder="Enter computer name">
+                                                                <button type="submit" style="all: unset;" id="img-@option.varientOptionId">
+                                                                    <input type="text" style="display: none" class="form-control" name="imageSelected" id="valueV-@option.varientOptionId"  value="@option.varientOptionId">
 
-                                                                        <a style="height:115px" class="product-gallery-item active" src="@option.varientImage" data-zoom-image="@option.varientImage">
-                                                                            <img src="@option.varientImage" alt="product side">
-                                                                        </a>
-                                                                    </button>
-                                                                </form>
+                                                                    <a style="height:115px" class="product-gallery-item active" src="@option.varientImage" data-zoom-image="@option.varientImage">
+                                                                        <img src="@option.varientImage" alt="product side">
+                                                                    </a>
+                                                                </button>
                                                             }
-
-                                                         
-
                                                         }
                                                     }
 
@@ -602,13 +596,14 @@
             console.log(productId);
 
             var VarientId;
-            if (document.getElementById("optionSelect") !== null) {
-                VarientId = document.getElementById("optionSelect").value;
+            if (document.getElementById("newVarientId") !== null) {
+                VarientId = document.getElementById("newVarientId").value;
             } else {
                 VarientId = "Null"
             }
             
             console.log("qty")
+            console.log(VarientId)
             jQuery.ajax({
                 url: '@Url.Action("AddToCart", "Home")',
                 type: 'POST',
@@ -628,58 +623,31 @@
             GetOnSaleItemsData();
         });
 
-
-        $(document).ready(function () {
-            $("form").submit(function (e) {
-                e.preventDefault();
-                jQuery.ajax({
-                    url: '@Url.Action("SelectImage", "Home")',
-                    type: 'GET',
-                    data: { imageSelected: e.target[1].value },
-                    success: function (data) {
-                        $('#product-zoom').replaceWith(data);
-                    },
-                    error: function () {
-                        // Handle errors if necessary
-                    }
-                });
-            });
-        });
-
-        $(document).ready(function () {
-            $("form").submit(function (e) {
-                e.preventDefault();
-                jQuery.ajax({
-                    url: '@Url.Action("SelectImageChangePrice", "Home")',
-                    type: 'GET',
-                    data: { imageSelected: e.target[1].value },
-                    success: function (data) {
-                        $('#priceDiv').replaceWith(data);
-                    },
-                    error: function () {
-                        // Handle errors if necessary
-                    }
-                });
-            });
-        });
-
-        
-
     </script>
 
     <script>
+ 
         @{
             if (@ViewBag.product.varientModels != null)
             {
                 @foreach (var varient in @ViewBag.product.varientModels)
                 {
                 <script>
-                        $(document).ready(function () {
-                                    $("#optionSelect-@varient.varientId").click(function (e) {
+                     
+                </script>
+
+
+                <script>
+                        @foreach (var option in @ViewBag.product.varientOptionModels)
+                        {
+                            <script>
+                               
+                            </script>
+                            <script>
+                                $(document).ready(function () {
+                                    $("#img-@option.varientOptionId").click(function (e) {
                                         e.preventDefault();
-                                        var x = document.getElementById("optionSelect-@varient.varientId").value;
-                                        console.log(productId)
-                                        console.log(VarientId)
+                                var x = document.getElementById("valueV-@option.varientOptionId").value;
 
                                         jQuery.ajax({
                                             url: '@Url.Action("SelectImage", "Home")',
@@ -693,37 +661,18 @@
                                             }
                                         });
                                     });
-                        })
-                        
+                                })
+                            </script>
+                        }
+                        <script>
 
+
+                        $(document).ready(function () {
                         $("#optionSelect-@varient.varientId").click(function (e) {
                             e.preventDefault();
                             var x = document.getElementById("optionSelect-@varient.varientId").value;
                             console.log(productId)
-                            console.log(VarientId)
-
-                            jQuery.ajax({
-                                url: '@Url.Action("SelectImageChangePrice", "Home")',
-                                type: 'GET',
-                                data: { imageSelected: x },
-                                success: function (data) {
-                                    $('#priceDiv').replaceWith(data);
-                                },
-                                error: function () {
-                                    // Handle errors if necessary
-                                }
-                            });
-                        });
-                </script>
-
-
-                <script>
-                    $(document).ready(function () {
-                        $("#optionSelect-@varient.varientId").click(function (e) {
-                            e.preventDefault();
-                            var x = document.getElementById("optionSelect-@varient.varientId").value;
-                            console.log(productId)
-                            console.log(VarientId)
+                            console.log("x: ", x)
 
                             jQuery.ajax({
                                 url: '@Url.Action("SelectImage", "Home")',
@@ -744,7 +693,6 @@
                         e.preventDefault();
                         var x = document.getElementById("optionSelect-@varient.varientId").value;
                         console.log(productId)
-                        console.log(VarientId)
 
                         jQuery.ajax({
                             url: '@Url.Action("SelectImageChangePrice", "Home")',
@@ -758,7 +706,27 @@
                             }
                         });
                     });
-                </script>
+
+                    $("#optionSelect-@varient.varientId").click(function (e) {
+                        e.preventDefault();
+                        var x = document.getElementById("optionSelect-@varient.varientId").value;
+                        console.log(productId)
+
+                        jQuery.ajax({
+                            url: '@Url.Action("SetVarientID", "Home")',
+                            type: 'GET',
+                            data: { imageSelected: x },
+                            success: function (data) {
+                                $('#newVarientId').replaceWith(data);
+                            },
+                            error: function () {
+                                // Handle errors if necessary
+                            }
+                        });
+                    });
+
+           
+                    </script>
                 }
             }
         }

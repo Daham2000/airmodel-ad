@@ -31,7 +31,7 @@ namespace airmodel_ad.Controllers
         {
             try
             {
-                List<OrderModel> pendingOrders = orderService.GetAllUserOrders();
+                List<OrderModel> pendingOrders = orderService.GetOrderByStatus("0");
                 for (int i = 0; i <= pendingOrders.Count() - 1; i++)
                 {
                     pendingOrders[i].orderItems = orderService.GetAllOrderItems(pendingOrders[i].oId);
@@ -48,7 +48,7 @@ namespace airmodel_ad.Controllers
                         pendingOrders[i].orderStatus = "Delivered";
                     }
                 }
-                ViewBag.orders = null;
+                ViewBag.orders = pendingOrders;
                 List<string> orderStatusList = new List<string>();
                 orderStatusList.Add("Shipped");
                 orderStatusList.Add("Delivered");

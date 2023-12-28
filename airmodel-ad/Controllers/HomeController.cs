@@ -308,7 +308,14 @@ namespace airmodel_ad.Controllers
                 bool re = await GetHomePageData();
                 ProductModel product = productService.GetProductById(searchInput);
                 ViewBag.product = product;
-                ViewBag.selectedImage = product.productImage;
+                if(product.hasVarients == false)
+                {
+                    ViewBag.selectedImage = product.productImage;
+                } else
+                {
+                    ViewBag.selectedImage = product.varientOptionModels[0].varientImage;
+                }
+                
 
                 ViewBag.productModels = productModels;
                 ViewBag.selectedCategory = selectedCategory;
@@ -316,7 +323,7 @@ namespace airmodel_ad.Controllers
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
                 ViewBag.categories = categories;
-
+                ViewBag.VarientId = "Null";
                 return View("../Product/ProductView");
             }
             catch (Exception ex)
@@ -331,6 +338,10 @@ namespace airmodel_ad.Controllers
             try
             {
                 total = 0;
+                Debug.WriteLine("VarientId: ");
+                Debug.WriteLine(VarientId);
+                Debug.WriteLine("productId: ");
+                Debug.WriteLine(productId);
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 User user = userService.GetUserByEmail(emailValue);
                 ProductModel product = productService.GetProductById(productId);
@@ -338,14 +349,18 @@ namespace airmodel_ad.Controllers
                 if(VarientId != "Null")
                 {
                     VarientOptionModel varientOptionModel = productService.GetProductVarientById(new Guid(VarientId));
+                    ViewBag.selectedProPrice = varientOptionModel.varientPrice;
+                    ViewBag.VarientId = new Guid(VarientId);
                     total = varientOptionModel.varientPrice * qty;
                 } else
                 {
                     total = product.productBasicPrice * qty;
+                    ViewBag.VarientId = "Null";
+                    ViewBag.selectedProPrice = product.productBasicPrice;
                 }
                 CartModel cartModel = cartService.GetCart(emailValue);
-                Debug.WriteLine("qty");
-                Debug.WriteLine(qty);
+                Debug.WriteLine("total: ");
+                Debug.WriteLine(total);
 
                 CartItemModel newCartItemModel = new CartItemModel();
                 newCartItemModel.cartItemId = Guid.NewGuid();
@@ -358,14 +373,21 @@ namespace airmodel_ad.Controllers
                     {
 
                         newCartItemModel.varientOptionId = new Guid(VarientId);
-                    } else
+                        bool result = cartService.AddCart(newCartItemModel);
+                        
+                    }
+                    else
                     {
                         newCartItemModel.varientOptionId = null;
+                        if(product.hasVarients == false)
+                        {
+                            bool result = cartService.AddCart(newCartItemModel);
+                        }
                     }
-                    bool result = cartService.AddCart(newCartItemModel);
                 }
                 await GetHomePageData();
                 ViewBag.product = product;
+                ViewBag.VarientId = VarientId;
                 ViewBag.selectedImage = product.productImage;
 
                 ViewBag.productModels = productModels;
@@ -403,7 +425,7 @@ namespace airmodel_ad.Controllers
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
                 ViewBag.categories = categories;
-
+                ViewBag.VarientId = "Null";
                 return View("../Home/HomeView");
             }
             catch (Exception ex)
@@ -420,10 +442,12 @@ namespace airmodel_ad.Controllers
                 if(varientOptionModel == null) {
                     ProductModel productModel = productService.GetProductById(imageSelected);
                     ViewBag.selectedImage = productModel.productImage;
+                    ViewBag.VarientId = "Null";
                 }
                 else
                 {
                     ViewBag.selectedImage = varientOptionModel.varientImage;
+                    ViewBag.VarientId = imageSelected;
                 }
 
                 return PartialView("../Product/ImageView");
@@ -431,6 +455,28 @@ namespace airmodel_ad.Controllers
             catch (Exception ex)
             {
                 return PartialView("../Product/ImageView");
+            }
+        }
+
+        public async Task<PartialViewResult> SetVarientID(Guid imageSelected)
+        {
+            try
+            {
+                VarientOptionModel varientOptionModel = productService.GetProductVarientById(imageSelected);
+                if (varientOptionModel == null)
+                {
+                    ViewBag.VarientId = "Null";
+                }
+                else
+                {
+                    ViewBag.VarientId = imageSelected;
+                }
+
+                return PartialView("../Product/VarientIdView");
+            }
+            catch (Exception ex)
+            {
+                return PartialView("../Product/VarientIdView");
             }
         }
 
@@ -446,7 +492,7 @@ namespace airmodel_ad.Controllers
                     ProductModel productModel = productService.GetProductById(imageSelected);
                     ViewBag.selectedProPrice = productModel.productBasicPrice;
                     Debug.WriteLine("productBasicPrice");
-
+                    ViewBag.VarientId = "Null";
                     Debug.WriteLine(productModel.productBasicPrice);
 
                 }
@@ -454,7 +500,7 @@ namespace airmodel_ad.Controllers
                 {
                     ViewBag.selectedProPrice = varientOptionModel.varientPrice;
                     Debug.WriteLine("varientPrice");
-
+                    ViewBag.VarientId = imageSelected;
                     Debug.WriteLine(varientOptionModel.varientPrice);
 
                 }

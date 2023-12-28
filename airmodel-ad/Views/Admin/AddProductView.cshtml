@@ -210,7 +210,7 @@
             <form method="post" asp-controller="ManageProductAdmin" asp-action="AddProductOnSubmit">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Products Name</label>
-                    <input type="text" class="form-control" name="productName" id="cName" value="@ViewBag.item.productName" aria-describedby="emailHelp" placeholder="Enter product name">
+                    <input required type="text" class="form-control" name="productName" id="cName" value="@ViewBag.item.productName" aria-describedby="emailHelp" placeholder="Enter product name">
                 </div>
                 <div class="mb-1">
                     <label>Select category type</label>
@@ -248,19 +248,19 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Product Genaral Price</label>
-                    <input type="number" class="form-control" name="productBasicPrice" id="productBasicPrice" value="@ViewBag.item.productBasicPrice" aria-describedby="emailHelp" placeholder="Enter product price">
+                    <input required type="number" class="form-control" name="productBasicPrice" id="productBasicPrice" value="@ViewBag.item.productBasicPrice" aria-describedby="emailHelp" placeholder="Enter product price">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Product Image URL</label>
-                    <input type="text" class="form-control" name="productImage" id="productBasicPrice" value="@ViewBag.item.productImage" aria-describedby="emailHelp" placeholder="Enter computer image URL">
+                    <input required type="text" class="form-control" name="productImage" id="productBasicPrice" value="@ViewBag.item.productImage" aria-describedby="emailHelp" placeholder="Enter computer image URL">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Product Description</label>
-                    <input type="text" class="form-control" name="productDescription" id="productDescription" value="@ViewBag.item.productDescription" aria-describedby="emailHelp" placeholder="Enter Product Description">
+                    <input required type="text" class="form-control" name="productDescription" id="productDescription" value="@ViewBag.item.productDescription" aria-describedby="emailHelp" placeholder="Enter Product Description">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Product Quantity</label>
-                    <input type="number" class="form-control" name="productQty" id="productQty" value="@ViewBag.item.productQty" aria-describedby="emailHelp" placeholder="Enter qty">
+                    <input required type="number" class="form-control" name="productQty" id="productQty" value="@ViewBag.item.productQty" aria-describedby="emailHelp" placeholder="Enter qty">
                 </div>
                 <div class="dropdown-divider w-50 mb-1"></div>
                 <input type="text" style="display: none" class="form-control" name="productId" value="@ViewBag.item.productId">
