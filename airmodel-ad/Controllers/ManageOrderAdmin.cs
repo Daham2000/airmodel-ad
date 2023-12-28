@@ -211,9 +211,9 @@ namespace airmodel_ad.Controllers
 
                 OrderModel orderModel = orderService.GetOrderByID(oId);
 
-                var senderEmail = new MailAddress("courseworkt810@gmail.com");
+                var senderEmail = new MailAddress("adcoursework9@gmail.com");
                 var receiverEmail = new MailAddress(orderModel.users.userEmail, "Receiver");
-                var password = "drmgqctqxnvlagvg";
+                var password = "uifuadhzwaflfqei";
 
                 var sub = "Order Status Changed - Your order " + oId.ToString().Substring(0, 10);
                 var body = "Hi " + orderModel.users.userName + "\nYour order has been moved to " + o + " status...";
@@ -226,7 +226,7 @@ namespace airmodel_ad.Controllers
                     Credentials = new NetworkCredential(senderEmail.Address, password),
                     EnableSsl = true
                 };
-                using (var mess = new MailMessage("courseworkt810@gmail.com", orderModel.users.userEmail, sub, " <body>\r\n    <h2>Order Status Confirmation</h2>\r\n\r\n    " +
+                using (var mess = new MailMessage("adcoursework9@gmail.com", orderModel.users.userEmail, sub, " <body>\r\n    <h2>Order Status Confirmation</h2>\r\n\r\n    " +
                     "<p>Dear " + orderModel.users.userName + ",</p>\r\n\r\n    <p>Thank you for placing an order with us. Here are the details " +
                     "of your order:</p>\r\n\r\n    <table>\r\n        <tr>\r\n            <td><strong>Order ID: "+ orderModel.oId + "</strong></td>\r\n " +
                     "         \r\n        </tr>\r\n        <tr>\r\n            <td><strong>Total Amount:</strong></td>\r\n  " +
