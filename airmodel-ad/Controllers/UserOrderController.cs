@@ -176,6 +176,7 @@ namespace airmodel_ad.Controllers
                     smtp.Send(mess);
                 }
 
+                total = 0;
                 await GetHomePageData();
 
                 ViewBag.productModels = productModels;
@@ -185,7 +186,7 @@ namespace airmodel_ad.Controllers
                 ViewBag.total = total;
                 ViewBag.categories = categories;
 
-                return View("../Home/HomeView");
+                return View("../Home/OrderSuccessView");
             }
             catch (Exception ex)
             {
