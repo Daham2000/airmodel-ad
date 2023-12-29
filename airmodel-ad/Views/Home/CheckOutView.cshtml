@@ -42,6 +42,14 @@
     <link rel="stylesheet" href="~/css/demos/demo-2.css">
 </head>
 <body id="bodyId">
+    <div style="position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 75px;
+    height: 75px;
+    z-index: 1000;" class="spinner-grow text-primary" id="loaderId" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
     <div id="headId" style="min-height:auto;" class="page-wrapper">
         <header class="header header-2 header-intro-clearance">
             <div class="header-middle">
@@ -212,7 +220,7 @@
                 <div class="container">
                     <div class="checkout-discount">
                     </div><!-- End .checkout-discount -->
-                    <form method="post" asp-controller="UserOrder" asp-action="PlaceOrder">
+                    <form method="post" onsubmit="return false">
                         <div class="row">
                             <div class="col-lg-9">
                                 <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
@@ -276,7 +284,7 @@
                                                 @foreach (var cartItem in @ViewBag.cartModels)
                                                 {
                                                     <tr>
-                                                        <td><a href="#">@cartItem.products.productName</a></td>
+                                                        <td><a href="#">@cartItem.products.productName x @cartItem.qty</a></td>
                                                         <td>
                                                             <span class="cart-product-qty">$@cartItem.total</span>
                                                         </td>
@@ -285,46 +293,19 @@
                                             }
 
                                             <tr class="summary-total">
-                                                <td>Total:</td>
-                                                <td>$@ViewBag.total</td>
-                                            </tr><!-- End .summary-total -->
-                                            <tr class="summary-total">
                                                 <td style="font-size: 13px;">Additional Cost:</td>
                                                 <td style="font-size: 13px;">$@ViewBag.additational</td>
                                             </tr><!-- End .summary-total -->
+
+                                            <tr class="summary-total">
+                                                <td>Total:</td>
+                                                <td>$@ViewBag.total</td>
+                                            </tr><!-- End .summary-total -->
+                                  
                                         </tbody>
                                     </table><!-- End .table table-summary -->
 
                                     <div class="accordion-summary" id="accordion-payment">
-                                        <div class="card">
-                                            <div class="card-header" id="heading-1">
-                                                <h2 class="card-title">
-                                                    <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
-                                                        Direct bank transfer
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion-payment">
-                                                <div class="card-body">
-                                                    Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card -->
-
-                                        <div class="card">
-                                            <div class="card-header" id="heading-2">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
-                                                        Check payments
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment">
-                                                <div class="card-body">
-                                                    Ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card -->
 
                                         <div class="card">
                                             <div class="card-header" id="heading-3">
@@ -342,25 +323,10 @@
                                         </div><!-- End .card -->
 
                                         <div class="card">
-                                            <div class="card-header" id="heading-4">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-                                                        PayPal <small class="float-right paypal-link">What is PayPal?</small>
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
-                                                <div class="card-body">
-                                                    Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card -->
-
-                                        <div class="card">
                                             <div class="card-header" id="heading-5">
                                                 <h2 class="card-title">
                                                     <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-                                                        Credit Card (Stripe)
+                                                        Credit Card (PayHere)
                                                     </a>
                                                 </h2>
                                             </div><!-- End .card-header -->
@@ -371,8 +337,7 @@
                                             </div><!-- End .collapse -->
                                         </div><!-- End .card -->
                                     </div><!-- End .accordion -->
-
-                                    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    <button type="submit" id="placeOrder" class="btn btn-outline-primary-2 btn-order btn-block">
                                         <span class="btn-text">Place Order</span>
                                         <span class="btn-hover-text">Proceed to Checkout</span>
                                     </button>
@@ -380,8 +345,10 @@
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
                     </form>
+
                 </div><!-- End .container -->
             </div><!-- End .checkout -->
+     
         </div><!-- End .page-content -->
     </main><!-- End .main -->
 
@@ -537,5 +504,127 @@
     <!-- Main JS File -->
     <script src="~/js/main.js"></script>
     <script src="~/js/demos/demo-2.js"></script>
+
+    <script src="https://www.payhere.lk/lib/payhere.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
+    <script>
+        document.getElementById('loaderId').style.visibility = "hidden";
+        function md5(str) {
+            let md5Hash = CryptoJS.MD5(str);
+            return md5Hash.toString().toUpperCase();
+        }
+
+        // Function to format the number with 2 decimal places
+        function number_format(amount) {
+            return amount.toFixed(2);
+        }
+
+        // Main function to calculate the hash
+        function calculateHash(
+            merchant_id,
+            order_id,
+            amount,
+            currency,
+            merchant_secret
+        ) {
+            // Formatting the amount with 2 decimal places
+            amount = number_format(amount);
+
+            // Creating the hash string
+            let hashString =
+                merchant_id + order_id + amount + currency + md5(merchant_secret);
+
+            // Calculating the MD5 hash
+            let hash = md5(hashString);
+
+            return hash
+
+        }
+
+        function isNullOrEmpty(value) {
+            return value === null || value.trim() === '';
+        }
+
+        // Payment window closed
+        payhere.onDismissed = function onDismissed() {
+            window.location = "/Home/LoadCheckOutView";
+        };
+
+        // Error occurred
+        payhere.onError = function onError(error) {
+            window.location = "/Home/LoadCheckOutView";
+        };
+
+        // Show the payhere.js popup, when "PayHere Pay" is clicked
+        document.getElementById('placeOrder').onclick = async function (e) {
+            var merchant_id = "1223597";
+            var order_id = uuidv4();
+            var currency = "LKR";
+            var amount = @ViewBag.total
+            var merchant_secret =
+                "MzA3MjI0NjQyODE0NzA3NzA2ODIzOTkzMjA3MzQ5MTM2ODU3OTYwMA==";
+
+            let hash = calculateHash(
+                merchant_id,
+                order_id,
+                amount,
+                currency,
+                merchant_secret
+            );
+
+            var payment = {
+                "sandbox": true,
+                "merchant_id": merchant_id,    // Replace your Merchant ID
+                "return_url": "http://localhost:7116/",   // Important
+                "cancel_url": "http://localhost:7116/",    // Important
+                "notify_url": "http://localhost:7116/",
+                "hash": hash,
+                "order_id": order_id,
+                "items": "AirPlane.net - web market",
+                "amount": amount,
+                "currency": currency,
+                "first_name": "Pasindu",
+                "last_name": "Eranga",
+                "email": "pasindu@gmail.com",
+                "phone": "0775707306",
+                "address": "No 602, Moragala, Pilana, Wanchawala",
+                "city": "Colombo",
+                "country": "Sri Lanka"
+            };
+
+
+            var fName = document.getElementsByName('fName')[0].value;
+            var lName = document.getElementsByName('lName')[0].value;
+            var orderNote = document.getElementsByName('orderNote')[0].value;
+            var county = document.getElementsByName('county')[0].value;
+            var street = document.getElementsByName('street')[0].value;
+            var houseNo = document.getElementsByName('houseNo')[0].value;
+            var city = document.getElementsByName('city')[0].value;
+            var postCode = document.getElementsByName('postCode')[0].value;
+            var phoneNumber = document.getElementsByName('phoneNumber')[0].value;
+
+            // Payment completed. It can be a successful failure.
+            payhere.onCompleted = function onCompleted(orderId) {
+                $.post("@Url.Action("PlaceOrder","UserOrder")", {
+                    fName: fName, lName: lName, orderNote: orderNote, county: county, street: street, houseNo: houseNo, city: city,
+                    postCode: postCode, phoneNumber: phoneNumber
+                }).done(function (data) {
+                    window.location = "/Home/Index";
+                });
+            };
+
+            if (isNullOrEmpty(fName) || isNullOrEmpty(lName) || isNullOrEmpty(county) ||
+                isNullOrEmpty(street) || isNullOrEmpty(houseNo) || isNullOrEmpty(city) || isNullOrEmpty(postCode) ||
+                isNullOrEmpty(phoneNumber)) {
+
+            } else {
+                if(amount > 0) {
+                    document.getElementById('loaderId').style.visibility = "visible";
+                    payhere.startPayment(payment);
+                }
+            }
+
+        };</script>
 </body>
 </html>

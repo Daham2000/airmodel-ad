@@ -1,6 +1,7 @@
 ﻿using airmodel_ad.Business.Interface;
 using airmodel_ad.Data;
 using airmodel_ad.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 
@@ -53,8 +54,6 @@ namespace airmodel_ad.Business.Services
             CartModel cartModel = new CartModel();
             try {
                 User user = appDbContext.users.Where((u) => u.userEmail == name).FirstOrDefault();
-                Debug.WriteLine("user: ", user.userId);
-                Debug.WriteLine(user.userId);
 
                 cartModel = appDbContext.carts.Where((u) => u.userId == user.userId).FirstOrDefault();
                 return cartModel;

@@ -2,7 +2,10 @@
 using airmodel_ad.Data;
 using airmodel_ad.Models;
 using airmodel_ad.Models.ParamModels;
+using airmodel_ad.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 
 namespace airmodel_ad.Business.Services
 {
@@ -27,7 +30,8 @@ namespace airmodel_ad.Business.Services
 				user.userId = Guid.NewGuid();
 				user.userRole = "user";
 				user.userEmail = signupModel.UserEmail;
-				user.userPassword = signupModel.UserPassword;
+
+                user.userPassword = PasswordHasher.Hash(signupModel.UserPassword);
 				user.userName = signupModel.UserName;
 
 				appDbContext.Add(user);
@@ -64,7 +68,38 @@ namespace airmodel_ad.Business.Services
         {
             try
             {
-                appDbContext.SaveChanges();
+                Debug.WriteLine("user.userPassword");
+                Debug.WriteLine(user.userPassword);
+                Debug.WriteLine(user.userId);
+                Debug.WriteLine(user.userEmail);
+                Debug.WriteLine(user.userPassword.IsNullOrEmpty());
+                List<User> users = appDbContext.users.Where((u) => u.userEmail == user.userEmail).ToList();
+
+                if (users.Count > 0)
+                {
+                    return false;
+                }
+                if (user.userPassword.IsNullOrEmpty())
+                {
+                    User tempUser = appDbContext.users.Where((u) => u.userId == uId).FirstOrDefault();
+                    Debug.WriteLine("tempUser.userEmail");
+
+                    Debug.WriteLine(tempUser.userEmail);
+
+                    user.userPassword = tempUser.userPassword;
+                    Debug.WriteLine(user.userPassword);
+
+                    appDbContext.SaveChanges();
+                } else
+                {
+                    if(user.userPassword.Length < 50)
+                    {
+                        user.userPassword = PasswordHasher.Hash(user.userPassword);
+                    }
+                    
+                    appDbContext.SaveChanges();
+                }
+            
                 return true;
             }
             catch (Exception ex)
@@ -77,12 +112,19 @@ namespace airmodel_ad.Business.Services
 		{
 			try
 			{
-				User? user = appDbContext.users.Where((u) => u.userEmail == email).Where((u) => u.userPassword == password).FirstOrDefault();
-				if (user == null)
+				User? user = appDbContext.users.Where((u) => u.userEmail == email).FirstOrDefault();
+                if (user == null)
 				{
 					return false;
 				}
-				return true;
+                Debug.WriteLine("user.userPassword");
+                Debug.WriteLine(user.userPassword);
+                bool isPasswordMatched = PasswordHasher.Verify(user.userPassword, password);
+                if (!isPasswordMatched)
+                {
+                    return false;
+                }
+                return true;
 			}
 			catch (Exception ex)
 			{
@@ -108,7 +150,8 @@ namespace airmodel_ad.Business.Services
 			try
 			{
 				User? user = appDbContext.users.Where((u) => u.userEmail == email).FirstOrDefault();
-				if (user == null)
+
+                if (user == null)
 				{
 					return new User();
 				}

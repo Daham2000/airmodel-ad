@@ -17,7 +17,7 @@
 				<label for="chk" aria-hidden="true">Sign up</label>
 				<input type="text" name="UserName" placeholder="User name" required="">
 				<input type="email" name="UserEmail" placeholder="Email" required="">
-				<input type="password" name="UserPassword" placeholder="Password" required="">
+				<input type="password" max="40" maxlength="40" name="UserPassword" placeholder="Password" required="">
 				<button>Sign up</button>
 			</form>
 			@{
@@ -32,7 +32,7 @@
 			<form action="/Auth/ActionLogin" method="post">
 				<label for="chk" aria-hidden="true">Login</label>
 				<input type="email" name="UserEmail" placeholder="Email" required="">
-				<input type="password" name="UserPassword" placeholder="Password" required="">
+				<input type="password" max="40" maxlength="40" name="UserPassword" placeholder="Password" required="">
 				<button>Login</button>
 			</form>
 			@{

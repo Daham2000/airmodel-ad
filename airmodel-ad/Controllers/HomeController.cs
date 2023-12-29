@@ -15,6 +15,7 @@ using airmodel_ad.Models.Chart;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.IdentityModel.Tokens;
 
 namespace airmodel_ad.Controllers
 {
@@ -63,9 +64,10 @@ namespace airmodel_ad.Controllers
                 
                 foreach (var item in cartModels)
                 {
-                    total += item.total;
+                    total += (item.total * item.qty);
                     additational += item.additionalCost;
                 }
+                total += additational;
                 return true;
             } catch (Exception ex)
             {
@@ -350,11 +352,14 @@ namespace airmodel_ad.Controllers
             try
             {
                 total = 0;
-                Debug.WriteLine("VarientId: ");
-                Debug.WriteLine(VarientId);
-                Debug.WriteLine("productId: ");
+                Debug.WriteLine("productId");
                 Debug.WriteLine(productId);
+                Debug.WriteLine("VarientId");
+                Debug.WriteLine(VarientId);
+                Debug.WriteLine(qty);
+
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
                 User user = userService.GetUserByEmail(emailValue);
                 ProductModel product = productService.GetProductById(productId);
                 bool ifAvailable = cartService.CheckProductAvailableInCart(product, user.userId);
@@ -364,17 +369,15 @@ namespace airmodel_ad.Controllers
                     VarientOptionModel varientOptionModel = productService.GetProductVarientById(new Guid(VarientId));
                     ViewBag.selectedProPrice = varientOptionModel.varientPrice;
                     ViewBag.VarientId = new Guid(VarientId);
-                    total = (varientOptionModel.varientPrice + product.productBasicPrice) * qty;
+                    total = product.productBasicPrice;
                     additionalCost = varientOptionModel.varientPrice * qty;
                 } else
                 {
-                    total = product.productBasicPrice * qty;
+                    total = product.productBasicPrice;
                     ViewBag.VarientId = "Null";
                     ViewBag.selectedProPrice = product.productBasicPrice;
                 }
                 CartModel cartModel = cartService.GetCart(emailValue);
-                Debug.WriteLine("total: ");
-                Debug.WriteLine(total);
 
                 CartItemModel newCartItemModel = new CartItemModel();
                 newCartItemModel.cartItemId = Guid.NewGuid();
@@ -412,7 +415,22 @@ namespace airmodel_ad.Controllers
                 ViewBag.categories = categories;
                 ViewBag.additational = additational;
 
-                return View("../Home/CheckOutView");
+                ViewBag.product = product;
+
+                if (product.hasVarients == false)
+                {
+                    ViewBag.selectedImage = product.productImage;
+                    ViewBag.VarientId = "Null";
+                    ViewBag.selectedProPrice = product.productBasicPrice;
+                }
+                else
+                {
+                    ViewBag.selectedImage = product.varientOptionModels[0].varientImage;
+                    ViewBag.VarientId = product.varientOptionModels[0].varientOptionId;
+                    ViewBag.selectedProPrice = product.varientOptionModels[0].varientPrice;
+                }
+
+                return View("../Product/ProductView");
             }
             catch (Exception ex)
             {
@@ -560,15 +578,21 @@ namespace airmodel_ad.Controllers
             return View("../Home/MyProfile");
         }
 
-        public IActionResult EditUserAction(Guid userId, string userName, string userEmail, string password)
+        public async Task<IActionResult> EditUserAction(Guid userId, string userName, string userEmail, string password)
         {
             User user = userService.GetUserByUid(userId);
             user.userName = userName;
             user.userEmail = userEmail;
-            user.userPassword = password;
+            if(!password.IsNullOrEmpty())
+            {
+                user.userPassword = password;
+            }
+            
             userService.EditUser(user.userId, user);
             user = userService.GetUserByUid(userId);
             ViewBag.user = user;
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Auth");
 
             return View("../Home/MyProfile");
         }
