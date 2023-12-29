@@ -311,11 +311,16 @@ namespace airmodel_ad.Controllers
                 if(product.hasVarients == false)
                 {
                     ViewBag.selectedImage = product.productImage;
-                } else
+                    ViewBag.VarientId = "Null";
+                    ViewBag.selectedProPrice = product.productBasicPrice;
+                }
+                else
                 {
                     ViewBag.selectedImage = product.varientOptionModels[0].varientImage;
+                    ViewBag.VarientId = product.varientOptionModels[0].varientOptionId;
+                    ViewBag.selectedProPrice = product.varientOptionModels[0].varientPrice;
                 }
-                
+
 
                 ViewBag.productModels = productModels;
                 ViewBag.selectedCategory = selectedCategory;
@@ -323,7 +328,6 @@ namespace airmodel_ad.Controllers
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
                 ViewBag.categories = categories;
-                ViewBag.VarientId = "Null";
                 return View("../Product/ProductView");
             }
             catch (Exception ex)
@@ -385,20 +389,17 @@ namespace airmodel_ad.Controllers
                         }
                     }
                 }
+                total = 0;
                 await GetHomePageData();
-                ViewBag.product = product;
-                ViewBag.VarientId = VarientId;
-                ViewBag.selectedImage = product.productImage;
-
+                
                 ViewBag.productModels = productModels;
                 ViewBag.selectedCategory = selectedCategory;
-                ViewBag.filteredProductModels = filteredProductModels;
                 ViewBag.cartModels = cartModels;
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
                 ViewBag.categories = categories;
 
-                return View("../Product/ProductView");
+                return View("../Home/CheckOutView");
             }
             catch (Exception ex)
             {

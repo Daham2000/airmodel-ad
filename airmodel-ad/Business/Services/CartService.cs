@@ -18,7 +18,11 @@ namespace airmodel_ad.Business.Services
         {
             try
             {
-                appDbContext.Add(item);
+                appDbContext.cartItems.Add(item);
+                if (item.varientOptionId != null)
+                {
+                    VarientOptionModel? varientOptionModel = appDbContext.varientOption.Where((o) => o.varientOptionId == item.varientOptionId).FirstOrDefault();
+                }
                 appDbContext.SaveChanges();
                 return true;
             }
@@ -73,14 +77,13 @@ namespace airmodel_ad.Business.Services
                         if (cartModel[i].varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
                         {
                             cartModel[i].varientOption = appDbContext.varientOption.Where((v) => v.varientOptionId == cartModel[i].varientOptionId).FirstOrDefault();
-                            cartModel[i].varientOption.varientImage = appDbContext.products.Where((p) => p.productId == cartModel[i].productId).FirstOrDefault().productImage;
+                            cartModel[i].varientOption.varientImage = appDbContext.varientOption.Where((v) => v.varientOptionId == cartModel[i].varientOptionId).FirstOrDefault().varientImage;
                         }
                         else
                         {
                             cartModel[i].varientOption = appDbContext.varientOption.Where((v) => v.varientOptionId == cartModel[i].varientOptionId).FirstOrDefault();
                         }
                     }
-
                 }
                 return cartModel;
             }
