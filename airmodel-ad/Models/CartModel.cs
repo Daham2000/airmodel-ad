@@ -5,11 +5,28 @@ namespace airmodel_ad.Models
 {
     public class CartModel
     {
-        [Key]
-        public Guid cartId { get; set; }
-        public User users { get; set; }
-        [ForeignKey("users")]
-        public Guid userId { get; set; }
+        private Guid _cartId;
+        private User _users;
+        private Guid _userId;
 
+        [Key]
+        public Guid cartId
+        {
+            get { return _cartId; }
+            set { _cartId = value; }
+        }
+
+        public User users
+        {
+            get { return _users; }
+            set { _users = value; }
+        }
+
+        [ForeignKey("users")]
+        public Guid userId
+        {
+            get { return _userId; }
+            set { _userId = value; }
+        }
     }
 }
