@@ -48,11 +48,11 @@
                         <span class="sr-only">Toggle mobile menu</span>
                         <i class="icon-bars"></i>
                     </button>
-                        <button onclick="location.href = '@Url.Action("Index", "Home")'" type="submit" style="all: unset;">
-                            <a class="logo">
-                                <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
-                            </a>
-                        </button>
+                    <button onclick="location.href = '@Url.Action("Index", "Home")'" type="submit" style="all: unset;">
+                        <a class="logo">
+                            <img src="~/images/logo.jpg" alt="AirModel Logo" width="105" height="25">
+                        </a>
+                    </button>
                 </div><!-- End .header-left -->
 
                 <div class="header-center">
@@ -93,20 +93,15 @@
 
                                                     <span class="cart-product-info">
                                                         @{
-                                                            if (@cartItem.varientOptionId == null)
-                                                            {
-                                                                <div>
-                                                                    <span class="cart-product-qty">@cartItem.qty</span>
-                                                                    x @cartItem.products.productBasicPrice
-                                                                </div>
-                                                            }
-                                                            else
-                                                            {
-                                                                <div>
-                                                                    <span class="cart-product-qty">@cartItem.qty</span>
-                                                                    x @cartItem.varientOption.varientPrice
-                                                                </div>
-                                                            }
+                                                            <div>
+                                                                <span class="cart-product-qty">Item Qty: @cartItem.qty</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="cart-product-qty">Item Total: @cartItem.total</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="cart-product-qty">Item Additional Cost: @cartItem.additionalCost</span>
+                                                            </div>
                                                         }
                                                     </span>
                                                 </div><!-- End .product-cart-details -->
@@ -127,11 +122,13 @@
                                                         }
                                                     </a>
                                                 </figure>
+                                                <form method="post" asp-controller="Home" asp-action="RemoveFromCart">
                                                     <input type="text" style="display: none" class="form-control" name="cartItemId" value="@cartItem.cartItemId">
 
-                                                    <button style="all: unset;" onclick="location.href = '@Url.Action("RemoveFromCart", "Home", new { cartItemId = @cartItem.cartItemId })'">
+                                                    <button type="submit" style="all: unset;">
                                                         <a class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                                     </button>
+                                                </form>
                                             </div>
                                         }
                                     </div><!-- End .cart-product -->
@@ -142,10 +139,18 @@
                                         <span class="cart-total-price">$@ViewBag.total</span>
                                     </div><!-- End .dropdown-cart-total -->
 
+                                    <div class="dropdown-cart-total" style="font-size: 13px;">
+                                        <span style="font-size: 13px;">Total Additional Cost</span>
+
+                                        <span style="font-size: 13px;" class="cart-total-price">$@ViewBag.additational</span>
+                                    </div><!-- End .dropdown-cart-total -->
+
                                     <div class="dropdown-cart-action">
-                                            <button onclick="location.href = '@Url.Action("LoadCheckOutView", "Home")'" type="submit" style="all: unset;">
+                                        <form method="post" asp-controller="Home" asp-action="LoadCheckOutView">
+                                            <button type="submit" style="all: unset;">
                                                 <a class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                                             </button>
+                                        </form>
                                     </div><!-- End .dropdown-cart-total -->
                                 </div><!-- End .dropdown-menu -->
                             </div>
@@ -185,7 +190,6 @@
         <div class="header-bottom sticky-header">
             <div class="container">
                 <div class="header-left">
-
                 </div><!-- End .header-left -->
 
             </div><!-- End .container -->
@@ -260,9 +264,17 @@
                             <h1 class="product-title">@ViewBag.product.productName</h1><!-- End .product-title -->
 
                             @{
-                                <div class="product-price" id="priceDiv">
+                                <div class="product-price">
                                     $@ViewBag.product.productBasicPrice
                                 </div>
+
+                                if (@ViewBag.product.hasVarients == true)
+                                {
+                                    <div class="product-price" style="font-size: 12px; color: lightcoral;" id="priceDiv">
+                                        Additional Cost: $0 Per Quantity
+                                    </div>
+                                }
+                            
                             }
 
                             <div class="product-content">

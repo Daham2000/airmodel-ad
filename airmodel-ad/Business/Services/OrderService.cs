@@ -90,7 +90,7 @@ namespace airmodel_ad.Business.Services
             List<OrderModel> orderModels = new List<OrderModel>();
             try
             {
-                orderModels = appDbContext.orders.Where((o) => o.userId == userId).ToList();
+                orderModels = appDbContext.orders.Where((o) => o.userId == userId).OrderByDescending(x => x.orderTime).ToList();
                 for (int i = 0; i <= orderModels.Count()-1; i++)
                 {
                     List<OrderItem> orderItems = appDbContext.orderItem.Where((o) => o.oId == orderModels[i].oId).ToList();

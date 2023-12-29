@@ -92,22 +92,14 @@ namespace airmodel_ad.Controllers
                 OrderModel orderModel = new OrderModel();
                 orderModel.oId = new Guid();
                 total = 0;
+                int additionalCost = 0;
                 foreach (var item in cartModels)
                 {
-                    if (item.varientOptionId != null)
-                    {
-                        if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
-                        {
-                            total += item.varientOption.varientPrice * item.qty;
-                        }
-                        else
-                        {
-                            total += item.products.productBasicPrice * item.qty;
-                        }
-                    }
-
+                    total += item.total;
+                    additionalCost += item.additionalCost;
                 }
                 orderModel.total = total;
+                orderModel.additionalCost = additionalCost;
                 orderModel.userId = user.userId;
                 orderModel.fName = fName;
                 orderModel.lName = lName;
@@ -116,6 +108,7 @@ namespace airmodel_ad.Controllers
                 orderModel.city = city;
                 orderModel.postCode = postCode;
                 orderModel.phoneNumber = phoneNumber;
+                orderModel.orderAdminNote = "";
                 if (orderNote == null)
                 {
                     orderModel.orderNote = "No order note.";
@@ -161,7 +154,7 @@ namespace airmodel_ad.Controllers
                     "         \r\n        </tr>\r\n        <tr>\r\n            <td><strong>Total Amount:</strong></td>\r\n  " +
                     "          <td>$" + orderModel.total + "</td>\r\n        </tr>\r\n        <!-- Add more details as needed -->\r\n\r\n     " +
                     "   <tr>\r\n            <td><strong>Delivery Address:</strong></td>\r\n            <td>\r\n  " +
-                    "              " + orderModel.fName + " " + orderModel.lName + "< br>\r\n                " + orderModel.address + "<br>\r\n" +
+                    "              " + orderModel.fName + " " + orderModel.lName + "< br>\r\n                " + orderModel.address + "\r\n" +
                     "                " + orderModel.city + ", " + orderModel.county + "<br>\r\n                " + orderModel.postCode + "\r\n " +
                     "           </td>\r\n        </tr>\r\n    </table>\r\n\r\n  <ul>\r\n      " +
 

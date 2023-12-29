@@ -11,6 +11,8 @@ namespace airmodel_ad.Models
         private ProductModel _products;
         private Guid _productId;
         private int _qty;
+        private int _total;
+        private int _additionalCost;
         private VarientOptionModel? _varientOption;
         private Guid? _varientOptionId;
 
@@ -51,6 +53,18 @@ namespace airmodel_ad.Models
         {
             get { return _qty; }
             set { _qty = value; }
+        }
+
+        public int total
+        {
+            get { return _total; }
+            set { _total = value; }
+        }
+
+        public int additionalCost
+        {
+            get { return _additionalCost; }
+            set { _additionalCost = value; }
         }
 
         public VarientOptionModel? varientOption

@@ -34,6 +34,7 @@ namespace airmodel_ad.Controllers
         private readonly ICategoryService categoryService;
         private readonly IOrderService orderService;
         int total = 0;
+        int additational = 0;
         string selectedImage = string.Empty;
         Guid VarientId = Guid.Empty;
         Guid productId = Guid.Empty;
@@ -62,18 +63,8 @@ namespace airmodel_ad.Controllers
                 
                 foreach (var item in cartModels)
                 {
-                    if(item.varientOptionId != null)
-                    {
-                        if (item.varientOptionId.ToString() != "00000000-0000-0000-0000-000000000000")
-                        {
-                            total += item.varientOption.varientPrice * item.qty;
-                        }
-                        else
-                        {
-                            total += item.products.productBasicPrice * item.qty;
-                        }
-                    }
-          
+                    total += item.total;
+                    additational += item.additionalCost;
                 }
                 return true;
             } catch (Exception ex)
@@ -167,6 +158,7 @@ namespace airmodel_ad.Controllers
                     ViewBag.cartModels = cartModels;
                     ViewBag.len = cartModels.Count();
                     ViewBag.total = total;
+                    ViewBag.additational = additational;
                     ViewBag.categories = categories;
                     return View("../Home/HomeView");
                 }
@@ -191,6 +183,8 @@ namespace airmodel_ad.Controllers
             ViewBag.cartModels = cartModels;
             ViewBag.len = cartModels.Count();
             ViewBag.total = total;
+            ViewBag.additational = additational;
+
             ViewBag.categories = categories;
             return View("../Home/HomeView");
         }
@@ -233,6 +227,7 @@ namespace airmodel_ad.Controllers
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
                 ViewBag.categories = categories;
+                ViewBag.additational = additational;
 
                 return View("../Home/MyOrderView");
             }
@@ -321,6 +316,7 @@ namespace airmodel_ad.Controllers
                     ViewBag.selectedProPrice = product.varientOptionModels[0].varientPrice;
                 }
 
+                ViewBag.additational = additational;
 
                 ViewBag.productModels = productModels;
                 ViewBag.selectedCategory = selectedCategory;
@@ -350,12 +346,14 @@ namespace airmodel_ad.Controllers
                 User user = userService.GetUserByEmail(emailValue);
                 ProductModel product = productService.GetProductById(productId);
                 bool ifAvailable = cartService.CheckProductAvailableInCart(product, user.userId);
+                int additionalCost = 0;
                 if(VarientId != "Null")
                 {
                     VarientOptionModel varientOptionModel = productService.GetProductVarientById(new Guid(VarientId));
                     ViewBag.selectedProPrice = varientOptionModel.varientPrice;
                     ViewBag.VarientId = new Guid(VarientId);
-                    total = varientOptionModel.varientPrice * qty;
+                    total = (varientOptionModel.varientPrice + product.productBasicPrice) * qty;
+                    additionalCost = varientOptionModel.varientPrice * qty;
                 } else
                 {
                     total = product.productBasicPrice * qty;
@@ -371,6 +369,8 @@ namespace airmodel_ad.Controllers
                 newCartItemModel.cartId = cartModel.cartId;
                 newCartItemModel.productId = productId;
                 newCartItemModel.qty = qty;
+                newCartItemModel.total = total;
+                newCartItemModel.additionalCost = additionalCost;
                 if (ifAvailable == false)
                 {
                     if (VarientId != "Null")
@@ -398,6 +398,7 @@ namespace airmodel_ad.Controllers
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
                 ViewBag.categories = categories;
+                ViewBag.additational = additational;
 
                 return View("../Home/CheckOutView");
             }
@@ -427,6 +428,8 @@ namespace airmodel_ad.Controllers
                 ViewBag.total = total;
                 ViewBag.categories = categories;
                 ViewBag.VarientId = "Null";
+                ViewBag.additational = additational;
+
                 return View("../Home/HomeView");
             }
             catch (Exception ex)
@@ -527,6 +530,7 @@ namespace airmodel_ad.Controllers
                 ViewBag.len = cartModels.Count();
                 ViewBag.total = total;
                 ViewBag.categories = categories;
+                ViewBag.additational = additational;
 
                 return View("../Home/CheckOutView");
             }

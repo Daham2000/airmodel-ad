@@ -93,20 +93,15 @@
 
                                                         <span class="cart-product-info">
                                                             @{
-                                                                if (@cartItem.varientOptionId == null)
-                                                                {
-                                                                    <div>
-                                                                        <span class="cart-product-qty">@cartItem.qty</span>
-                                                                        x @cartItem.products.productBasicPrice
-                                                                    </div>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <div>
-                                                                        <span class="cart-product-qty">@cartItem.qty</span>
-                                                                        x @cartItem.varientOption.varientPrice
-                                                                    </div>
-                                                                }
+                                                                <div>
+                                                                    <span class="cart-product-qty">Item Qty: @cartItem.qty</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="cart-product-qty">Item Total: @cartItem.total</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="cart-product-qty">Item Additional Cost: @cartItem.additionalCost</span>
+                                                                </div>
                                                             }
                                                         </span>
                                                     </div><!-- End .product-cart-details -->
@@ -142,6 +137,12 @@
                                             <span>Total</span>
 
                                             <span class="cart-total-price">$@ViewBag.total</span>
+                                        </div><!-- End .dropdown-cart-total -->
+
+                                        <div class="dropdown-cart-total" style="font-size: 13px;">
+                                            <span style="font-size: 13px;">Total Additional Cost</span>
+
+                                            <span style="font-size: 13px;" class="cart-total-price">$@ViewBag.additational</span>
                                         </div><!-- End .dropdown-cart-total -->
 
                                         <div class="dropdown-cart-action">
@@ -189,7 +190,6 @@
             <div class="header-bottom sticky-header">
                 <div class="container">
                     <div class="header-left">
-
                     </div><!-- End .header-left -->
 
                 </div><!-- End .container -->
@@ -212,6 +212,7 @@
                         <tr>
                             <th>Products</th>
                             <th>Total</th>
+                            <th>Additional Cost</th>
                             <th>Order Status</th>
                             <th></th>
                             <th></th>
@@ -237,12 +238,14 @@
                                                     {
                                                         <a href="#">@orderItem.products.productName</a>
                                                         <a href="#">Qty: @orderItem.qty</a>
-                                                        <a href="#">  </a>
+                                                        <br/>
+                                                        <br/>
                                                     }
                                                 </h3><!-- End .product-title -->
                                             </div><!-- End .product -->
                                         </td>
                                         <td class="price-col">$@order.total</td>
+                                        <td class="price-col">$@order.additionalCost</td>
                                         <td class="stock-col"><span class="in-stock">@order.orderStatus</span></td>
                                     </tr>
                                 }

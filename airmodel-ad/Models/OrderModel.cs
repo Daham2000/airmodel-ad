@@ -9,6 +9,7 @@ namespace airmodel_ad.Models
         private User _users;
         private Guid _userId;
         private int _total;
+        private int _additionalCost;
         private string _fName;
         private string _lName;
         private string _county;
@@ -18,6 +19,7 @@ namespace airmodel_ad.Models
         private string _phoneNumber;
         private string _orderStatus;
         private string _orderNote;
+        private string _orderAdminNote;
         private List<OrderItem>? _orderItems;
         private DateTime _orderTime;
 
@@ -26,6 +28,12 @@ namespace airmodel_ad.Models
         {
             get { return _oId; }
             set { _oId = value; }
+        }
+
+        public int additionalCost
+        {
+            get { return _additionalCost; }
+            set { _additionalCost = value; }
         }
 
         public User users
@@ -99,6 +107,12 @@ namespace airmodel_ad.Models
         {
             get { return _orderNote; }
             set { _orderNote = value; }
+        }
+
+        public string orderAdminNote
+        {
+            get { return _orderAdminNote; }
+            set { _orderAdminNote = value; }
         }
 
         [NotMapped]
