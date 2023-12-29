@@ -100,6 +100,10 @@ namespace airmodel_ad.Controllers
                         {
                             pendingOrders[i].orderStatus = "Shipped";
                         }
+                        else if (pendingOrders[i].orderStatus == "3")
+                        {
+                            pendingOrders[i].orderStatus = "Canceled";
+                        }
                         else
                         {
                             pendingOrders[i].orderStatus = "Delivered";
@@ -117,6 +121,10 @@ namespace airmodel_ad.Controllers
                         else if (orderPerYear[i].orderStatus == "1")
                         {
                             orderPerYear[i].orderStatus = "Shipped";
+                        }
+                        else if (pendingOrders[i].orderStatus == "3")
+                        {
+                            orderPerYear[i].orderStatus = "Canceled";
                         }
                         else
                         {
@@ -210,6 +218,10 @@ namespace airmodel_ad.Controllers
                     else if (orderModels[i].orderStatus == "1")
                     {
                         orderModels[i].orderStatus = "Shipped";
+                    }
+                    else if (orderModels[i].orderStatus == "3")
+                    {
+                        orderModels[i].orderStatus = "Canceled";
                     }
                     else
                     {
@@ -560,6 +572,5 @@ namespace airmodel_ad.Controllers
 
             return View("../Home/MyProfile");
         }
-
     }
 }

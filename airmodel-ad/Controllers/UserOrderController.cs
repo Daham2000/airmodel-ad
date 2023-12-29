@@ -83,10 +83,6 @@ namespace airmodel_ad.Controllers
             try
             {
                 await GetHomePageData();
-                Debug.WriteLine("Fname");
-                Debug.WriteLine(fName);
-                Debug.WriteLine(street);
-                Debug.WriteLine(postCode);
                 string emailValue = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 User user = userService.GetUserByEmail(emailValue);
                 OrderModel orderModel = new OrderModel();

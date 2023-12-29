@@ -43,6 +43,10 @@ namespace airmodel_ad.Controllers
                     {
                         pendingOrders[i].orderStatus = "Shipped";
                     }
+                    else if (pendingOrders[i].orderStatus == "3")
+                    {
+                        pendingOrders[i].orderStatus = "Canceled";
+                    }
                     else
                     {
                         pendingOrders[i].orderStatus = "Delivered";
@@ -52,12 +56,16 @@ namespace airmodel_ad.Controllers
                 List<string> orderStatusList = new List<string>();
                 orderStatusList.Add("Shipped");
                 orderStatusList.Add("Delivered");
+                orderStatusList.Add("Canceled");
+
                 ViewBag.orderStatus = orderStatusList;
 
                 List<string> orderStatusFilter = new List<string>();
                 orderStatusFilter.Add("Shipped");
                 orderStatusFilter.Add("Delivered");
                 orderStatusFilter.Add("Pending");
+                orderStatusFilter.Add("Canceled");
+
                 ViewBag.orderStatusFilter = orderStatusFilter;
 
                 return View("../Admin/ManageOrderView");
@@ -84,6 +92,10 @@ namespace airmodel_ad.Controllers
                     {
                         pendingOrders[i].orderStatus = "Shipped";
                     }
+                    else if (pendingOrders[i].orderStatus == "3")
+                    {
+                        pendingOrders[i].orderStatus = "Canceled";
+                    }
                     else
                     {
                         pendingOrders[i].orderStatus = "Delivered";
@@ -95,12 +107,15 @@ namespace airmodel_ad.Controllers
                 List<string> orderStatusList = new List<string>();
                 orderStatusList.Add("Shipped");
                 orderStatusList.Add("Delivered");
+                orderStatusList.Add("Canceled");
+
                 ViewBag.orderStatus = orderStatusList;
 
                 List<string> orderStatusFilter = new List<string>();
                 orderStatusFilter.Add("Shipped");
                 orderStatusFilter.Add("Delivered");
                 orderStatusFilter.Add("Pending");
+                orderStatusFilter.Add("Canceled");
                 ViewBag.orderStatusFilter = orderStatusFilter;
 
                 return View("../Admin/ManageOrderView");
@@ -119,6 +134,10 @@ namespace airmodel_ad.Controllers
                 if (orderStatusSelected == "Pending")
                 {
                     orderStatusSelected = "0";
+                }
+                else if (orderStatusSelected == "Canceled")
+                {
+                    orderStatusSelected = "3";
                 }
                 else if (orderStatusSelected == "Shipped")
                 {
@@ -141,6 +160,10 @@ namespace airmodel_ad.Controllers
                     {
                         pendingOrders[i].orderStatus = "Shipped";
                     }
+                    else if (pendingOrders[i].orderStatus == "3")
+                    {
+                        pendingOrders[i].orderStatus = "Canceled";
+                    }
                     else
                     {
                         pendingOrders[i].orderStatus = "Delivered";
@@ -150,12 +173,15 @@ namespace airmodel_ad.Controllers
                 List<string> orderStatusList = new List<string>();
                 orderStatusList.Add("Shipped");
                 orderStatusList.Add("Delivered");
+                orderStatusList.Add("Canceled");
+
                 ViewBag.orderStatus = orderStatusList;
 
                 List<string> orderStatusFilter = new List<string>();
                 orderStatusFilter.Add("Shipped");
                 orderStatusFilter.Add("Delivered");
                 orderStatusFilter.Add("Pending");
+                orderStatusFilter.Add("Canceled");
                 ViewBag.orderStatusFilter = orderStatusFilter;
                 ViewBag.orderStatusSelected = orderStatusSelectedF;
 
@@ -171,10 +197,19 @@ namespace airmodel_ad.Controllers
         {
             try {
                 string o = orderStatus;
-                if (orderStatus == "Shipped")
+                if (orderStatus == "Pending")
+                {
+                    orderStatus = "0";
+                }
+                else if (orderStatus == "Canceled")
+                {
+                    orderStatus = "3";
+                }
+                else if (orderStatus == "Shipped")
                 {
                     orderStatus = "1";
-                } else
+                }
+                else
                 {
                     orderStatus = "2";
                 }
@@ -191,6 +226,10 @@ namespace airmodel_ad.Controllers
                     {
                         pendingOrders[i].orderStatus = "Shipped";
                     }
+                    else if (pendingOrders[i].orderStatus == "3")
+                    {
+                        pendingOrders[i].orderStatus = "Canceled";
+                    }
                     else
                     {
                         pendingOrders[i].orderStatus = "Delivered";
@@ -201,12 +240,15 @@ namespace airmodel_ad.Controllers
                 List<string> orderStatusList = new List<string>();
                 orderStatusList.Add("Shipped");
                 orderStatusList.Add("Delivered");
+                orderStatusList.Add("Canceled");
+
                 ViewBag.orderStatus = orderStatusList;
 
                 List<string> orderStatusFilter = new List<string>();
                 orderStatusFilter.Add("Shipped");
                 orderStatusFilter.Add("Delivered");
                 orderStatusFilter.Add("Pending");
+                orderStatusFilter.Add("Canceled");
                 ViewBag.orderStatusFilter = orderStatusFilter;
 
                 OrderModel orderModel = orderService.GetOrderByID(oId);
@@ -254,5 +296,78 @@ namespace airmodel_ad.Controllers
                 return View("../Admin/ManageOrderView");
             }
         }
-    }
+
+        public IActionResult AddOrderNote(string orderAdminNote, Guid oId)
+        {
+            List<OrderModel> pendingOrders = orderService.GetAllUserOrders();
+            for (int i = 0; i <= pendingOrders.Count() - 1; i++)
+            {
+                pendingOrders[i].orderItems = orderService.GetAllOrderItems(pendingOrders[i].oId);
+                if (pendingOrders[i].orderStatus == "0")
+                {
+                    pendingOrders[i].orderStatus = "Pending";
+                }
+                else if (pendingOrders[i].orderStatus == "1")
+                {
+                    pendingOrders[i].orderStatus = "Shipped";
+                }
+                else if (pendingOrders[i].orderStatus == "3")
+                {
+                    pendingOrders[i].orderStatus = "Canceled";
+                }
+                else
+                {
+                    pendingOrders[i].orderStatus = "Delivered";
+                }
+            }
+
+            ViewBag.orders = pendingOrders;
+            List<string> orderStatusList = new List<string>();
+            orderStatusList.Add("Shipped");
+            orderStatusList.Add("Delivered");
+            orderStatusList.Add("Canceled");
+
+            ViewBag.orderStatus = orderStatusList;
+
+            List<string> orderStatusFilter = new List<string>();
+            orderStatusFilter.Add("Shipped");
+            orderStatusFilter.Add("Delivered");
+            orderStatusFilter.Add("Pending");
+            orderStatusFilter.Add("Canceled");
+            ViewBag.orderStatusFilter = orderStatusFilter;
+
+            OrderModel orderModel = orderService.GetOrderByID(oId);
+
+            var senderEmail = new MailAddress("adcoursework9@gmail.com");
+            var receiverEmail = new MailAddress(orderModel.users.userEmail, "Receiver");
+            var password = "uifuadhzwaflfqei";
+
+            var sub = "You have a message from the Seller - Your order " + oId.ToString().Substring(0, 10);
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(senderEmail.Address, password),
+                EnableSsl = true
+            };
+            using (var mess = new MailMessage("adcoursework9@gmail.com", orderModel.users.userEmail, sub, " <body>\r\n    <h2>You have a message from the Seller.</h2>\r\n\r\n    " +
+                "<p>Dear " + orderModel.users.userName + ",</p>\r\n\r\n    <p>Thank you for placing an order with us. Here is the message from the Seller " +
+                "\r\n\r\n" + "Message:  " + orderAdminNote + "\n" +
+                "<p>If you have any questions or concerns about your order, please feel free to contact us.</p>\r\n\r\n   " +
+                " <p>Thank you for choosing our service!</p>\r\n\r\n    <p>Best regards,<br>\r\n    AirModel UK inc.</p>\r\n</body> ")
+            {
+            })
+            {
+                mess.IsBodyHtml = true;
+                smtp.Send(mess);
+            }
+
+            OrderModel orderModel1 = orderService.GetOrderByID(oId);
+
+
+            return View("../Admin/ManageOrderView");
+        }
+      }
 }

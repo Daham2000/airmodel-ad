@@ -287,6 +287,7 @@
                                             <h6 class="card-subtitle mb-2 text-muted">Customer name: @order.fName @order.lName</h6>
                                             <p class="card-text">Shipping Address: @order.address, @order.county</p>
                                             <p class="card-text">Order total: $@order.total</p>
+                                            <p class="card-text">Order Additional Cost: $@order.additionalCost</p>
                                             <p class="card-text">Shipping City: @order.city</p>
                                             <p class="card-text">Shipping Post Code: @order.postCode</p>
                                             <p class="card-text">Contact Number: @order.phoneNumber</p>
@@ -327,6 +328,13 @@
                                     <input type="hidden" class="form-control" name="oId" value="@order.oId">
 
                                 </div>
+                            </form>
+
+                            <form class="mr-2" style="margin-left: 20px; margin-right: 20px;" method="post" asp-controller="ManageOrderAdmin" asp-action="AddOrderNote">
+                                <textarea label="" placeholder="Add your order note to buyer" required  class="form-control mt-2" name="orderAdminNote" rows="4" cols="50"></textarea>
+                                <input type="hidden" class="form-control" name="oId" value="@order.oId">
+
+                                <button type="submit" style="margin-top: 14px;" class="btn btn-primary">Send Note to User</button>
                             </form>
 
                             <form method="post" asp-controller="Admin" class="mr-2" style="margin-left: 20px" asp-action="GenerateOrderBasicReportByID">
