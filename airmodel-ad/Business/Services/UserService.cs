@@ -73,12 +73,7 @@ namespace airmodel_ad.Business.Services
                 Debug.WriteLine(user.userId);
                 Debug.WriteLine(user.userEmail);
                 Debug.WriteLine(user.userPassword.IsNullOrEmpty());
-                List<User> users = appDbContext.users.Where((u) => u.userEmail == user.userEmail).ToList();
-
-                if (users.Count > 0)
-                {
-                    return false;
-                }
+                
                 if (user.userPassword.IsNullOrEmpty())
                 {
                     User tempUser = appDbContext.users.Where((u) => u.userId == uId).FirstOrDefault();
