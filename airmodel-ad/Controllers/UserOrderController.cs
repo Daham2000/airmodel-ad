@@ -132,8 +132,6 @@ namespace airmodel_ad.Controllers
                 Debug.WriteLine(orderItems[0].productId);
                 orderService.AddOrder(orderModel, orderItems, cartModels[0].cartId);
 
-                
-
                 total = 0;
                 await GetHomePageData();
 

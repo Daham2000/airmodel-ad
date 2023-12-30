@@ -317,7 +317,7 @@ namespace airmodel_ad.Controllers
             userRoles.Add("admin");
             ViewBag.userRoles = userRoles;
 
-            return View("../Admin/ManageUsers");
+			return View("../Admin/ManageUsers");
         }
 
         public IActionResult DownloadUserReport()
@@ -411,8 +411,11 @@ namespace airmodel_ad.Controllers
             orderStatusList.Add("Shipped");
             orderStatusList.Add("Delivered");
             ViewBag.orderStatus = orderStatusList;
+			ViewBag.isUserEdit = false;
+			List<User> users = userService.GetAllUsers();
+			ViewBag.users = users;
 
-            return View("../Admin/ManageUsers");
+			return View("../Admin/ManageUsers");
         }
 
         public IActionResult EditUserView(Guid userId)

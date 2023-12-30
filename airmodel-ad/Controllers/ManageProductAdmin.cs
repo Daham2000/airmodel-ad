@@ -272,9 +272,10 @@ namespace airmodel_ad.Controllers
                 ViewBag.booll = booll;
                 ViewBag.hasVarients = item.hasVarients == true ? "Yes" : "No";
 
-                return View("../Admin/AddProductView");
-            }
-            catch (Exception ex)
+				return Index();
+
+			}
+			catch (Exception ex)
             {
                 return View("../Admin/AddProductView");
             }
